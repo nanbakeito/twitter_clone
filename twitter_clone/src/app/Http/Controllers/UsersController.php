@@ -12,7 +12,7 @@ use App\Models\Follower;
 class UsersController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * ユーザー一覧機能
      *
      * @return \Illuminate\Http\Response
      */
@@ -23,32 +23,30 @@ class UsersController extends Controller
         return view('users.index', [
             'all_users'  => $all_users
         ]);
-        #return view('users.index')->with('all_users',$all_users);
     }
 
 
-       // フォロー
+    /** フォロー機能*/
     public function follow(Request $request)
     {
-        //dd($request);
         $follower = auth()->user();
-        // フォローしているか
-        $is_following = $follower->isFollowing($request->input('id'));
-        if(!$is_following) {
-            // フォローしていなければフォローする
+        /** フォローしているかの確認*/
+        $isFollowing = $follower->isFollowing($request->input('id'));
+        if(!$isFollowing) {
+            /** フォローしていなければフォロー*/
             $follower->follow($request->input('id'));
             return back();
         }
     }
 
-    // フォロー解除
+    /** フォロー解除機能*/
     public function unfollow(Request $request)
     {
         $follower = auth()->user();
-        // フォローしているか
-        $is_following = $follower->isFollowing($request->input('id'));
-        if($is_following) {
-            // フォローしていればフォローを解除する
+        /** フォローしているかの確認*/
+        $isFollowing = $follower->isFollowing($request->input('id'));
+        if($isFollowing) {
+            /** フォローしていればフォロー解除*/
             $follower->unfollow($request->input('id'));
             return back();
         }
