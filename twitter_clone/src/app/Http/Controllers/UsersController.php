@@ -26,7 +26,10 @@ class UsersController extends Controller
     }
 
 
-    /** フォロー機能*/
+    /** フォロー機能
+     * 
+     * @param  \Illuminate\Http\Request  $request
+    */
     public function follow(Request $request)
     {
         $follower = auth()->user();
@@ -39,7 +42,10 @@ class UsersController extends Controller
         }
     }
 
-    /** フォロー解除機能*/
+    /** フォロー解除機能
+     * 
+     * @param  \Illuminate\Http\Request  $request
+    */
     public function unfollow(Request $request)
     {
         $follower = auth()->user();
@@ -74,14 +80,22 @@ class UsersController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * ユーザー詳細画面
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user, Tweet $tweet, Follower $follower)
     {
-        //
+        $login_user = auth()->user();
+        $isFollowing = $login_user->isFollowing($user->id);
+        $isFollowed = $login_user->isFollowed($user->id);
+
+        return view('users.show', [
+            'user'           => $user,
+            'is_following'   => $isFollowing,
+            'is_followed'    => $isFollowed,
+        ]);
     }
 
     /**
