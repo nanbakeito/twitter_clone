@@ -26,3 +26,13 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+// ログイン状態
+Route::group(['middleware' => 'auth'], function() {
+
+    // ユーザ関連のリソース
+    Route::resource('users', 'App\Http\Controllers\UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
+    // リソースにはない，フォロー/フォロー解除を追加
+    Route::post('users/follow', 'App\Http\Controllers\UsersController@follow')->name('follow');
+    Route::delete('users/unfollow', 'App\Http\Controllers\UsersController@unfollow')->name('unfollow');
+}); 

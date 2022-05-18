@@ -19,7 +19,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     /**
-     * The attributes that are mass assignable.
+     * Mass Assignment 可能
      *
      * @var string[]
      */
@@ -27,10 +27,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_image',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * シリアライズのために隠す必要
      *
      * @var array
      */
@@ -42,7 +43,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * cast　する必要
      *
      * @var array
      */
@@ -51,11 +52,50 @@ class User extends Authenticatable
     ];
 
     /**
-     * The accessors to append to the model's array form.
+     * モデルの配列フォームに追加するアクセサ
      *
      * @var array
      */
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getAllUsers(Int $user_id)
+    {
+        return $this->Where('id', '<>', $user_id)->paginate(5);
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(self::class, 'followers', 'followed_id', 'following_id');
+    }
+
+    public function follows()
+    {
+        return $this->belongsToMany(self::class, 'followers', 'following_id', 'followed_id');
+    }
+
+    /* フォロー機能 */
+    public function follow(Int $user_id) 
+    {
+        return $this->follows()->attach($user_id);
+    }
+
+    /* フォロー解除機能 */
+    public function unfollow(Int $user_id)
+    {
+        return $this->follows()->detach($user_id);
+    }
+
+    /* フォローしているかの確認*/
+    public function isFollowing(Int $user_id) 
+    {
+        return (boolean) $this->follows()->where('followed_id', $user_id)->first(['id']);
+    }
+
+    /* フォローされているかの確認 */
+    public function isFollowed(Int $user_id) 
+    {
+        return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
+    }
 }

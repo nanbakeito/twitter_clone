@@ -10,7 +10,7 @@ class Tweet extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
+     * Mass Assignment 可能
      *
      * @var array
      */
