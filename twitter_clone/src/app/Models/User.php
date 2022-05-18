@@ -98,4 +98,27 @@ class User extends Authenticatable
     {
         return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
     }
+
+        /* ユーザー情報更新 */
+    public function updateProfile(Array $params)
+    {
+        if (isset($params['profile_image'])) {
+            $fileName = $params['profile_image']->store('public/profile_image/');
+
+            $this::where('id', $this->id)
+                ->update([
+                    'name'          => $params['name'],
+                    'profile_image' => basename($fileName),
+                    'email'         => $params['email'],
+                ]);
+        } else {
+            $this::where('id', $this->id)
+                ->update([
+                    'name'          => $params['name'],
+                    'email'         => $params['email'],
+                ]); 
+        }
+
+        return;
+    }
 }
