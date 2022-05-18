@@ -32,7 +32,12 @@
                     </div>
                 </header>
             @endif
-
+            <!-- フラッシュメッセージ -->
+            @if (session('flashMessage'))
+                <div class="flash_message">
+                    {{ session('flashMessage') }}
+                </div>
+            @endif
             <!-- Page Content -->
             <main>
                 @yield('content')
