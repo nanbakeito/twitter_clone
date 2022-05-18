@@ -8,13 +8,12 @@
         <div class="profile__container">
             <figure>
                 <img src="/images/icon.png" />
-                <!-- {{ $user->profile_image }} -->
             </figure>
             <div>
                 {{$user->name}}
             </div>
             @if ($user->id === Auth::user()->id)
-                                    <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
+                <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
             @else
                 @if ($isFollowing)
                     <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST">
@@ -28,7 +27,6 @@
                         <button type="submit" class="btn btn-primary">フォローする</button>
                     </form>
                 @endif
-
                 @if ($isFollowed)
                     <span class="mt-2 px-1 bg-secondary text-light">フォローされています</span>
                 @endif
@@ -64,7 +62,6 @@
                         <div class="twitter__block">
                             <figure>
                                 <img src="/images/icon.png" />
-                                <!-- {{ $user->profile_image }} -->
                             </figure>
                             <div class="twitter__block-text">
                                 <div class="name">{{ $user->name }}<span class="name_reply">@usa_tan</span></div>
@@ -87,12 +84,9 @@
             @endforeach
         @else
             <div class="twitter__container">
-        <!-- タイトル -->
                 <div class="twitter__title">
                     <span class="twitter-logo"></span>
                 </div>
-
-                        <!-- ▼タイムラインエリア scrollを外すと高さ固定解除 -->
                 <div class="twitter__contents scroll">
                     ツイートはありません
                 </div>

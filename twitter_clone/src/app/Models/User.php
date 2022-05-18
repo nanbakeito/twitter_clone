@@ -99,9 +99,10 @@ class User extends Authenticatable
         return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
     }
 
-        /* ユーザー情報更新 */
+    /* ユーザー情報更新 */
     public function updateProfile(Array $params)
     {
+        // 画像が更新される時の処理
         if (isset($params['profile_image'])) {
             $fileName = $params['profile_image']->store('public/profile_image/');
 

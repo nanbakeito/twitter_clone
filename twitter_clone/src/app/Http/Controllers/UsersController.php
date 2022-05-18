@@ -119,11 +119,11 @@ class UsersController extends Controller
         $validator = Validator::make($data, [
             'name'          => ['required', 'string', 'max:255'],
             'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            // 自身のidの時にはemailは重複しても良い
             'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)]
         ]);
         $validator->validate();
         $user->updateProfile($data);
-
         return redirect('users/'.$user->id);
     }
 }
