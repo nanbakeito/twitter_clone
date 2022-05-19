@@ -77,4 +77,19 @@ class Tweet extends Model
     {
         return $this->with('user')->where('id', $tweet_id)->first();
     }
+
+    /**
+     * 新規tweet保存
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tweetStore(Int $user_id, Array $data)
+    {
+        $this->user_id = $user_id;
+        $this->text = $data['text'];
+        $this->save();
+
+        return;
+    }
 }

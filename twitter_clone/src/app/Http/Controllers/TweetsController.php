@@ -10,6 +10,12 @@ use App\Models\Follower;
 
 class TweetsController extends Controller
 {
+    /**
+     * tweet一覧機能
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
@@ -25,6 +31,12 @@ class TweetsController extends Controller
         ]);
     }
 
+    /**
+     * tweet詳細機能
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show(Tweet $tweet, Comment $comment)
     {
         $user = auth()->user();
@@ -36,5 +48,45 @@ class TweetsController extends Controller
             'tweet' => $tweet,
             'comments' => $comments
         ]);
+    }
+
+    /**
+     * tweet新規投稿画面を表示する機能
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $user = auth()->user();
+
+        return view('tweets.create', [
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * tweet新規投稿機能
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, Tweet $tweet)
+    {
+        $user = auth()->user();
+        $data = $request->all();
+        $tweet->tweetStore($user->id, $data);
+
+        return redirect('tweets');
+    }
+
+    /**
+     * ミドルウェアによるバリデーション
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function __construct() {
+        $this->middleware('validationTweet')->only(['store']);
     }
 }
