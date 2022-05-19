@@ -63,7 +63,7 @@ class Tweet extends Model
     public function getTimeLines(int $user_id, Array $followIds)
     {
         // 自身とフォローしているユーザIDを結合する
-        $follow_ids[] = $user_id;
+        $followIds[] = $user_id;
         return $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
     }
 
@@ -91,5 +91,42 @@ class Tweet extends Model
         $this->save();
 
         return;
+    }
+
+    /**
+     * 新規tweet保存
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getEditTweet(int $user_id, int $tweet_id)
+    {
+        return $this->where('user_id', $user_id)->where('id', $tweet_id)->first();
+    }
+
+    /**
+     * tweet更新
+     *
+     * @param  int  $tweet_id
+     * @return \Illuminate\Http\Response
+     */
+    public function tweetUpdate(int $tweet_id, Array $data)
+    {
+        $this->id = $tweet_id;
+        $this->text = $data['text'];
+        $this->update();
+
+        return;
+    }
+
+    /**
+     * tweet削除
+     *
+     * @param  int  $user_id,$tweet_id
+     * @return \Illuminate\Http\Response
+     */
+    public function tweetDestroy(int $user_id, int $tweet_id)
+    {
+        return $this->where('user_id', $user_id)->where('id', $tweet_id)->delete();
     }
 }
