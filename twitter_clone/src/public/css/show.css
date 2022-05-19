@@ -1,0 +1,7 @@
+.col-md-8{
+    margin:20px;
+}
+
+.p-2.d-flex.flex-column.align-items-center{
+    display: inline-block;
+}

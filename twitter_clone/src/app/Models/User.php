@@ -60,42 +60,109 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function getAllUsers(Int $user_id)
+    /**
+     * 複数ユーザーの値取得しページネイト
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllUsers(int $user_id)
     {
         return $this->Where('id', '<>', $user_id)->paginate(5);
     }
 
+    /**
+     * フォロワー結びつけ
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function followers()
     {
         return $this->belongsToMany(self::class, 'followers', 'followed_id', 'following_id');
     }
 
+    /**
+     * フォロー結びつけ
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function follows()
     {
         return $this->belongsToMany(self::class, 'followers', 'following_id', 'followed_id');
     }
 
-    /* フォロー機能 */
-    public function follow(Int $user_id) 
+    /**
+     * フォロー機能
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function follow(int $user_id) 
     {
         return $this->follows()->attach($user_id);
     }
 
-    /* フォロー解除機能 */
-    public function unfollow(Int $user_id)
+    /**
+     * フォロー解除機能
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function unFollow(Int $user_id)
     {
         return $this->follows()->detach($user_id);
     }
 
-    /* フォローしているかの確認*/
-    public function isFollowing(Int $user_id) 
+    /**
+     * フォローしているかの確認
+     *
+     * @param  int  $id
+     * @return bool
+     */
+    public function isFollowing(int $user_id) 
     {
-        return (boolean) $this->follows()->where('followed_id', $user_id)->first(['id']);
+        return (boolean) $this->follows()->where('followed_id', $user_id)->first();
     }
 
-    /* フォローされているかの確認 */
-    public function isFollowed(Int $user_id) 
+    /**
+     * フォローされているかの確認
+     *
+     * @param  int  $id
+     * @return bool
+     */
+    public function isFollowed(int $user_id) 
     {
-        return (boolean) $this->followers()->where('following_id', $user_id)->first(['id']);
+        return (boolean) $this->followers()->where('following_id', $user_id)->first();
+    }
+
+    /**
+     * ユーザー情報更新
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProfile(Array $params)
+    {
+        // 画像が更新される時の処理
+        if (isset($params['profile_image'])) {
+            $fileName = $params['profile_image']->store('public/profile_image/');
+
+            $this::where('id', $this->id)
+                ->update([
+                    'name'          => $params['name'],
+                    'profile_image' => basename($fileName),
+                    'email'         => $params['email'],
+                ]);
+        } else {
+            $this::where('id', $this->id)
+                ->update([
+                    'name'          => $params['name'],
+                    'email'         => $params['email'],
+                ]); 
+        }
+
+        return;
     }
 }

@@ -35,17 +35,8 @@ class UsersController extends Controller
     public function follow(Request $request)
     {
         $follower = auth()->user();
-        // フォローしているかの確認
-        $isFollowing = $follower->isFollowing($request->input('id'));
-        if(!$isFollowing) {
-            // フォローしていなければフォロー
-            $follower->follow($request->input('id'));
-            return back();
-        }
-        else{
-            // フォローしていればフラッシュメッセージ
-            return redirect('users')->with('flashMessage', 'すでにフォローしています');
-        }
+        $follower->follow($request->input('id'));
+        return back();
     }
 
     /** フォロー解除機能
@@ -56,17 +47,8 @@ class UsersController extends Controller
     public function unfollow(Request $request)
     {
         $follower = auth()->user();
-        // フォローしているかの確認
-        $isFollowing = $follower->isFollowing($request->input('id'));
-        if($isFollowing) {
-            // フォローしていればフォロー解除
-            $follower->unfollow($request->input('id'));
-            return back();
-        }
-        else{
-            // フォローしていなければフラッシュメッセージ
-            return redirect('users')->with('flashMessage', 'フォローしていません');
-        }
+        $follower->unFollow($request->input('id'));
+        return back();
     }
 
     /**
@@ -77,14 +59,46 @@ class UsersController extends Controller
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
     {
-        $login_user = auth()->user();
-        $isFollowing = $login_user->isFollowing($user->id);
-        $isFollowed = $login_user->isFollowed($user->id);
+        $timelines = $tweet->getUserTimeLine($user->id);
+        $tweetCount = $tweet->getTweetCount($user->id);
+        $followCount = $follower->getFollowCount($user->id);
+        $followerCount = $follower->getFollowerCount($user->id);
 
         return view('users.show', [
             'user'           => $user,
-            'is_following'   => $isFollowing,
-            'is_followed'    => $isFollowed,
+            'timelines'      => $timelines,
+            'tweetCount'    => $tweetCount,
+            'followCount'   => $followCount,
+            'followerCount' => $followerCount
         ]);
+    }
+
+    /**
+     * ユーザー編集画面
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return view('users.edit', ['user' => $user]);
+    }
+
+    /**
+     * ユーザー更新機能
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, User $user)
+    {
+        $data = $request->all();
+        $user->updateProfile($data);
+        
+        return redirect('users/'.$user->id);
+    }
+
+    public function __construct() {
+        $this->middleware('validationUser')->only(['update']);
     }
 }

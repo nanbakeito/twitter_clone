@@ -31,4 +31,26 @@ class Tweet extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * タイムライン情報取得しページネイト
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUserTimeLine(int $user_id)
+    {
+        return $this->where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(50);
+    }
+
+    /**
+     * ツイート数カウント
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTweetCount(int $user_id)
+    {
+        return $this->where('user_id', $user_id)->count();
+    }
 }
