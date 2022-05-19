@@ -2,12 +2,12 @@
 
 @section('content')
 <link href="{{ asset('/css/show.css') }}" rel="stylesheet">
-<link rel='stylesheet' href='/css/style.css' type='text/css' media='all' />
+<link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <div class="container">
     <div class="row justify-content-center">
         <div class="profile__container">
             <figure>
-                <img src="/images/icon.png" />
+                <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" />
             </figure>
             <div>
                 {{$user->name}}
@@ -15,7 +15,7 @@
             @if ($user->id === Auth::user()->id)
                 <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
             @else
-                @if ($isFollowing)
+                @if (auth()->user()->isFollowing($user->id))
                     <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
@@ -27,7 +27,7 @@
                         <button type="submit" class="btn btn-primary">フォローする</button>
                     </form>
                 @endif
-                @if ($isFollowed)
+                @if (auth()->user()->isFollowed($user->id))
                     <span class="mt-2 px-1 bg-secondary text-light">フォローされています</span>
                 @endif
             @endif
