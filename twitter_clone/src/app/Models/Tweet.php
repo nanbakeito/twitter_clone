@@ -53,4 +53,28 @@ class Tweet extends Model
     {
         return $this->where('user_id', $user_id)->count();
     }
+
+    /**
+     * フォローしているuserのtimeline作成
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTimeLines(int $user_id, Array $followIds)
+    {
+        // 自身とフォローしているユーザIDを結合する
+        $follow_ids[] = $user_id;
+        return $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
+    }
+
+    /**
+     * 詳細画面
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTweet(int $tweet_id)
+    {
+        return $this->with('user')->where('id', $tweet_id)->first();
+    }
 }
