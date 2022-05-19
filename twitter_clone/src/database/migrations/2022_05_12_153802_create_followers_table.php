@@ -14,6 +14,7 @@ class CreateFollowersTable extends Migration
     public function up()
     {
         Schema::create('followers', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('following_id')->constrained('users')->comment('フォローしているユーザーのID');
             $table->foreignId('followed_id')->constrained('users')->comment('フォローされているユーザーのID');
     

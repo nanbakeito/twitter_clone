@@ -14,6 +14,7 @@ class CreateFavoritesTable extends Migration
     public function up()
     {
         Schema::create('favorites', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained()->comment('ユーザID');
             $table->foreignId('tweet_id')->constrained()->comment('ツイートID');
     
