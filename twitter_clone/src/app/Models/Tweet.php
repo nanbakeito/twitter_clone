@@ -38,7 +38,7 @@ class Tweet extends Model
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getUserTimeLine(Int $user_id)
+    public function getUserTimeLine(int $user_id)
     {
         return $this->where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(50);
     }
@@ -49,7 +49,7 @@ class Tweet extends Model
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getTweetCount(Int $user_id)
+    public function getTweetCount(int $user_id)
     {
         return $this->where('user_id', $user_id)->count();
     }

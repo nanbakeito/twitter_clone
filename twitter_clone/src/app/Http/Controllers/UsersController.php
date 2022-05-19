@@ -94,6 +94,7 @@ class UsersController extends Controller
     {
         $data = $request->all();
         $user->updateProfile($data);
+        
         return redirect('users/'.$user->id);
     }
 

@@ -66,7 +66,7 @@ class User extends Authenticatable
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getAllUsers(Int $user_id)
+    public function getAllUsers(int $user_id)
     {
         return $this->Where('id', '<>', $user_id)->paginate(5);
     }
@@ -99,7 +99,7 @@ class User extends Authenticatable
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function follow(Int $user_id) 
+    public function follow(int $user_id) 
     {
         return $this->follows()->attach($user_id);
     }
@@ -121,7 +121,7 @@ class User extends Authenticatable
      * @param  int  $id
      * @return bool
      */
-    public function isFollowing(Int $user_id) 
+    public function isFollowing(int $user_id) 
     {
         return (boolean) $this->follows()->where('followed_id', $user_id)->first();
     }
@@ -132,7 +132,7 @@ class User extends Authenticatable
      * @param  int  $id
      * @return bool
      */
-    public function isFollowed(Int $user_id) 
+    public function isFollowed(int $user_id) 
     {
         return (boolean) $this->followers()->where('following_id', $user_id)->first();
     }
