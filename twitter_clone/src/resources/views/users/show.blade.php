@@ -16,7 +16,7 @@
                 <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
             @else
                 @if (auth()->user()->isFollowing($user->id))
-                    <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST">
+                    <form action="{{ route('unFollow', ['id' => $user->id]) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
                         <button type="submit" class="btn btn-danger">フォロー解除</button>
@@ -61,7 +61,7 @@
                         <!-- 記事エリア -->
                         <div class="twitter__block">
                             <figure>
-                                <img src="/images/icon.png" />
+                                <!-- tweet作成後に画像挿入（tweet機能未実装のため） -->
                             </figure>
                             <div class="twitter__block-text">
                                 <div class="name">{{ $user->name }}<span class="name_reply">@usa_tan</span></div>

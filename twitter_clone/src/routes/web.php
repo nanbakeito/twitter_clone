@@ -34,5 +34,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('users', 'App\Http\Controllers\UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
     // リソースにはない，フォロー/フォロー解除を追加
     Route::post('users/follow', 'App\Http\Controllers\UsersController@follow')->name('follow');
-    Route::delete('users/unfollow', 'App\Http\Controllers\UsersController@unfollow')->name('unfollow');
+    Route::delete('users/unFollow', 'App\Http\Controllers\UsersController@unFollow')->name('unFollow');
 }); 

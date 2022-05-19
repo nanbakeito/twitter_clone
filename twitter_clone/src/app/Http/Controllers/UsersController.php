@@ -47,7 +47,7 @@ class UsersController extends Controller
     public function unfollow(Request $request)
     {
         $follower = auth()->user();
-        $follower->unfollow($request->input('id'));
+        $follower->unFollow($request->input('id'));
         return back();
     }
 
@@ -98,6 +98,6 @@ class UsersController extends Controller
     }
 
     public function __construct() {
-        $this->middleware('validation')->only(['update']);
+        $this->middleware('validationUser')->only(['update']);
     }
 }
