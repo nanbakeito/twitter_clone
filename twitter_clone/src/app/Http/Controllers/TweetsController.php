@@ -13,7 +13,9 @@ class TweetsController extends Controller
     /**
      * tweet一覧機能
      *
-     * @param  int  $id
+     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Follower  $follower
+     * 
      * @return \Illuminate\Http\Response
      */
     public function index(Tweet $tweet, Follower $follower)
@@ -33,7 +35,9 @@ class TweetsController extends Controller
     /**
      * tweet詳細機能
      *
-     * @param  int  $id
+     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Comment  $comment
+     * 
      * @return \Illuminate\Http\Response
      */
     public function show(Tweet $tweet, Comment $comment)
@@ -68,6 +72,8 @@ class TweetsController extends Controller
      * tweet新規投稿機能
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tweet  $tweet
+     * 
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Tweet $tweet)
@@ -82,7 +88,7 @@ class TweetsController extends Controller
     /**
      * ミドルウェアによるバリデーション
      *
-     * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function __construct() {
@@ -92,7 +98,8 @@ class TweetsController extends Controller
     /**
      * tweet編集画面
      *
-     * @param  int  $id
+     * @param  \App\Models\Tweet  $tweet
+     * 
      * @return \Illuminate\Http\Response
      */
     public function edit(Tweet $tweet)
@@ -114,6 +121,8 @@ class TweetsController extends Controller
      * tweet更新
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tweet  $tweet
+     * 
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Tweet $tweet)
@@ -127,7 +136,8 @@ class TweetsController extends Controller
     /**
      * tweet削除
      *
-     * @param  $tweet
+     * @param  \App\Models\Tweet  $tweet
+     * 
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Tweet $tweet)

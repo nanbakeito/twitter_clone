@@ -63,19 +63,19 @@ class User extends Authenticatable
     /**
      * 複数ユーザーの値取得しページネイト
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function getAllUsers(int $user_id)
+    public function getAllUsers(int $userId)
     {
-        return $this->Where('id', '<>', $user_id)->paginate(5);
+        return $this->Where('id', '<>', $userId)->paginate(5);
     }
 
     /**
-     * フォロワー結びつけ
+     * フォロワーテーブルリレーション　フォロワー　（1対多）
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function followers()
     {
@@ -83,10 +83,9 @@ class User extends Authenticatable
     }
 
     /**
-     * フォロー結びつけ
+     * フォロワーテーブルリレーション　フォロー　（1対多）
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function follows()
     {
@@ -96,51 +95,56 @@ class User extends Authenticatable
     /**
      * フォロー機能
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function follow(int $user_id) 
+    public function follow(int $userId) 
     {
-        return $this->follows()->attach($user_id);
+        return $this->follows()->attach($userId);
     }
 
     /**
      * フォロー解除機能
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function unFollow(Int $user_id)
+    public function unFollow(int $userId)
     {
-        return $this->follows()->detach($user_id);
+        return $this->follows()->detach($userId);
     }
 
     /**
      * フォローしているかの確認
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return bool
      */
-    public function isFollowing(int $user_id) 
+    public function isFollowing(int $userId) 
     {
-        return (boolean) $this->follows()->where('followed_id', $user_id)->first();
+        return (boolean) $this->follows()->where('followed_id', $userId)->first();
     }
 
     /**
      * フォローされているかの確認
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return bool
      */
-    public function isFollowed(int $user_id) 
+    public function isFollowed(int $userId) 
     {
-        return (boolean) $this->followers()->where('following_id', $user_id)->first();
+        return (boolean) $this->followers()->where('following_id', $userId)->first();
     }
 
     /**
      * ユーザー情報更新
      *
-     * @param  int  $id
+     * @param  Array  $params
+     * 
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateProfile(Array $params)

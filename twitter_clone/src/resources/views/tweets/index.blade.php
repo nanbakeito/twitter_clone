@@ -20,7 +20,7 @@
                             <!-- 記事エリア -->
                             <div class="twitter__block">
                                 <figure>
-                                    <!-- tweet作成後に画像挿入（tweet機能未実装のため） -->
+                                    <!-- 画像挿入（tweet画像未実装のため） -->
                                 </figure>
                                 <div class="twitter__block-text">
                                     <div class="name">{{ $user->name }}<span class="name_reply">@usa_tan</span></div>

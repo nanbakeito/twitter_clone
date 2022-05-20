@@ -17,6 +17,12 @@ class Comment extends Model
     protected $fillable = [
         'text'
     ];
+
+    /**
+     *　usersテーブルとのリレーション（１対１）
+     *
+     * 
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -25,11 +31,12 @@ class Comment extends Model
     /**
      * 詳細画面
      *
-     * @param  int  $id
+     * @param  int  $tweetId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function getComments(int $tweet_id)
+    public function getComments(int $tweetId)
     {
-        return $this->with('user')->where('tweet_id', $tweet_id)->get();
+        return $this->with('user')->where('tweet_id', $tweetId)->get();
     }
 }

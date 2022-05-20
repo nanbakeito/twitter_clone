@@ -14,7 +14,8 @@ class UsersController extends Controller
     /**
      * ユーザー一覧機能
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
+     * 
      * @return \Illuminate\Http\Response
      */
     public function index(User $user)
@@ -30,6 +31,7 @@ class UsersController extends Controller
     /** フォロー機能
      * 
      * @param  \Illuminate\Http\Request  $request
+     * 
      * @return  \Illuminate\Http\RedirectResponse
     */
     public function follow(Request $request)
@@ -42,6 +44,7 @@ class UsersController extends Controller
     /** フォロー解除機能
      * 
      * @param  \Illuminate\Http\Request  $request
+     * 
      * @return  \Illuminate\Http\RedirectResponse
     */
     public function unfollow(Request $request)
@@ -54,7 +57,10 @@ class UsersController extends Controller
     /**
      * ユーザー詳細画面
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Follower  $follower
+     * 
      * @return \Illuminate\Http\Response
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
@@ -76,7 +82,8 @@ class UsersController extends Controller
     /**
      * ユーザー編集画面
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
+     * 
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -88,6 +95,8 @@ class UsersController extends Controller
      * ユーザー更新機能
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * 
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user)

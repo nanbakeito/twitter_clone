@@ -20,33 +20,36 @@ class Follower extends Model
     /**
      * フォロー数カウント
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollowCount($user_id)
+    public function getFollowCount(int $userId)
     {
-        return $this->where('following_id', $user_id)->count();
+        return $this->where('following_id', $userId)->count();
     }
 
     /**
      * フォロワー数カウント
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollowerCount($user_id)
+    public function getFollowerCount(int $userId)
     {
-        return $this->where('followed_id', $user_id)->count();
+        return $this->where('followed_id', $userId)->count();
     }
 
     /**
      * ログインしているユーザIDを引数で渡してフォローしているユーザIDを取得します
      *
-     * @param  int  $id
+     * @param  int  $userId
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function followingIds(int $user_id)
+    public function followingIds(int $userId)
     {
-        return $this->where('following_id', $user_id)->get('followed_id');
+        return $this->where('following_id', $userId)->get('followed_id');
     }
 }
