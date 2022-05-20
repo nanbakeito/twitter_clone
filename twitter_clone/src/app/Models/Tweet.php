@@ -64,6 +64,7 @@ class Tweet extends Model
     {
         // 自身とフォローしているユーザIDを結合する
         $followIds[] = $user_id;
+        
         return $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
     }
 

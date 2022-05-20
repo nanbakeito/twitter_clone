@@ -6,12 +6,10 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Update</div>
-
                 <div class="card-body">
                     <form method="POST" action="{{ url('tweets/' .$tweets->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-
                         <div class="form-group row mb-0">
                             <div class="col-md-12 p-3 w-100 d-flex">
                                 <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
@@ -22,7 +20,6 @@
                             </div>
                             <div class="col-md-12">
                                 <textarea class="form-control @error('text') is-invalid @enderror" name="text" required autocomplete="text" rows="4">{{ old('text') ? : $tweets->text }}</textarea>
-
                                 @error('text')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -30,7 +27,6 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group row mb-0">
                             <div class="col-md-12 text-right">
                                 <p class="mb-4 text-danger">140文字以内</p>

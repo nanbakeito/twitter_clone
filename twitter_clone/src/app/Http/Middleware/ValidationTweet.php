@@ -14,6 +14,7 @@ class ValidationTweet
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * 
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
@@ -23,6 +24,7 @@ class ValidationTweet
             'text' => ['required', 'string', 'max:140']
         ]);
         $validator->validate();
+
         return $next($request);
     }
 }
