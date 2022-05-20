@@ -14,7 +14,7 @@ class UsersController extends Controller
     /**
      * ユーザー一覧機能
      *
-     * @param  \App\Models\User  $user
+     * @param  User  $user
      * 
      * @return \Illuminate\Http\Response
      */
@@ -57,9 +57,9 @@ class UsersController extends Controller
     /**
      * ユーザー詳細画面
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Tweet  $tweet
-     * @param  \App\Models\Follower  $follower
+     * @param  User  $user
+     * @param  Tweet  $tweet
+     * @param  Follower  $follower
      * 
      * @return \Illuminate\Http\Response
      */
@@ -82,7 +82,7 @@ class UsersController extends Controller
     /**
      * ユーザー編集画面
      *
-     * @param  \App\Models\User  $user
+     * @param  User  $user
      * 
      * @return \Illuminate\Http\Response
      */
@@ -95,7 +95,7 @@ class UsersController extends Controller
      * ユーザー更新機能
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  User  $user
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
