@@ -11,6 +11,15 @@ use App\Models\Follower;
 class TweetsController extends Controller
 {
     /**
+     * ミドルウェアによるバリデーション
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function __construct() {
+        $this->middleware('validationTweet')->only(['store','update']);
+    }
+
+    /**
      * tweet一覧機能
      *
      * @param  Tweet  $tweet
@@ -82,15 +91,6 @@ class TweetsController extends Controller
         $tweet->tweetStore($user->id, $data);
 
         return redirect('tweets');
-    }
-
-    /**
-     * ミドルウェアによるバリデーション
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function __construct() {
-        $this->middleware('validationTweet')->only(['store','update']);
     }
 
     /**

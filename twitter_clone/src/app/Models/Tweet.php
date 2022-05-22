@@ -128,8 +128,6 @@ class Tweet extends Model
         $this->id = $tweetId;
         $this->text = $data['text'];
         $this->update();
-
-        return;
     }
 
     /**

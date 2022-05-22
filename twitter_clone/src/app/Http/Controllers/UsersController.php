@@ -12,6 +12,15 @@ use App\Models\Follower;
 class UsersController extends Controller
 {
     /**
+     * ミドルウェアによるバリデーション
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function __construct() {
+        $this->middleware('validationUser')->only(['store','update']);
+    }
+
+    /**
      * ユーザー一覧機能
      *
      * @param  User  $user
@@ -36,7 +45,7 @@ class UsersController extends Controller
     */
     public function follow(Request $request, User $user)
     {
-        $currentUser = $user->where('id', $request->currentUserId)->first();
+        $currentUser = $user->where('id', $request->userId)->first();
         $currentUser->follow($request->input('id'));
 
         return back();
@@ -108,9 +117,5 @@ class UsersController extends Controller
         $user->updateProfile($data);
         
         return redirect('users/'.$user->id);
-    }
-
-    public function __construct() {
-        $this->middleware('validationUser')->only(['update']);
     }
 }
