@@ -48,7 +48,6 @@
                                     </li>
                                 @endif
                             @else
-                                <!-- 追加 -->
                                 <li class="nav-item mr-5">
                                     <a href="{{ url('tweets/create') }}" class="btn btn-md btn-primary">ツイートする</a>
                                 </li>
@@ -76,7 +75,6 @@
                     </div>
                 </div>
             </nav>
-
             <main class="py-4">
                 @yield('content')
             </main>

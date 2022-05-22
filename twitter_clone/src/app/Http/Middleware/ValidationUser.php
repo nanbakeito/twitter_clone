@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 class ValidationUser
 {
     /**
-     * Handle an incoming request.
+     * ユーザーのバリデーション
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Closure  $next
@@ -26,6 +26,7 @@ class ValidationUser
             'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->id)]
         ]);
         $validator->validate();
+        
         return $next($request);
     }
 }

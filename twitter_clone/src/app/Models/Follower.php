@@ -10,11 +10,14 @@ class Follower extends Model
         'following_id',
         'followed_id'
     ];
+    
     protected $fillable = [
         'following_id',
         'followed_id'
     ];
+
     public $timestamps = false;
+
     public $incrementing = false;
 
     /**

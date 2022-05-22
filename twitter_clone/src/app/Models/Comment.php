@@ -19,9 +19,7 @@ class Comment extends Model
     ];
 
     /**
-     *　usersテーブルとのリレーション（１対１）
-     *
-     * 
+     *　usersテーブルとのリレーション（多対1）
      */
     public function user()
     {

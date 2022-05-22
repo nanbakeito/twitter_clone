@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8 mb-3 text-right">
-            <a href="{{ url('users') }}">ユーザ一覧 <i class="fas fa-users" class="fa-fw"></i> </a>
+            <a href="{{ route('tweets.show') }}">ユーザ一覧 <i class="fas fa-users" class="fa-fw"></i> </a>
         </div>
         <!-- ここからツイート -->
         <div class="twitter__container">
@@ -26,7 +26,6 @@
                             {{ $tweet->text }}
                         </div>
                         <div class="in-pict">
-                            <img src="/images/sample.jpg">
                         </div>
                         <div class="twitter__icon">
                             <span class="twitter-bubble">{{ count($tweet->comments) }}</span>
@@ -44,7 +43,8 @@
                                         <img src="{{ asset('storage/profile_image/' .$comment->user->profile_image) }}" class="rounded-circle" width="50" height="50">
                                         <div class="ml-2 d-flex flex-column">
                                             <p class="mb-0">{{ $comment->user->name }}</p>
-                                            <a href="{{ url('users/' .$comment->user->id) }}" class="text-secondary">{{ $comment->user->screen_name }}</a>
+                                            <!-- コメント機能未実装のためコメントアウト -->
+                                            <!-- <a href="{{ url('users/' .$comment->user->id) }}" class="text-secondary">{{ $comment->user->screen_name }}</a> -->
                                         </div>
                                         <div class="d-flex justify-content-end flex-grow-1">
                                             <p class="mb-0 text-secondary">{{ $comment->created_at->format('Y-m-d H:i') }}</p>
@@ -62,7 +62,6 @@
                         </ul>
                     </div>
                 </div> 
-                
             </div>
         </div>
 </div>

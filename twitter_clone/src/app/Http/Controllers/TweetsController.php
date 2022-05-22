@@ -56,7 +56,6 @@ class TweetsController extends Controller
     /**
      * tweet新規投稿画面を表示する機能
      *
-     * 
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -87,7 +86,6 @@ class TweetsController extends Controller
 
     /**
      * ミドルウェアによるバリデーション
-     *
      *
      * @return \Illuminate\Http\Response
      */

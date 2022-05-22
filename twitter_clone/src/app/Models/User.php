@@ -74,8 +74,6 @@ class User extends Authenticatable
 
     /**
      * フォロワーテーブルリレーション　フォロワー　（1対多）
-     *
-     * 
      */
     public function followers()
     {
@@ -84,8 +82,6 @@ class User extends Authenticatable
 
     /**
      * フォロワーテーブルリレーション　フォロー　（1対多）
-     *
-     * 
      */
     public function follows()
     {

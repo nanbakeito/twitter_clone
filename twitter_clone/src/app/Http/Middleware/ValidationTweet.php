@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 class ValidationTweet
 {
     /**
-     * Handle an incoming request.
+     * ツイートのバリデーション
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Closure  $next

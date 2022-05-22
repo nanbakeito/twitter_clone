@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Update</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ url('tweets/' .$tweets->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('tweets.update', $tweets->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-group row mb-0">
@@ -15,7 +15,6 @@
                                 <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
                                 <div class="ml-2 d-flex flex-column">
                                     <p class="mb-0">{{ $user->name }}</p>
-                                    <a href="{{ url('users/' .$user->id) }}" class="text-secondary">{{ $user->screen_name }}</a>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -31,7 +30,7 @@
                             <div class="col-md-12 text-right">
                                 <p class="mb-4 text-danger">140文字以内</p>
                                 <button type="submit" class="btn btn-primary">
-                                    ツイートする
+                                    更新
                                 </button>
                             </div>
                         </div>

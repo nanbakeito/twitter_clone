@@ -13,7 +13,7 @@
                 {{$user->name}}
             </div>
             @if ($user->id === Auth::user()->id)
-                <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
+                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">プロフィールを編集する</a>
             @else
                 @if (auth()->user()->isFollowing($user->id))
                     <form action="{{ route('unFollow', ['id' => $user->id]) }}" method="POST">
@@ -70,7 +70,6 @@
                                     {{ $timeline->text }}
                                 </div>
                                 <div class="in-pict">
-                                    <img src="/images/sample.jpg">
                                 </div>
                                 <div class="twitter__icon">
                                     <span class="twitter-bubble">{{ count($timeline->comments) }}</span>

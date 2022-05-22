@@ -27,30 +27,33 @@ class UsersController extends Controller
         ]);
     }
 
-
     /** フォロー機能
      * 
      * @param  \Illuminate\Http\Request  $request
+     * @param  User  $user
      * 
      * @return  \Illuminate\Http\RedirectResponse
     */
-    public function follow(Request $request)
+    public function follow(Request $request, User $user)
     {
-        $follower = auth()->user();
-        $follower->follow($request->input('id'));
+        $currentUser = $user->where('id', $request->currentUserId)->first();
+        $currentUser->follow($request->input('id'));
+
         return back();
     }
 
     /** フォロー解除機能
      * 
      * @param  \Illuminate\Http\Request  $request
+     * @param  User  $user
      * 
      * @return  \Illuminate\Http\RedirectResponse
     */
-    public function unfollow(Request $request)
+    public function unfollow(Request $request, User $user)
     {
-        $follower = auth()->user();
-        $follower->unFollow($request->input('id'));
+        $currentUser = $user->where('id', $request->currentUserId)->first();
+        $currentUser->unFollow($request->input('id'));
+
         return back();
     }
 

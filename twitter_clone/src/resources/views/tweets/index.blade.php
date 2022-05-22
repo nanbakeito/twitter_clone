@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8 mb-3 text-right">
-            <a href="{{ url('users') }}">ユーザ一覧 <i class="fas fa-users" class="fa-fw"></i> </a>
+            <a href="{{ route('users.index') }}">ユーザ一覧 <i class="fas fa-users" class="fa-fw"></i> </a>
         </div>
         <!-- ここからツイート -->
         <div class="twitter__container">
@@ -13,7 +13,7 @@
             <div class="twitter__title">
                 <span class="twitter-logo"></span>
             </div>
-                @if (isset($timelines[0]))
+                @if (isset($timelines))
                     @foreach ($timelines as $timeline)
                         <!-- ▼タイムラインエリア scrollを外すと高さ固定解除 -->
                         <div class="twitter__contents scroll">
@@ -29,7 +29,6 @@
                                         {{ $timeline->text }}
                                     </div>
                                     <div class="in-pict">
-                                        <img src="/images/sample.jpg">
                                     </div>
                                     <div class="twitter__icon">
                                         @if ($timeline->user->id === Auth::user()->id)
@@ -38,11 +37,9 @@
                                                     <i class="fas fa-ellipsis-v fa-fw"></i>
                                                 </a>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <form method="POST" action="{{ url('tweets/' .$timeline->id) }}" class="mb-0">
+                                                    <form method="POST" action="{{ route('tweets.destroy', $timeline->id) }}" class="mb-0">
                                                         @csrf
-                                                        @method('DELETE')
-
-                                                        <a href="{{ url('tweets/' .$timeline->id .'/edit') }}" class="dropdown-item">編集</a>
+                                                        <a href="{{ route('tweets.edit', $timeline->id) }}" class="dropdown-item">編集</a>
                                                         <button type="submit" class="dropdown-item del-btn">削除</button>
                                                     </form>
                                                 </div>
@@ -62,8 +59,10 @@
                     </div>
                 @endif
         </div>
+    @if (isset($timelines))
     <div class="my-4 d-flex justify-content-center">
         {{ $timelines->links() }}
     </div>
+    @endif
 </div>
 @endsection

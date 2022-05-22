@@ -68,8 +68,9 @@ class Tweet extends Model
     {
         // 自身とフォローしているユーザIDを結合する
         $followIds[] = $userId;
-
-        return $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
+        $timelines = $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
+        // ツイートがあるかどうか
+        return $this->wherein('user_id', $followIds)->exists() ? $timelines : null ;
     }
 
     /**
