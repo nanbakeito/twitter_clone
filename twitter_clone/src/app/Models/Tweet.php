@@ -91,15 +91,13 @@ class Tweet extends Model
      * @param  int  $userId
      * @param  array  $data
      * 
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function tweetStore(int $userId, Array $data)
+    public function tweetStore(int $userId, Array $data) : void
     {
         $this->user_id = $userId;
         $this->text = $data['text'];
         $this->save();
-
-        return;
     }
 
     /**
@@ -121,9 +119,9 @@ class Tweet extends Model
      * @param  int  $tweetId
      * @param  array  $data
      * 
-     * @return \Illuminate\Http\Response
+     * @return  void
      */
-    public function tweetUpdate(int $tweetId, Array $data)
+    public function tweetUpdate(int $tweetId, Array $data) : void
     {
         $this->id = $tweetId;
         $this->text = $data['text'];
