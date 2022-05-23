@@ -78,7 +78,7 @@
     overflow-y: scroll;
 }
 
-.twitter__container .twitter__block {
+.twitter__container .twitter__block .comment__block{
     width: 100%;
     display: block;
     padding: 10px;

@@ -13,7 +13,7 @@
                 {{$user->name}}
             </div>
             @if ($user->id === Auth::user()->id)
-                <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
+                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">プロフィールを編集する</a>
             @else
                 @if (auth()->user()->isFollowing($user->id))
                     <form action="{{ route('unFollow', ['id' => $user->id]) }}" method="POST">
@@ -61,7 +61,7 @@
                         <!-- 記事エリア -->
                         <div class="twitter__block">
                             <figure>
-                                <!-- tweet作成後に画像挿入（tweet機能未実装のため） -->
+                                <!-- 画像挿入（tweet画像未実装のため） -->
                             </figure>
                             <div class="twitter__block-text">
                                 <div class="name">{{ $user->name }}<span class="name_reply">@usa_tan</span></div>
@@ -70,7 +70,6 @@
                                     {{ $timeline->text }}
                                 </div>
                                 <div class="in-pict">
-                                    <img src="/images/sample.jpg">
                                 </div>
                                 <div class="twitter__icon">
                                     <span class="twitter-bubble">{{ count($timeline->comments) }}</span>

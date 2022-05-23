@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::middleware([
@@ -36,3 +36,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('users/follow', 'App\Http\Controllers\UsersController@follow')->name('follow');
     Route::delete('users/unFollow', 'App\Http\Controllers\UsersController@unFollow')->name('unFollow');
 }); 
+
+// ツイート関連
+Route::resource('tweets', 'App\Http\Controllers\TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);

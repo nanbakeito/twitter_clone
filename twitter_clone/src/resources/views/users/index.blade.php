@@ -22,11 +22,13 @@
                                     <form action="{{ route('unFollow', ['id' => $user->id]) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
+                                        <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
                                         <button type="submit" class="btn btn-danger">フォロー解除</button>
                                     </form>   
                                 @else
                                     <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
                                         {{ csrf_field() }}
+                                        <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
                                         <button type="submit" class="btn btn-primary">フォローする</button>
                                     </form>                                                           
                                 @endif

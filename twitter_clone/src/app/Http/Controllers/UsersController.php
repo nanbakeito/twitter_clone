@@ -12,9 +12,17 @@ use App\Models\Follower;
 class UsersController extends Controller
 {
     /**
+     * ミドルウェアによるバリデーション
+     */
+    public function __construct() {
+        $this->middleware('validationUser')->only(['store','update']);
+    }
+
+    /**
      * ユーザー一覧機能
      *
-     * @param  int  $id
+     * @param  User  $user
+     * 
      * @return \Illuminate\Http\Response
      */
     public function index(User $user)
@@ -26,35 +34,43 @@ class UsersController extends Controller
         ]);
     }
 
-
     /** フォロー機能
      * 
      * @param  \Illuminate\Http\Request  $request
+     * @param  User  $user
+     * 
      * @return  \Illuminate\Http\RedirectResponse
     */
-    public function follow(Request $request)
+    public function follow(Request $request, User $user)
     {
-        $follower = auth()->user();
-        $follower->follow($request->input('id'));
+        $currentUser = $user->where('id', $request->userId)->first();
+        $currentUser->follow($request->input('id'));
+
         return back();
     }
 
     /** フォロー解除機能
      * 
      * @param  \Illuminate\Http\Request  $request
+     * @param  User  $user
+     * 
      * @return  \Illuminate\Http\RedirectResponse
     */
-    public function unfollow(Request $request)
+    public function unfollow(Request $request, User $user)
     {
-        $follower = auth()->user();
-        $follower->unFollow($request->input('id'));
+        $currentUser = $user->where('id', $request->userId)->first();
+        $currentUser->unFollow($request->input('id'));
+
         return back();
     }
 
     /**
      * ユーザー詳細画面
      *
-     * @param  int  $id
+     * @param  User  $user
+     * @param  Tweet  $tweet
+     * @param  Follower  $follower
+     * 
      * @return \Illuminate\Http\Response
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
@@ -76,7 +92,8 @@ class UsersController extends Controller
     /**
      * ユーザー編集画面
      *
-     * @param  int  $id
+     * @param  User  $user
+     * 
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -88,6 +105,8 @@ class UsersController extends Controller
      * ユーザー更新機能
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  User  $user
+     * 
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user)
@@ -96,9 +115,5 @@ class UsersController extends Controller
         $user->updateProfile($data);
         
         return redirect('users/'.$user->id);
-    }
-
-    public function __construct() {
-        $this->middleware('validationUser')->only(['update']);
     }
 }
