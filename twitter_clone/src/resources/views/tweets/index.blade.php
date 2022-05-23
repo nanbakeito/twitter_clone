@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<button id="test_jquery">ぽちっとな</button>
 <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 <div class="container">
     <div class="row justify-content-center">

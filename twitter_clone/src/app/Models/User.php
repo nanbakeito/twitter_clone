@@ -141,9 +141,9 @@ class User extends Authenticatable
      *
      * @param  Array  $params
      * 
-     * @return \Illuminate\Http\RedirectResponse
+     * @return void
      */
-    public function updateProfile(Array $params)
+    public function updateProfile(Array $params) : void
     {
         // 画像が更新される時の処理
         if (isset($params['profile_image'])) {

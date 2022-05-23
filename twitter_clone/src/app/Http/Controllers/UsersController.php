@@ -13,8 +13,6 @@ class UsersController extends Controller
 {
     /**
      * ミドルウェアによるバリデーション
-     *
-     * @return \Illuminate\Http\Response
      */
     public function __construct() {
         $this->middleware('validationUser')->only(['store','update']);
@@ -60,7 +58,7 @@ class UsersController extends Controller
     */
     public function unfollow(Request $request, User $user)
     {
-        $currentUser = $user->where('id', $request->currentUserId)->first();
+        $currentUser = $user->where('id', $request->userId)->first();
         $currentUser->unFollow($request->input('id'));
 
         return back();

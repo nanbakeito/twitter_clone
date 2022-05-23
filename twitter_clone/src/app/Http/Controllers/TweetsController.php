@@ -12,13 +12,11 @@ class TweetsController extends Controller
 {
     /**
      * ミドルウェアによるバリデーション
-     *
-     * @return \Illuminate\Http\Response
      */
     public function __construct() {
         $this->middleware('validationTweet')->only(['store','update']);
     }
-
+    
     /**
      * tweet一覧機能
      *
