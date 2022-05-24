@@ -1,14 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<link href="{{ asset('/css/index.css') }}" rel="stylesheet">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 @foreach ($allUsers as $user)
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
+                        @if(isset($user->profile_image))
                             <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
+                        @endif
                             <div class="ml-2 d-flex flex-column">
                                 <a href="{{ route('users.show', $user->id) }}" class="text-secondary">{{ $user->name }}</a>
                             </div>
@@ -28,7 +29,7 @@
                                 @else
                                     <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
                                         {{ csrf_field() }}
-                                        <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
+                                        <input name="usserId" type="hidden" value="{{ auth()->user()->id }}">
                                         <button type="submit" class="btn btn-primary">フォローする</button>
                                     </form>                                                           
                                 @endif
@@ -42,4 +43,4 @@
             {{ $allUsers->links() }}
         </div>
     </div>
-@endsection 
+@endsection

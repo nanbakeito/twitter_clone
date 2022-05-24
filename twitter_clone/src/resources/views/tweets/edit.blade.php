@@ -5,7 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">update</div>
+                <div class="card-header">Update</div>
+
                 <div class="card-body">
                     <form method="POST" action="{{ route('tweets.update', $tweets->id) }}" enctype="multipart/form-data">
                         @csrf
@@ -16,7 +17,9 @@
                             <div class="col-md-12 p-3 w-100 d-flex">
                                 <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
                                 <div class="ml-2 d-flex flex-column">
-                                    <p class="mb-0">{{ $user->name }}</p>
+                                    <a href="{{ route('users.show', $user->id) }}" class="text-secondary">
+                                        <p class="mb-0">{{ $user->name }}</p>
+                                    </a>
                                 </div>
                             </div>
                             <div class="form-group row">
