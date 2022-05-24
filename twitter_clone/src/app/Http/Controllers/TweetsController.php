@@ -13,7 +13,7 @@ class TweetsController extends Controller
     /**
      * ミドルウェアによるバリデーション
      */
-    public function __construct() {
+    public function __construct()  {
         $this->middleware('validationTweet')->only(['store','update']);
     }
 

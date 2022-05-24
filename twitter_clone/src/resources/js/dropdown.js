@@ -1,8 +1,6 @@
-$(document).ready(function(){
-	$("#demo_menu li").hover(function() {
-		$(this).children('ul').slideDown();
-		
-	}, function() {
-		$(this).children('ul').hide();
+$(function(){
+	$(".btn1").on("click", function(){
+	  //listBの高さを取得
+		alert("アラートを表示します。")
 	});
-})
+});

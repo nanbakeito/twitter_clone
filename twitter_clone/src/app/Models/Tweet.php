@@ -33,7 +33,7 @@ class Tweet extends Model
     {
         return $this->hasMany(Comment::class);
     }
-
+    
     /**
      * タイムライン情報取得しページネイト
      *

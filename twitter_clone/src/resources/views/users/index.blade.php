@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<input type="button" class= "btn1" value="アラートを表示" style= "margin: 20px;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -29,7 +30,7 @@
                                 @else
                                     <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
                                         {{ csrf_field() }}
-                                        <input name="usserId" type="hidden" value="{{ auth()->user()->id }}">
+                                        <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
                                         <button type="submit" class="btn btn-primary">フォローする</button>
                                     </form>                                                           
                                 @endif

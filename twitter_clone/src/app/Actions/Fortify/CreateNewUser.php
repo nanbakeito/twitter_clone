@@ -18,7 +18,7 @@ class CreateNewUser implements CreatesNewUsers
      * @param  array  $input
      * @return \App\Models\User
      */
-    public function create(array $input)
+    public function create(array $input) 
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
@@ -27,13 +27,22 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        $file_name = $input['profile_image']->store('public/profile_image/');
+        if (isset($input['profile_image'])) {
+            $fileName = $input['profile_image']->store('public/profile_image/');
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-            'profile_image' => basename($file_name),
-        ]);
+            return User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'profile_image' => basename($fileName),
+            ]);
+            
+        } else {
+            return User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]);
+        };
     }
 }
