@@ -20,6 +20,7 @@ class ValidationUser
     public function handle(Request $request, Closure $next)
     {
         $data = $request->all();
+        dd($data);
         $validator = Validator::make($data, [
             'name'          => ['required', 'string', 'max:255'],
             'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],

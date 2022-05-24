@@ -21,7 +21,8 @@ class ValidationTweet
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'text' => ['required', 'string', 'max:140']
+            'text' => ['required', 'string', 'max:140'],
+            'image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
         $validator->validate();
 

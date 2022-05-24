@@ -16,7 +16,7 @@ class TweetsController extends Controller
     public function __construct() {
         $this->middleware('validationTweet')->only(['store','update']);
     }
-    
+
     /**
      * tweet一覧機能
      *
@@ -84,9 +84,23 @@ class TweetsController extends Controller
      */
     public function store(Request $request, Tweet $tweet)
     {
-        $user = auth()->user();
         $data = $request->all();
-        $tweet->tweetStore($user->id, $data);
+
+        if (isset($data['image'])) {
+            $fileName = $data['image']->store('public/image/');
+
+            Tweet::create([
+                'user_id' => $data['userId'],
+                'text' => $data['text'],
+                'image' => basename($fileName),
+            ]);
+            
+        } else {
+            Tweet::create([
+                'user_id' => $data['userId'],
+                'text' => $data['text'],
+            ]);
+        };
 
         return redirect('tweets');
     }
@@ -124,7 +138,23 @@ class TweetsController extends Controller
     public function update(Request $request, Tweet $tweet)
     {
         $data = $request->all();
-        $tweet->tweetUpdate($tweet->id, $data);
+
+        if (isset($data['image'])) {
+            $fileName = $data['image']->store('public/image/');
+
+            $tweet::where('id', $data['id'])
+            ->update([
+                'user_id' => $data['userId'],
+                'text' => $data['text'],
+                'image' => basename($fileName),
+            ]);
+        } else {
+            $tweet::where('id', $data['id'])
+            ->update([
+                'user_id' => $data['userId'],
+                'text' => $data['text'],
+            ]);
+        };
 
         return redirect('tweets');
     }

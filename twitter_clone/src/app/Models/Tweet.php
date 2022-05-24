@@ -15,7 +15,9 @@ class Tweet extends Model
      * @var array
      */
     protected $fillable = [
-        'text'
+        'text',
+        'image',
+        'user_id'
     ];
     public function user()
     {
@@ -86,22 +88,7 @@ class Tweet extends Model
     }
 
     /**
-     * 新規tweet保存
-     *
-     * @param  int  $userId
-     * @param  array  $data
-     * 
-     * @return void
-     */
-    public function tweetStore(int $userId, Array $data) : void
-    {
-        $this->user_id = $userId;
-        $this->text = $data['text'];
-        $this->save();
-    }
-
-    /**
-     * 新規tweet保存
+     * user取り出し
      *
      * @param  int  $userId
      * @param  int  $tweetId
@@ -111,21 +98,6 @@ class Tweet extends Model
     public function getEditTweet(int $userId, int $tweetId)
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->first();
-    }
-
-    /**
-     * tweet更新
-     *
-     * @param  int  $tweetId
-     * @param  array  $data
-     * 
-     * @return  void
-     */
-    public function tweetUpdate(int $tweetId, Array $data) : void
-    {
-        $this->id = $tweetId;
-        $this->text = $data['text'];
-        $this->update();
     }
 
     /**

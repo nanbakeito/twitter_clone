@@ -21,15 +21,16 @@
                         <!-- 記事エリア -->
                         <div class="twitter__block">
                             <figure>
-                                <!-- 画像挿入（tweet画像未実装のため） -->
+                                <img src="{{ asset('storage/profile_image/' .$timeline->user->profile_image) }}" class="rounded-circle" width="50" height="50">
                             </figure>
                             <div class="twitter__block-text">
-                                <div class="name">{{ $user->name }}<span class="name_reply">@usa_tan</span></div>
+                                <a href="{{ route('users.show', $timeline->user->id) }}" class="text-secondary">{{ $timeline->user->name }}</a>
                                 <div class="date">{{ $timeline->created_at->format('Y-m-d H:i') }}</div>
                                 <div class="text">
                                     {{ $timeline->text }}
                                 </div>
                                 <div class="in-pict">
+                                    <img src="{{ asset('storage/image/' .$timeline->image) }}" >
                                 </div>
                                 <div class="twitter__icon">
                                 @if ($timeline->user->id === Auth::user()->id)
