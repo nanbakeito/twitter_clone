@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth'], function() {
     // リソースにはない，フォロー/フォロー解除を追加
     Route::post('users/follow', 'App\Http\Controllers\UsersController@follow')->name('follow');
     Route::delete('users/unFollow', 'App\Http\Controllers\UsersController@unFollow')->name('unFollow');
+    // コメント
+    Route::resource('comments', 'App\Http\Controllers\CommentsController', ['only' => ['store']]);
 }); 
 
 // ツイート関連

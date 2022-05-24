@@ -37,4 +37,20 @@ class Comment extends Model
     {
         return $this->with('user')->where('tweet_id', $tweetId)->get();
     }
+
+    /**
+     * コメント保存
+     *
+     * @param  int  $user_id
+     * @param  array  $data
+     * 
+     * @return void
+     */
+    public function commentStore(int $user_id, Array $data) : void
+    {
+        $this->user_id = $user_id;
+        $this->tweet_id = $data['tweet_id'];
+        $this->text = $data['text'];
+        $this->save();
+    }
 }

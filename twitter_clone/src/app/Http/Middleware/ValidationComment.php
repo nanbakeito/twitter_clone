@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class ValidationUser
+class ValidationComment
 {
     /**
      * ユーザーのバリデーション
@@ -21,9 +21,8 @@ class ValidationUser
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'name'          => ['required', 'string', 'max:255'],
-            'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->id)]
+            'tweet_id' =>['required', 'integer'],
+            'text'     => ['required', 'string', 'max:140']
         ]);
         $validator->validate();
         

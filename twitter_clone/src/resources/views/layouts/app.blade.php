@@ -11,7 +11,11 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
-        <script src="{{ mix('js/dropdown.js') }}"></script>
+
+        <!-- jQuery -->
+        <script src=“https://code.jquery.com/jquery-3.5.1.slim.min.js”
+        integrity=“sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj”
+        crossorigin=“anonymous”></script>
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,6 +25,10 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <!-- Font Awesome -->
         <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <!-- bootstrap.js -->
+        <script src=“https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js”
+        integrity=“sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV”
+        crossorigin=“anonymous”></script>
     </head>
     <body>
         <div id="app">
