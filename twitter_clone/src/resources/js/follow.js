@@ -1,5 +1,6 @@
 $(function () {
 	let favorite = $('.btn '); 
+	let followerCount = $('.followerCount '); 
     let followUserId; 
     favorite.on('click', function () { //onはイベントハンドラー
 		let $this = $(this); 
@@ -17,10 +18,11 @@ $(function () {
 			},
 		})
 		//通信成功した時の処理
-		.done(function () {
+		.done(function (data) {
 			$this.toggleClass('btn-primary btn-danger'); //likedクラスのON/OFF切り替え。
 			$('.btn-danger').text('フォロー解除');
 			$('.btn-primary').text('フォローする');
+			followerCount.text(data.followerCount);
 		})
 		//通信失敗した時の処理
 		.fail(function () {

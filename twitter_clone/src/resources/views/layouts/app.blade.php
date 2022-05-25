@@ -60,7 +60,13 @@
                                 @endif
                             @else
                                 <li class="nav-item mr-5">
-                                    <a href="{{ url('tweets/create') }}" class="btn btn-md btn-primary">ツイートする</a>
+                                    <a href="{{ route('tweets.index') }}" class="btn btn-md ">タイムライン</a>
+                                </li>
+                                <li class="nav-item mr-5">
+                                    <a href="{{ route('users.index') }}" class="btn btn-md ">ユーザー一覧</a>
+                                </li>
+                                <li class="nav-item mr-5">
+                                    <a href="{{ route('tweets.create') }}" class="btn btn-md ">ツイートする</a>
                                 </li>
                                 <li class="nav-item">
                                     <img src="{{ asset('storage/profile_image/' .auth()->user()->profile_image) }}" class="rounded-circle" width="50" height="50">
@@ -70,7 +76,7 @@
                                         {{ auth()->user()->name }} <span class="caret"></span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a href="{{ url('users/' .auth()->user()->id) }}" class="dropdown-item">プロフィール</a>
+                                        <a href="{{ route('users.show', auth()->user()->id) }}" class="dropdown-item">プロフィール</a>
                                         <a href="{{ route('logout') }}" class="dropdown-item"
                                         onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();">
