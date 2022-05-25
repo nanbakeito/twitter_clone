@@ -81,8 +81,8 @@ class UsersController extends Controller
         $followerCount = $follower->getFollowerCount($user->id);
 
         return view('users.show', [
-            'user'           => $user,
-            'timelines'      => $timelines,
+            'user'          => $user,
+            'timelines'     => $timelines,
             'tweetCount'    => $tweetCount,
             'followCount'   => $followCount,
             'followerCount' => $followerCount
@@ -90,7 +90,7 @@ class UsersController extends Controller
     }
 
     /**
-     * ユーザー編集画面
+     * ユーザー編集画面s
      *
      * @param  User  $user
      * 

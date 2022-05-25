@@ -15,23 +15,47 @@ class Tweet extends Model
      * @var array
      */
     protected $fillable = [
-        'text'
+        'text',
+        'image',
+        'user_id'
     ];
+    
+    /**
+     * usersテーブルとのリレーションを定義する
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * favoritesテーブルとのリレーションを定義する
+     */
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
 
+    /**
+     * commentsテーブルとのリレーションを定義する
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * いいねされているかを判定するメソッド
+     *
+     * @param  $user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function isLikedBy($user): bool
+    {
+        return Favorite::where('user_id', $user->id)->where('tweet_id', $this->id)->first() !==null;
+    }
+    
     /**
      * タイムライン情報取得しページネイト
      *
@@ -86,22 +110,7 @@ class Tweet extends Model
     }
 
     /**
-     * 新規tweet保存
-     *
-     * @param  int  $userId
-     * @param  array  $data
-     * 
-     * @return void
-     */
-    public function tweetStore(int $userId, Array $data) : void
-    {
-        $this->user_id = $userId;
-        $this->text = $data['text'];
-        $this->save();
-    }
-
-    /**
-     * 新規tweet保存
+     * user取り出し
      *
      * @param  int  $userId
      * @param  int  $tweetId
@@ -111,21 +120,6 @@ class Tweet extends Model
     public function getEditTweet(int $userId, int $tweetId)
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->first();
-    }
-
-    /**
-     * tweet更新
-     *
-     * @param  int  $tweetId
-     * @param  array  $data
-     * 
-     * @return  void
-     */
-    public function tweetUpdate(int $tweetId, Array $data) : void
-    {
-        $this->id = $tweetId;
-        $this->text = $data['text'];
-        $this->update();
     }
 
     /**
@@ -139,5 +133,17 @@ class Tweet extends Model
     public function tweetDestroy(int $userId, int $tweetId)
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->delete();
+    }
+
+    /**
+     * いいねカウント
+     *
+     * @param  int  $tweetId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function favoriteCount(int $tweetId)
+    {
+        return $this->favorites()->where('tweet_id', $tweetId)->count();
     }
 }

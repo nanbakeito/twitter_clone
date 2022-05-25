@@ -1,0 +1,8 @@
+.fas.fa-solid.fa-thumbs-up.favoriteToggle{
+    opacity:0.2;
+}
+
+.fas.fa-solid.fa-thumbs-up.favoriteToggle.favorite{
+    opacity:1;
+    color: rgb(255, 0, 212);
+}

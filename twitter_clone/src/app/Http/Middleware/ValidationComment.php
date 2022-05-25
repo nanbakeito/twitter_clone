@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class ValidationTweet
+class ValidationComment
 {
     /**
-     * ツイートのバリデーション
+     * ユーザーのバリデーション
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Closure  $next
@@ -21,11 +21,11 @@ class ValidationTweet
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'text' => ['required', 'string', 'max:140'],
-            'image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'tweet_id' =>['required', 'integer'],
+            'text'     => ['required', 'string', 'max:140']
         ]);
         $validator->validate();
-
+        
         return $next($request);
     }
 }

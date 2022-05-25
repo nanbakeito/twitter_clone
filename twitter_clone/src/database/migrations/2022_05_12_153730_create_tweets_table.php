@@ -17,6 +17,7 @@ class CreateTweetsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->comment('ユーザID');
             $table->string('text')->comment('ツイート本文');
+            $table->string('image')->nullable()->comment('プロフィール画像');
             $table->softDeletes();
             $table->timestamps();
     
