@@ -102,7 +102,6 @@
                                 <p class="mb-0 text-secondary">{{ count($timeline->comments) }}</p>
                             </div>
                             <!-- ここからいいね -->
-                            @auth
                             @if (!$timeline->isLikedBy(auth()->user()))
                                 <span class="favorites">
                                     <i class="fas fa-solid fa-thumbs-up favoriteToggle" data-tweet-id="{{ $timeline->id }}"></i>

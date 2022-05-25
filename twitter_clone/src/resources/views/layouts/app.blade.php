@@ -11,7 +11,7 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
-        <script src="{{ mix('js/dropdown.js') }}"></script>
+        <script src="{{ mix('js/favorite.js') }}"></script>
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

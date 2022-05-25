@@ -51,8 +51,6 @@
                             <a href="{{ route('tweets.show', $timeline->id) }}"><i class="far fa-comment fa-fw"></i></a>
                             <p class="mb-0 text-secondary">{{ count($timeline->comments) }}</p>
                         </div>
-                        <!-- ここから -->
-                        @auth
                         <!-- Review.phpに作ったisLikedByメソッドをここで使用 -->
                         @if (!$timeline->isLikedBy(auth()->user()))
                             <span class="favorites">
@@ -65,13 +63,6 @@
                                 <span class="favoriteCounter">{{$timeline->favoriteCount($timeline->id)}}</span>
                             </span>
                         @endif
-                        @endauth
-                        @guest
-                            <span class="favorites">
-                                <i class="fas fa-solid fa-thumbs-up"></i>
-                                <span class="favoriteCounter">{{$timeline->favoriteCount($timeline->id)}}</span>
-                            </span>
-                        @endguest
                     </div>
                 </div>
             </div>

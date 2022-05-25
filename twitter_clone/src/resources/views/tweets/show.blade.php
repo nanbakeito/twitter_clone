@@ -44,7 +44,6 @@
                         <i class="far fa-comment fa-fw"></i>
                         <p class="mb-0 text-secondary">{{ count($tweet->comments) }}</p>
                     </div>
-                    @auth
                     <!-- いいね -->
                     @if (!$tweet->isLikedBy(auth()->user()))
                         <span class="favorites">
@@ -57,18 +56,10 @@
                             <span class="favoriteCounter">{{$tweet->favoriteCount($tweet->id)}}</span>
                         </span>
                     @endif
-                    @endauth
-                    @guest
-                        <span class="favorites">
-                            <i class="fas fa-solid fa-thumbs-up heart"></i>
-                            <span class="favoriteCounter">{{$tweet->favoriteCount($tweet->id)}}</span>
-                        </span>
-                    @endguest
                 </div>
             </div>
         </div>
     </div>
-
     <!-- コメント -->
     <div class="row justify-content-center">
         <div class="col-md-8 mb-3">
