@@ -20,18 +20,11 @@
                             @endif
                             <div class="d-flex justify-content-end flex-grow-1">
                                 @if (auth()->user()->isFollowing($user->id))
-                                    <form action="{{ route('unFollow', ['id' => $user->id]) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
                                         <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
-                                        <button type="submit" class="btn btn-danger">フォロー解除</button>
-                                    </form>   
+                                        <button type="button" class="btn btn-danger" data-user-id="{{ $user->id }}">フォロー解除</button>
                                 @else
-                                    <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
-                                        <button type="submit" class="btn btn-primary">フォローする</button>
-                                    </form>                                                           
+                                    <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
+                                    <button type="button" class="btn btn-primary" data-user-id="{{ $user->id }}">フォローする</button>                                                    
                                 @endif
                             </div>
                         </div>

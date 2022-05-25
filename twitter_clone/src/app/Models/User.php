@@ -97,30 +97,6 @@ class User extends Authenticatable
     }
 
     /**
-     * フォロー機能
-     *
-     * @param  int  $userId
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function follow(int $userId) 
-    {
-        return $this->follows()->attach($userId);
-    }
-
-    /**
-     * フォロー解除機能
-     *
-     * @param  int  $userId
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function unFollow(int $userId)
-    {
-        return $this->follows()->detach($userId);
-    }
-
-    /**
      * フォローしているかの確認
      *
      * @param  int  $userId

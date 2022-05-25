@@ -41,27 +41,22 @@ class UsersController extends Controller
      * 
      * @return  \Illuminate\Http\RedirectResponse
     */
-    public function follow(Request $request, User $user)
+    public function follow(Request $request)
     {
-        $currentUser = $user->where('id', $request->userId)->first();
-        $currentUser->follow($request->input('id'));
+        $loginUserId = Auth()->user()->id; 
+        $userId = $request->userId;
+        $alreadyFollowed =  Follower::where('following_id', $loginUserId)->where('followed_id', $userId)->first();
 
-        return back();
-    }
+        if (!$alreadyFollowed) { 
+            $follower = new Follower; 
+            $follower->following_id = $loginUserId; 
+            $follower->followed_id = $userId;
+            $follower->save();
 
-    /** フォロー解除機能
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
-     * 
-     * @return  \Illuminate\Http\RedirectResponse
-    */
-    public function unfollow(Request $request, User $user)
-    {
-        $currentUser = $user->where('id', $request->userId)->first();
-        $currentUser->unFollow($request->input('id'));
-
-        return back();
+        } else { 
+            Follower::where('following_id', $loginUserId)->where('followed_id', $userId)->delete();
+        }
+        return response()->json(); 
     }
 
     /**

@@ -5,7 +5,6 @@ $(function () {
     favorite.on('click', function () { //onはイベントハンドラー
 		let $this = $(this); //this=イベントの発火した要素＝iタグを代入
 		favoriteTweetId = $this.data('tweet-id'); //iタグに仕込んだdata-review-idの値を取得
-		console.log(url); 
 		//ajax処理スタート
 		$.ajax({
 			headers: { //HTTPヘッダ情報をヘッダ名と値のマップで記述
