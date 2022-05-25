@@ -6,7 +6,7 @@
         <div class="col-md-8 mb-3 text-right">
             <a href="{{ route('users.index') }}">ユーザ一覧 <i class="fas fa-users" class="fa-fw"></i> </a>
         </div>
-        <!-- タイムライン -->
+    <!-- タイムライン -->
     @if (isset($timelines))
         @foreach ($timelines as $timeline)
             <div class="col-md-8 mb-3">
@@ -52,26 +52,26 @@
                             <p class="mb-0 text-secondary">{{ count($timeline->comments) }}</p>
                         </div>
                         <!-- ここから -->
-                        <div class="d-flex align-items-center">
-                            @if (!in_array($user->id, array_column($timeline->favorites->toArray(), 'user_id'), TRUE))
-                                <form method="POST" action="{{ url('favorites/') }}" class="mb-0">
-                                    @csrf
-
-                                    <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                                    <button type="submit" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
-                                </form>
-                            @else
-                                <form method="POST" action="{{ url('favorites/' .array_column($timeline->favorites->toArray(), 'id', 'user_id')[$user->id]) }}" class="mb-0">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="btn p-0 border-0 text-danger"><i class="fas fa-heart fa-fw"></i></button>
-                                </form>
-                            @endif
-                            <p class="mb-0 text-secondary">{{ count($timeline->favorites) }}</p>
-                        </div>
-                        <!-- ここまで -->
-
+                        @auth
+                        <!-- Review.phpに作ったisLikedByメソッドをここで使用 -->
+                        @if (!$timeline->isLikedBy(auth()->user()))
+                            <span class="favorites">
+                                <i class="fas fa-solid fa-thumbs-up favoriteToggle" data-tweet-id="{{ $timeline->id }}"></i>
+                                <span class="favoriteCounter">{{$timeline->favoriteCount($timeline->id)}}</span>
+                            </span>
+                        @else
+                            <span class="favorites">
+                                <i class="fas fa-solid fa-thumbs-up favoriteToggle favorite" data-tweet-id="{{ $timeline->id }}"></i>
+                                <span class="favoriteCounter">{{$timeline->favoriteCount($timeline->id)}}</span>
+                            </span>
+                        @endif
+                        @endauth
+                        @guest
+                            <span class="favorites">
+                                <i class="fas fa-solid fa-thumbs-up"></i>
+                                <span class="favoriteCounter">{{$timeline->favoriteCount($timeline->id)}}</span>
+                            </span>
+                        @endguest
                     </div>
                 </div>
             </div>

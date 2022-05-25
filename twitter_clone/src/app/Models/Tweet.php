@@ -19,19 +19,41 @@ class Tweet extends Model
         'image',
         'user_id'
     ];
+    
+    /**
+     * usersテーブルとのリレーションを定義する
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * favoritesテーブルとのリレーションを定義する
+     */
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
 
+    /**
+     * commentsテーブルとのリレーションを定義する
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * いいねされているかを判定するメソッド
+     *
+     * @param  $user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function isLikedBy($user): bool
+    {
+        return Favorite::where('user_id', $user->id)->where('tweet_id', $this->id)->first() !==null;
     }
     
     /**
@@ -111,5 +133,17 @@ class Tweet extends Model
     public function tweetDestroy(int $userId, int $tweetId)
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->delete();
+    }
+
+    /**
+     * いいねカウント
+     *
+     * @param  int  $tweetId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function favoriteCount(int $tweetId)
+    {
+        return $this->favorites()->where('tweet_id', $tweetId)->count();
     }
 }

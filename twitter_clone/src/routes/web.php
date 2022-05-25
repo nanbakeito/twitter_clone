@@ -37,6 +37,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::delete('users/unFollow', 'App\Http\Controllers\UsersController@unFollow')->name('unFollow');
     // コメント
     Route::resource('comments', 'App\Http\Controllers\CommentsController', ['only' => ['store']]);
+    // いいね
+    Route::post('tweets/favorite/{id}', 'App\Http\Controllers\FavoritesController@favorite')->name('tweets.favorite');
 }); 
 
 // ツイート関連

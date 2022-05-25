@@ -31,5 +31,4 @@ class CommentsController extends Controller
 
         return back();
     }
-
 }

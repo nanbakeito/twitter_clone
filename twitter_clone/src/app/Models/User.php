@@ -73,6 +73,14 @@ class User extends Authenticatable
     }
 
     /**
+     * favoriteテーブルリレーション　
+     */
+    public function likes()
+    {
+        return $this->hasMany('App\Model\Favorite');
+    }
+
+    /**
      * フォロワーテーブルリレーション　フォロワー　（1対多）
      */
     public function followers()
@@ -162,7 +170,5 @@ class User extends Authenticatable
                     'email'         => $params['email'],
                 ]); 
         }
-
-        return;
     }
 }

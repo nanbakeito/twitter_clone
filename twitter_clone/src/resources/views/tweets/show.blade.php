@@ -44,10 +44,26 @@
                         <i class="far fa-comment fa-fw"></i>
                         <p class="mb-0 text-secondary">{{ count($tweet->comments) }}</p>
                     </div>
-                    <div class="d-flex align-items-center">
-                        <button type="" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
-                        <p class="mb-0 text-secondary">{{ count($tweet->favorites) }}</p>
-                    </div>
+                    @auth
+                    <!-- いいね -->
+                    @if (!$tweet->isLikedBy(auth()->user()))
+                        <span class="favorites">
+                            <i class="fas fa-solid fa-thumbs-up favoriteToggle" data-tweet-id="{{ $tweet->id }}"></i>
+                            <span class="favoriteCounter">{{$tweet->favoriteCount($tweet->id)}}</span>
+                        </span>
+                    @else
+                        <span class="favorites">
+                            <i class="fas fa-solid fa-thumbs-up favoriteToggle favorite" data-tweet-id="{{ $tweet->id }}"></i>
+                            <span class="favoriteCounter">{{$tweet->favoriteCount($tweet->id)}}</span>
+                        </span>
+                    @endif
+                    @endauth
+                    @guest
+                        <span class="favorites">
+                            <i class="fas fa-solid fa-thumbs-up heart"></i>
+                            <span class="favoriteCounter">{{$tweet->favoriteCount($tweet->id)}}</span>
+                        </span>
+                    @endguest
                 </div>
             </div>
         </div>

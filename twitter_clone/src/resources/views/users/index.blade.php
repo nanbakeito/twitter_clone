@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<input type="button" class= "btn1" value="アラートを表示" style= "margin: 20px;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
