@@ -121,6 +121,51 @@ class User extends Authenticatable
     }
 
     /**
+     * フォロワー取得
+     *
+     * @param  $followerIds
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getFollower($followerIds) {
+
+        if (isset($followerIds)){
+
+            foreach ($followerIds as $followerId) {
+                $follower = $this->where('id', $followerId)->get();
+                $followerData[] = $follower;
+            } 
+
+            return $followerData;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * フォローしている人取得
+     *
+     * @param  $followingIds
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getFollowing($followingIds) {
+
+        if (isset($followingIds)){
+
+            foreach ($followingIds as $followingId) {
+                $following = $this->where('id', $followingId)->get();
+                $followingData[] = $following;
+            } 
+
+            return $followingData;
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * ユーザー情報更新
      *
      * @param  Array  $params
