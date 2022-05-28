@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     @if (isset($timeline->image))
-                        <img src="{{ asset('storage/image/' .$timeline->image) }}" width="500" height="500">
+                        <img src="{{ asset('storage/image/' .$timeline->image) }}" >
                     @endif
                     <div class="card-body">
                         {!! nl2br(e($timeline->text)) !!}

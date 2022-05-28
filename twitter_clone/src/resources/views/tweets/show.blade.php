@@ -62,7 +62,7 @@
     </div>
     {{-- vueコメント --}}
     <div class="row justify-content-center">
-        <div id="following" class="col-md-8 mb-3"><TestVue></TestVue></div>
+        <div id="follower" class="col-md-8 mb-3"><TestVue></TestVue></div>
     </div>
     <!-- コメント -->
     <div class="row justify-content-center">

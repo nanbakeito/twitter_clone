@@ -12,7 +12,7 @@ class VueAPIController extends Controller
     public function getFollowing(User $user, Follower $follower)
     {
         $userId = "1";
-        $followingIds = $follower->followingIds($userId);
+        $followingIds = $follower->followingIds($userId)->toArray();
         $data = $user->getFollowing($followingIds);
 
         return response()->json($data); 
@@ -21,7 +21,7 @@ class VueAPIController extends Controller
     public function getFollower(User $user, Follower $follower)
     {
         $userId = "1";
-        $followerIds = $follower->followerIds($userId);
+        $followerIds = $follower->followerIds($userId)->toArray();
         $data = $user->getFollower($followerIds);
 
         return response()->json($data); 

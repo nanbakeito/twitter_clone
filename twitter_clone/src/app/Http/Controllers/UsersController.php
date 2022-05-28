@@ -34,12 +34,12 @@ class UsersController extends Controller
         ]);
     }
 
-    /** フォロー機能
+    /** フォロー&解除機能　（Ajax）
      * 
      * @param  \Illuminate\Http\Request  $request
      * @param  Follower $follower
      * 
-     * @return  \Illuminate\Http\RedirectResponse
+     * @return  \Illuminate\Http\Response
     */
     public function follow(Request $request, Follower $follower)
     {

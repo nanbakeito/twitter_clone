@@ -54,7 +54,7 @@ class Follower extends Model
     public function followingIds(int $userId)
     {
         if ($this->getFollowCount($userId) > 0) {
-            return $this->where('following_id', $userId)->get('followed_id')->toArray();
+            return $this->where('following_id', $userId)->get('followed_id');
         } else {
             return null;
         }
@@ -69,7 +69,7 @@ class Follower extends Model
     public function followerIds($userId)
     {
         if ($this->getFollowerCount($userId) > 0) {
-            return $this->where('followed_id', $userId)->get('following_id')->toArray();
+            return $this->where('followed_id', $userId)->get('following_id');
         } else {
             return null;
         }

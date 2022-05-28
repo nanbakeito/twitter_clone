@@ -30,9 +30,12 @@ class TweetsController extends Controller
     {
         $user = auth()->user();
         $followIds = $follower->followingIds($user->id);
-        // followed_idだけ抜き出す
-        $followingIds = $followIds->pluck('followed_id')->toArray();
-        $timelines = $tweet->getTimelines($user->id, $followingIds);
+
+        if (isset($followIds)) {
+            // followed_idだけ抜き出す
+            $followingIds = $followIds->pluck('followed_id')->toArray();
+            $timelines = $tweet->getTimelines($user->id, $followingIds);
+        }
         
         return view('tweets.index', [
             'user'      => $user,
