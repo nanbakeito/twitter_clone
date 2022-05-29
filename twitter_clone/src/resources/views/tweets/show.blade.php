@@ -62,7 +62,13 @@
     </div>
     {{-- vueコメント --}}
     <div class="row justify-content-center">
-        <div id="follower" class="col-md-8 mb-3"><TestVue></TestVue></div>
+        <div  class="col-md-8 mb-3">zz</div>
+    </div>
+    <div>
+        <test v-bind:tweet='@json($tweet)'></test>
+    </div>
+    <div>
+        <follower-vue></follower-vue>
     </div>
     <!-- コメント -->
     <div class="row justify-content-center">

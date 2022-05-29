@@ -3,6 +3,9 @@
     <input type="text">
     <button type="button" @click="onClick">検索する</button>
 </div>
+<div>
+    <follower-vue></follower-vue>
+</div>
 
 
 <div class="col-md-8">

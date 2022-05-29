@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/following', 'App\Http\Controllers\VueAPIController@getFollowing');
 Route::get('/follower', 'App\Http\Controllers\VueAPIController@getFollower');
+
+Route::get('/commentPost', 'App\Http\Controllers\VueAPIController@commentPost');

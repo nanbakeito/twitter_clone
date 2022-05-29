@@ -3,20 +3,17 @@ import './favorite';
 import './follow';
 import '../sass/app.scss';
 import '../css/app.css';
-import { createApp } from 'vue'
-
-// フォローしている人を取得
+import { createApp } from 'vue';
+import App from './App.vue';
 import FollowingVue from './Components/Following.vue';
-
-const Following = createApp(FollowingVue) 
-Following.mount('#following');
-
-// // フォロワーを取得
 import FollowerVue from './Components/Follower.vue';
+import Test from './Components/test.vue';
+// フォローしている人を取得
 
-const Follower = createApp(FollowerVue) 
-Follower.mount('#follower')
-
-
+createApp(App)
+    .component("FollowingVue", FollowingVue)
+    .component("FollowerVue", FollowerVue)
+    .component("Test", Test)
+    .mount("#app");
 
 
