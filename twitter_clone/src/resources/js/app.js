@@ -1,7 +1,19 @@
-require('./bootstrap');
+import './bootstrap';
+import './favorite';
+import './follow';
+import '../sass/app.scss';
+import '../css/app.css';
+import { createApp } from 'vue';
+import App from './App.vue';
+import FollowingVue from './Components/Following.vue';
+import FollowerVue from './Components/Follower.vue';
+import Test from './Components/test.vue';
+// フォローしている人を取得
 
-import Alpine from 'alpinejs';
+createApp(App)
+    .component("FollowingVue", FollowingVue)
+    .component("FollowerVue", FollowerVue)
+    .component("Test", Test)
+    .mount("#app");
 
-window.Alpine = Alpine;
 
-Alpine.start();

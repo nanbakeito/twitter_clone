@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 @if (isset($tweet->image))
-                    <img src="{{ asset('storage/image/' .$tweet->image) }}" width="500" height="500">
+                    <img src="{{ asset('storage/image/' .$tweet->image) }}" >
                 @endif
                 <div class="card-body">
                     {!! nl2br(e($tweet->text)) !!}
@@ -59,6 +59,16 @@
                 </div>
             </div>
         </div>
+    </div>
+    {{-- vueコメント --}}
+    <div class="row justify-content-center">
+        <div  class="col-md-8 mb-3">zz</div>
+    </div>
+    <div>
+        <test v-bind:tweet='@json($tweet)'></test>
+    </div>
+    <div>
+        <follower-vue></follower-vue>
     </div>
     <!-- コメント -->
     <div class="row justify-content-center">

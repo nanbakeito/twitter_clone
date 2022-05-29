@@ -34,34 +34,31 @@ class UsersController extends Controller
         ]);
     }
 
-    /** フォロー機能
+    /** フォロー&解除機能　（Ajax）
      * 
      * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
+     * @param  Follower $follower
      * 
-     * @return  \Illuminate\Http\RedirectResponse
+     * @return  \Illuminate\Http\Response
     */
-    public function follow(Request $request, User $user)
+    public function follow(Request $request, Follower $follower)
     {
-        $currentUser = $user->where('id', $request->userId)->first();
-        $currentUser->follow($request->input('id'));
+        $loginUserId = Auth()->user()->id; 
+        $userId = $request->userId;
+        $alreadyFollowed =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
 
-        return back();
-    }
+        if (!$alreadyFollowed) { 
+            $follower->following_id = $loginUserId; 
+            $follower->followed_id = $userId;
+            $follower->save();
 
-    /** フォロー解除機能
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
-     * 
-     * @return  \Illuminate\Http\RedirectResponse
-    */
-    public function unfollow(Request $request, User $user)
-    {
-        $currentUser = $user->where('id', $request->userId)->first();
-        $currentUser->unFollow($request->input('id'));
+        } else { 
+            $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->delete();
+        }
 
-        return back();
+        $followerCount = $follower->getFollowerCount($userId);
+        $param = array('followerCount'=> $followerCount);
+        return response()->json($param); 
     }
 
     /**
@@ -90,7 +87,7 @@ class UsersController extends Controller
     }
 
     /**
-     * ユーザー編集画面s
+     * ユーザー編集画面
      *
      * @param  User  $user
      * 

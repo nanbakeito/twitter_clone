@@ -7,17 +7,6 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}"></script>
-        <script src="{{ mix('js/favorite.js') }}"></script>
-
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -59,7 +48,13 @@
                                 @endif
                             @else
                                 <li class="nav-item mr-5">
-                                    <a href="{{ url('tweets/create') }}" class="btn btn-md btn-primary">ツイートする</a>
+                                    <a href="{{ route('tweets.index') }}" class="btn btn-md ">タイムライン</a>
+                                </li>
+                                <li class="nav-item mr-5">
+                                    <a href="{{ route('users.index') }}" class="btn btn-md ">ユーザー一覧</a>
+                                </li>
+                                <li class="nav-item mr-5">
+                                    <a href="{{ route('tweets.create') }}" class="btn btn-md ">ツイートする</a>
                                 </li>
                                 <li class="nav-item">
                                     <img src="{{ asset('storage/profile_image/' .auth()->user()->profile_image) }}" class="rounded-circle" width="50" height="50">
@@ -69,7 +64,7 @@
                                         {{ auth()->user()->name }} <span class="caret"></span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a href="{{ url('users/' .auth()->user()->id) }}" class="dropdown-item">プロフィール</a>
+                                        <a href="{{ route('users.show', auth()->user()->id) }}" class="dropdown-item">プロフィール</a>
                                         <a href="{{ route('logout') }}" class="dropdown-item"
                                         onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();">
@@ -89,5 +84,13 @@
                 @yield('content')
             </main>
         </div>
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </body>
 </html>
