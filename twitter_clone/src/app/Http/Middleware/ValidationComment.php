@@ -21,7 +21,7 @@ class ValidationComment
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'tweet_id' =>['required', 'integer'],
+            'tweet' =>['required', 'integer'],
             'text'     => ['required', 'string', 'max:140']
         ]);
         $validator->validate();

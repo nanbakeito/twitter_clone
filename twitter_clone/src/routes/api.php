@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+// 検索機能　**未実装
 Route::get('/following', 'App\Http\Controllers\VueAPIController@getFollowing');
 Route::get('/follower', 'App\Http\Controllers\VueAPIController@getFollower');
-
-Route::get('/commentPost', 'App\Http\Controllers\VueAPIController@commentPost');
+// コメントcrud機能
+Route::post('/commentPost', 'App\Http\Controllers\VueAPIController@commentPost')->middleware('validationComment');
+Route::get('/commentGet', 'App\Http\Controllers\VueAPIController@commentGet');
+Route::delete('/commentDelete/{id}', 'App\Http\Controllers\VueAPIController@commentDelete');

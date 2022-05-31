@@ -15,6 +15,8 @@ class Comment extends Model
      * @var array
      */
     protected $fillable = [
+        'tweet_id',
+        'user_id',
         'text'
     ];
 
@@ -41,16 +43,39 @@ class Comment extends Model
     /**
      * コメント保存
      *
-     * @param  int  $user_id
      * @param  array  $data
      * 
      * @return void
      */
-    public function commentStore(int $user_id, Array $data) : void
+    public function commentStore(Array $data) : void
     {
-        $this->user_id = $user_id;
-        $this->tweet_id = $data['tweet_id'];
+        $this->user_id = $data['user'];
+        $this->tweet_id = $data['tweet'];
         $this->text = $data['text'];
         $this->save();
+    }
+
+    /**
+     * コメント削除
+     *
+     * @param  $id
+     * 
+     * @return void
+     */
+    public function commentDelete($id) : void
+    {
+        $this->where('id',$id)->delete();
+    }
+
+    /**
+     * 一意のツイートのコメント取得
+     *
+     * @param  $tweetId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function comments($tweetId)
+    {
+        return $this->where('tweet_id', $tweetId)->get();
     }
 }
