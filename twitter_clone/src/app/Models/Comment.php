@@ -49,8 +49,8 @@ class Comment extends Model
      */
     public function commentStore(Array $data) : void
     {
-        $this->user_id = $data['user'];
-        $this->tweet_id = $data['tweet'];
+        $this->user_id = $data['user_id'];
+        $this->tweet_id = $data['tweet_id'];
         $this->text = $data['text'];
         $this->save();
     }
@@ -58,24 +58,26 @@ class Comment extends Model
     /**
      * コメント削除
      *
-     * @param  $id
+     * @param  int $id
      * 
      * @return void
      */
-    public function commentDelete($id) : void
+    public function commentDelete(int $id) : void
     {
         $this->where('id',$id)->delete();
     }
 
     /**
-     * 一意のツイートのコメント取得
+     * 一意のツイートの全コメント取得
      *
-     * @param  $tweetId
+     * @param  int $tweetId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function comments($tweetId)
+    public function fetchCommentsByTweetId(int $tweetId)
     {
-        return $this->where('tweet_id', $tweetId)->get();
+        $comments = $this->where('tweet_id', $tweetId)->get();
+        
+        return $this->where('tweet_id', $tweetId)->exists() ? $comments : null ;
     }
 }

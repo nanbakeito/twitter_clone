@@ -17719,11 +17719,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  created: function created() {
-    console.log("app");
-  }
-});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
 
 /***/ }),
 
@@ -17772,7 +17768,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return axios.get("/api/follower");
+              return axios.post("/api/commentPost");
 
             case 2:
               res = _context.sent;
@@ -17855,6 +17851,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
+    console.log("debug2");
     this.get();
   },
   props: {
@@ -17871,48 +17868,41 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   watch: {
-    comments: function comments() {
-      console.log("変更");
-    }
+    comments: function comments() {}
   },
   methods: {
     get: function get() {
       var _this = this;
 
-      axios.get("/api/commentGet", {
+      axios.get("/api/getComment", {
         params: {
-          user: this.user,
-          tweet: this.tweet
+          user_id: this.user,
+          tweet_id: this.tweet
         }
       }).then(function (res) {
-        _this.comments = res.data.slice().reverse();
-        console.log(res.data);
+        _this.comments = res.data.reverse();
+        console.log(res.length);
       });
     },
-    post: function post() {
+    pos: function pos() {
       var _this2 = this;
 
-      axios.post("/api/commentPost", {
-        text: this.$refs.comment.value,
-        user: this.user,
-        tweet: this.tweet
+      axios.post("/api/postComment", {
+        text: this.$refs.commentText.value,
+        user_id: this.user,
+        tweet_id: this.tweet
       }).then(function (res) {
         _this2.get();
       })["catch"](function (error) {
         alert("テキストを入れてください");
-        console.log('通信失敗');
-        console.log(error.status);
       });
     },
     remove: function remove(id) {
       var _this3 = this;
 
-      axios["delete"]("/api/commentDelete/" + id).then(function (res) {
+      axios["delete"]("/api/deleteComment/" + id).then(function (res) {
         _this3.get();
-      })["catch"](function (error) {
-        console.log('通信失敗');
-        console.log(id);
-      });
+      })["catch"](function (error) {});
     }
   }
 });
@@ -17954,10 +17944,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, "follower");
+  return null;
 }
 
 /***/ }),
@@ -18021,7 +18009,7 @@ var _hoisted_6 = {
   type: "text",
   "class": "form-control",
   placeholder: "コメント    140文字以内",
-  ref: "comment"
+  ref: "commentText"
 };
 var _hoisted_7 = {
   "class": "input-group-btn"
@@ -18060,7 +18048,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.post && $options.post.apply($options, arguments);
+      return $options.pos && $options.pos.apply($options, arguments);
     })
   }, "送信")])])])])])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.comments, function (comment) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
@@ -18126,9 +18114,11 @@ var _hoisted_1 = /*#__PURE__*/_withScopeId(function () {
 });
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_follower_vue = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("follower-vue");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.tweet.text), 1
   /* TEXT */
-  ), _hoisted_1]);
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follower_vue)]), _hoisted_1]);
 }
 
 /***/ }),

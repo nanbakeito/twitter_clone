@@ -1,13 +1,13 @@
 <template>
-    <div >
+    <div>
         <li class="list-group-item">
             <div class="py-3">
                 <div class="col-md-12"> 
                     <div class="form-group row mb-0">
                         <div class="col-md-12">
-                            <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="comment">
+                            <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="commentText">
                             <span class="input-group-btn">
-                                <button class=" submit-btn" type="button" v-on:click="post" >送信</button> 
+                                <button class="submit-btn" type="button" v-on:click="pos" >送信</button> 
                             </span>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                     {{ comment.text }}
                 </div>
                 <div class="py-3">
-                    <button class=" delete-btn" type="button" v-on:click="remove(comment.id)" >削除</button>
+                    <button class="delete-btn" type="button" v-on:click="remove(comment.id)" >削除</button>
                 </div>
             </li>
         </dl>
@@ -39,6 +39,7 @@
 <script>
 export default {
     created() {
+        console.log("debug2");
         this.get();
     },
     props: {
@@ -52,46 +53,40 @@ export default {
     data() {
         return {
             comments: [],
-        }
+        };
     },
     watch: {
-        comments: function(){
-            console.log("変更")
+        comments: function () {
         }
     },
     methods: {
-        get: function(){ 
-            axios.get("/api/commentGet",{
+        get: function () {
+            axios.get("/api/getComment", {
                 params: {
-                    user: this.user,
-                    tweet: this.tweet,
+                    user_id: this.user,
+                    tweet_id: this.tweet,
                 }
-                }).then((res) => {
-                    this.comments = res.data.slice().reverse();
-                    console.log(res.data);
-                });
+            }).then((res) => {
+                this.comments = res.data.reverse();
+                console.log(res.length);
+            });
         },
-        post: function(){ 
-            axios.post("/api/commentPost",{
-                text: this.$refs.comment.value,
-                user: this.user,
-                tweet: this.tweet,
-                }).then((res) => { 
-                    this.get();
-                }).catch((error) => {
-                    alert("テキストを入れてください")
-                    console.log('通信失敗'); 
-                    console.log(error.status); 
-                });
+        pos: function () {
+            axios.post("/api/postComment", {
+                text: this.$refs.commentText.value,
+                user_id: this.user,
+                tweet_id: this.tweet,
+            }).then((res) => {
+                this.get();
+            }).catch((error) => {
+                alert("テキストを入れてください");
+            });
         },
-        remove: function(id){ 
-            axios.delete("/api/commentDelete/" + id,
-                ).then((res) => { 
-                    this.get();
-                }).catch((error) => {
-                    console.log('通信失敗'); 
-                    console.log(id); 
-                });
+        remove: function (id) {
+            axios.delete("/api/deleteComment/" + id).then((res) => {
+                this.get();
+            }).catch((error) => {
+            });
         },
     },
 };  

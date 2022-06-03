@@ -4,7 +4,6 @@ import './favorite';
 import './follow';
 import '../sass/app.scss';
 import '../css/app.css';
-
 import { createApp } from 'vue';
 import App from './App.vue';
 import FollowingVue from './Components/Following.vue';
