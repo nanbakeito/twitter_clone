@@ -34,7 +34,8 @@ class UsersController extends Controller
         ]);
     }
 
-    /** フォロー&解除機能　（Ajax）
+    /** 
+     * フォロー&解除機能　（Ajax）
      * 
      * @param  \Illuminate\Http\Request  $request
      * @param  Follower $follower

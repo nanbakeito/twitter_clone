@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+<div><select-box :user= "@json(auth()->user()->id)"></select-box>  </div>
+    {{-- <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 @foreach ($allUsers as $user)
@@ -35,5 +36,5 @@
         <div class="my-4 d-flex justify-content-center">
             {{ $allUsers->links() }}
         </div>
-    </div>
+    </div> --}}
 @endsection

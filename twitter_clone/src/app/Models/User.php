@@ -192,4 +192,47 @@ class User extends Authenticatable
                 ]); 
         }
     }
+
+    /**
+     * 全ユーザーid取得
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchUserIds()
+    {
+        $users = User::all();
+        foreach ($users as $user) {
+            $ids[] = $user->id;
+        };
+
+        return $ids ;
+    }
+
+    /**
+     * ユーザータイムライン取得（自身以外）
+     *
+     * @param  Array  $userIds
+     * @param  int  $loginUserId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchUserTimeLines(array $userIds ,int $loginUserId) 
+    {
+        $userIds = array_diff($userIds, array($loginUserId));
+        $loginUser = $this->where('id', $loginUserId)->first();
+
+        foreach($userIds as $userId) {
+
+            $person = $this->where('id', $userId)->first();
+                $userTimeLine = ([
+                    'id'                    => $userId,
+                    'userName'              => $person->name,
+                    'userProfileImage'      => $person->profile_image,
+                    'followingJudgement'    => $loginUser->isFollowing($userId),
+                ]);
+                $userTimeLines[] = $userTimeLine;
+        }
+
+        return $userTimeLines;
+    }
 }

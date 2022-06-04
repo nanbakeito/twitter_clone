@@ -1,5 +1,5 @@
 <template>
-<div>follower</div>
+<div>aaaa</div>
 </template>
 
 
@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         get: function () {
-            axios.get("/api/fetchFollower", {
+            axios.get("/api/fetchFollow", {
                 params: {
                     user_id: this.user,
                 }
