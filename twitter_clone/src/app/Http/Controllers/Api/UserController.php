@@ -21,6 +21,7 @@ class UserController extends Controller
      */
     public function getFollowing(User $user, Follower $follower)
     {
+        // 未実装
         $userId = "1";
         $followingIds = $follower->followingIds($userId);
         
@@ -43,6 +44,7 @@ class UserController extends Controller
      */
     public function getFollower(User $user, Follower $follower)
     {
+        // 未実装
         $userId = "1";
         $followerIds = $follower->followerIds($userId)->toArray();
         if (isset($followerIds)) {

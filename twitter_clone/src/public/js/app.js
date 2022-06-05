@@ -17851,7 +17851,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    console.log("debug2");
     this.get();
   },
   props: {
@@ -17884,7 +17883,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(res.length);
       });
     },
-    pos: function pos() {
+    post: function post() {
       var _this2 = this;
 
       axios.post("/api/postComment", {
@@ -18048,7 +18047,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.pos && $options.pos.apply($options, arguments);
+      return $options.post && $options.post.apply($options, arguments);
     })
   }, "送信")])])])])])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.comments, function (comment) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {

@@ -76,8 +76,6 @@ class Comment extends Model
      */
     public function fetchCommentsByTweetId(int $tweetId)
     {
-        $comments = $this->where('tweet_id', $tweetId)->get();
-        
-        return $this->where('tweet_id', $tweetId)->exists() ? $comments : null ;
+        return $this->where('tweet_id', $tweetId)->exists() ? $this->where('tweet_id', $tweetId)->get() : null ;
     }
 }
