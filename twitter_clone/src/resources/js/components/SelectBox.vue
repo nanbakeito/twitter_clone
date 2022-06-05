@@ -4,29 +4,27 @@
         <input
             id="follow"
             type="checkbox"
-            value="follow"
+            value= 0
             v-model="checkList"
         >
         <label for="follow">フォロー</label>
-
         <input
-            id="kai"
+            id="follower"
             type="checkbox"
-            value="follower"
+            value= 1
             v-model="checkList"
         >
         <label for="follower">フォロワー</label>
-
         <input
-            id="other"
+            id="all"
             type="checkbox"
-            value="other"
+            value= 2
             v-model="checkList"
         >
-        <label for="other">その他</label>
+        <label for="all">全員</label>
     </section>
     <span class="input-group-btn">
-        <button class="submit-btn" type="button" v-on:click="list" >絞り込み</button> 
+        <button class="submit-btn" type="button" v-on:click="narrowDownUserTimeLinesByRequest" >絞り込み</button> 
     </span>
     <div class="container">
         <div class="row justify-content-center">
@@ -69,6 +67,10 @@ export default {
             userTimeLines: [],
         }
     },
+    watch: {
+        userTimeLines: function () {
+        }
+    },
     methods: {
 
         list: function () {
@@ -90,7 +92,8 @@ export default {
         narrowDownUserTimeLinesByRequest: function() {
             axios.get("/api/narrowDownUserTimeLinesByRequest", {
                 params: {
-                    user_id: this.user
+                    user_id: this.user,
+                    checkList: this.checkList
                 }
             }).then((res) => {
                 this.userTimeLines = res.data,

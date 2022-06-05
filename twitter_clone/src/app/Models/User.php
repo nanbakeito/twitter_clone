@@ -209,6 +209,38 @@ class User extends Authenticatable
     }
 
     /**
+     * ユーザーid取得（条件付き）
+     *
+     * @param  Array  $judge
+     * @param  int  $loginUserId
+     * @param  array  $followingIds
+     * @param  array  $followerIds
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchUserIdsByRequest(array $judge,int $loginUserId, array $followingIds, array $followerIds)
+    {
+        $follow = 0; 
+        $follower = 1;
+        $all = 2;
+
+        if (in_array($all, $judge)) {
+            $ids = $this->fetchUserIds();
+        } elseif (in_array($follow, $judge) and in_array($follower, $judge)) {
+            $ids = array_unique(array_merge($followingIds, $followerIds));
+
+        } elseif(in_array($follow, $judge)) {
+            $ids = $followingIds;
+
+        } elseif(in_array($follower, $judge)) {
+            $ids = $followerIds;
+
+        };
+        
+        return $ids ;
+    }
+
+    /**
      * ユーザータイムライン取得（自身以外）
      *
      * @param  Array  $userIds

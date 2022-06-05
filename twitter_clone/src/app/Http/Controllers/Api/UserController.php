@@ -47,6 +47,7 @@ class UserController extends Controller
     {
         $userId = $Request->user_id;
         $followerIds = $follower->followerIds($userId);
+
         if (isset($followerIds)) {
             $followerIds = $follower->followerIds($userId)->toArray();
             $data = $user->getFollower($followerIds);
@@ -66,18 +67,31 @@ class UserController extends Controller
      */
     public function narrowDownUserTimeLinesByRequest(Request $Request,User $user, Follower $follower)
     {
-        $userId = $Request->user_id;
-        $followerIds = $follower->followerIds($userId);
-        if (isset($followerIds)) {
-            $followerIds = $follower->followerIds($userId)->toArray();
-            $data = $user->getFollower($followerIds);
+        $judge = array_map('intval', $Request->checkList);
+        $followingIds = $follower->followingIds($Request->user_id);
+        $followerIds = $follower->followerIds($Request->user_id);
+        
+        if (isset($followingIds) and isset($followerIds)) {
+            $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
+        
+        } elseif (isset($followingIds)) {
+            $followerIds = [];
+            $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
 
-            return response()->json($data); 
+        } elseif (isset($followerIds)) {
+            $followingIds = [];
+            $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
+
         }
+
+        $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
+        $userTimeLines = $user->fetchUserTimeLines($userIds, $Request->user_id);
+
+        return response()->json($userTimeLines); 
     }
 
 
-    /**
+    /** 
      * 
      * ユーザータイムライン取得（自身以外）
      * 

@@ -17863,6 +17863,9 @@ __webpack_require__.r(__webpack_exports__);
       userTimeLines: []
     };
   },
+  watch: {
+    userTimeLines: function userTimeLines() {}
+  },
   methods: {
     list: function list() {
       console.log(this.checkList);
@@ -17883,7 +17886,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/narrowDownUserTimeLinesByRequest", {
         params: {
-          user_id: this.user
+          user_id: this.user,
+          checkList: this.checkList
         }
       }).then(function (res) {
         _this2.userTimeLines = res.data, console.log(userTimeLines);
@@ -18081,8 +18085,8 @@ var _hoisted_2 = /*#__PURE__*/_withScopeId(function () {
 
 var _hoisted_3 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-    "for": "other"
-  }, "その他", -1
+    "for": "all"
+  }, "全員", -1
   /* HOISTED */
   );
 });
@@ -18122,25 +18126,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: "follow",
     type: "checkbox",
-    value: "follow",
+    value: "0",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.checkList = $event;
     })
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    id: "kai",
+    id: "follower",
     type: "checkbox",
-    value: "follower",
+    value: "1",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $data.checkList = $event;
     })
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    id: "other",
+    id: "all",
     type: "checkbox",
-    value: "other",
+    value: "2",
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $data.checkList = $event;
     })
@@ -18150,7 +18154,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.list && $options.list.apply($options, arguments);
+      return $options.narrowDownUserTimeLinesByRequest && $options.narrowDownUserTimeLinesByRequest.apply($options, arguments);
     })
   }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.userTimeLines, function (userTimeLine) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
