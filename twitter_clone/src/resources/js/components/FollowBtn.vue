@@ -27,7 +27,7 @@ export default {
         };
     },
     watch: {
-            judge: function () {
+        judge: function () {
         }
     },
     methods: {

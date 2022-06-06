@@ -31,6 +31,12 @@
                             </div>
                         </div>
                         <!-- コメントアイコン -->
+                        <div class="mr-3 d-flex align-items-center">
+                            <a :href="'/tweets/' + timeLine.id "><i class="far fa-comment fa-fw"></i></a>
+                            <p class="mb-0 text-secondary">{{ timeLine.commentCount }}</p>
+                        </div>
+                        <!-- いいね -->
+                        <favorite-btn :login_user_id= "user" :tweet_id="timeLine.id" :favorite_count="timeLine.favoriteCount" :favorite_judge="timeLine.favoriteJudge"></favorite-btn>
                     </div>
                 </div>
             </dl>

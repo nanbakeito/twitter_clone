@@ -48,23 +48,23 @@ class Tweet extends Model
     /**
      * いいねされているかを判定するメソッド
      *
-     * @param  $user
+     * @param  int $userId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function isLikedBy($user): bool
+    public function isLikedBy(int $userId): bool
     {
-        return Favorite::where('user_id', $user->id)->where('tweet_id', $this->id)->first() !==null;
+        return Favorite::where('user_id', $userId)->where('tweet_id', $this->id)->first() !==null;
     }
     
     /**
      * タイムライン情報取得しページネイト
      *
-     * @param  int  $userId
+     * @param  $userId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getUserTimeLine(int $userId)
+    public function getUserTimeLine($userId)
     {
         return $this->where('user_id', $userId)->orderBy('created_at', 'DESC')->paginate(50);
     }
@@ -101,6 +101,8 @@ class Tweet extends Model
                 'image'                 => $tweet->image,
                 'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
                 'commentCount'          => count($tweet->comments),
+                'favoriteCount'         => count($tweet->favorites),
+                'favoriteJudge'         => $tweet->isLikedBy($userId),
                 // ユーザー情報（リレーション）
                 'userId'                => $tweet->user->id,
                 'userName'              => $tweet->user->name,
