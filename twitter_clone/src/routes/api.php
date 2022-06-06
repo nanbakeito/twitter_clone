@@ -29,3 +29,7 @@ Route::get('/fetchFollower', 'App\Http\Controllers\API\UserController@fetchFollo
 Route::post('/postComment', 'App\Http\Controllers\API\CommentController@postComment')->middleware('validationComment');
 Route::get('/getComment', 'App\Http\Controllers\API\CommentController@getComment');
 Route::delete('/deleteComment/{id}', 'App\Http\Controllers\API\CommentController@deleteComment');
+// ツイート関連
+Route::get('/fetchTimeLines', 'App\Http\Controllers\API\TweetController@fetchTimeLines');
+Route::delete('/deleteTweet/{id}', 'App\Http\Controllers\API\TweetController@deleteTweet');
+

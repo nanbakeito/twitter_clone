@@ -29,17 +29,9 @@ class TweetsController extends Controller
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
-        $followIds = $follower->followingIds($user->id);
-
-        if (isset($followIds)) {
-            // followed_idだけ抜き出す
-            $followingIds = $followIds->pluck('followed_id')->toArray();
-            $timelines = $tweet->getTimelines($user->id, $followingIds);
-        }
         
         return view('tweets.index', [
             'user'      => $user,
-            'timelines' => $timelines
         ]);
     }
 

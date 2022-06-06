@@ -11,7 +11,6 @@ use App\Http\Controllers\Controller;
 class UserController extends Controller
 {
     /**
-     * 
      * フォローしているユーザー取得
      * 
      * @param  Illuminate\Http\Request $Request
@@ -35,7 +34,6 @@ class UserController extends Controller
     }
 
     /**
-     * 
      * フォロワー取得
      *
      * @param  User  $user
@@ -57,7 +55,6 @@ class UserController extends Controller
     }
 
     /**
-     * 
      * ユーザータイムライン絞り込み
      *
      * @param  User  $user
@@ -90,9 +87,7 @@ class UserController extends Controller
         return response()->json($userTimeLines); 
     }
 
-
     /** 
-     * 
      * ユーザータイムライン取得（自身以外）
      * 
      * @param  Illuminate\Http\Request $Request

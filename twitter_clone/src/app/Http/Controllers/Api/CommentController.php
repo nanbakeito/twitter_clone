@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Follower;
 use App\Models\Comment;
 use App\Http\Controllers\Controller;
 
@@ -35,7 +34,6 @@ class CommentController extends Controller
     }
 
     /**
-     * 
      * コメント削除
      *
      * @param  \Illuminate\Http\Request  $request

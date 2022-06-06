@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\softDeletes;
+use App\Models\Comment;
 
 class Tweet extends Model
 {
@@ -88,13 +89,34 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getTimeLines(int $userId, Array $followIds)
+    public function fetchTimeLines(int $userId, Array $followingIds)
     {
         // 自身とフォローしているユーザIDを結合する
-        $followIds[] = $userId;
-        $timelines = $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
+        $followingIds[] = $userId;
+        $tweets = $this->whereIn('user_id', $followingIds)->orderBy('created_at', 'DESC')->get();
+        foreach($tweets as $tweet) {
+            $timeLine = ([
+                'id'                    => $tweet->id,
+                'text'                  => $tweet->text,
+                'image'                 => $tweet->image,
+                'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
+                'commentCount'          => count($tweet->comments),
+                // ユーザー情報（リレーション）
+                'userId'                => $tweet->user->id,
+                'userName'              => $tweet->user->name,
+                'userProfileImage'      => $tweet->user->profile_image,
+            ]);
+            $timeLines[] = $timeLine;
+        }
+
+        return $timeLines;
+
+
+
+
+        $timelines = $this->whereIn('user_id', $followingIds)->orderBy('created_at', 'DESC')->get();
         // ツイートがあるかどうか
-        return $this->wherein('user_id', $followIds)->exists() ? $timelines : null ;
+        return $timelines;
     }
 
     /**
@@ -125,14 +147,13 @@ class Tweet extends Model
     /**
      * tweet削除
      *
-     * @param  int  $userId
      * @param  int  $tweetId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function tweetDestroy(int $userId, int $tweetId)
+    public function tweetDelete(int $tweetId)
     {
-        return $this->where('user_id', $userId)->where('id', $tweetId)->delete();
+        return $this->where('id', $tweetId)->delete();
     }
 
     /**

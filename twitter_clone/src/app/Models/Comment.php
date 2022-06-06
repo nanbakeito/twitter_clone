@@ -29,6 +29,14 @@ class Comment extends Model
     }
 
     /**
+     *　tweetテーブルとのリレーション（多対1）
+     */
+    public function tweet()
+    {
+        return $this->belongsTo(Tweet::class);
+    }
+
+    /**
      * 詳細画面
      *
      * @param  int  $tweetId
