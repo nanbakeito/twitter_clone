@@ -24,13 +24,9 @@ class UserController extends Controller
     {
         $userId = $request->user_id;
         $followingIds = $follower->followingIds($userId);
-        
-        if (isset($followingIds)) {
-            $followingIds = $follower->followingIds($userId)->toArray();
-            $data = $user->getFollower($followingIds);
+        $data = $user->getFollower($followingIds);
 
-            return response()->json($data); 
-        }
+        return response()->json($data); 
     }
 
     /**
@@ -45,13 +41,9 @@ class UserController extends Controller
     {
         $userId = $request->user_id;
         $followerIds = $follower->followerIds($userId);
+        $data = $user->getFollower($followerIds);
 
-        if (isset($followerIds)) {
-            $followerIds = $follower->followerIds($userId)->toArray();
-            $data = $user->getFollower($followerIds);
-
-            return response()->json($data); 
-        }
+        return response()->json($data); 
     }
 
     /**
@@ -67,20 +59,7 @@ class UserController extends Controller
         $judge = array_map('intval', $request->checkList);
         $followingIds = $follower->followingIds($request->user_id);
         $followerIds = $follower->followerIds($request->user_id);
-        
-        if (isset($followingIds) and isset($followerIds)) {
-            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
-        
-        } elseif (isset($followingIds)) {
-            $followerIds = [];
-            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
-
-        } elseif (isset($followerIds)) {
-            $followingIds = [];
-            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
-
-        }
-
+        $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
         $userTimeLines = $user->fetchUserTimeLines($userIds, $request->user_id);
 
         return response()->json($userTimeLines); 

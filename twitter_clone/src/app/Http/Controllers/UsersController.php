@@ -59,6 +59,7 @@ class UsersController extends Controller
 
         $followerCount = $follower->getFollowerCount($userId);
         $param = array('followerCount'=> $followerCount);
+        
         return response()->json($param); 
     }
 

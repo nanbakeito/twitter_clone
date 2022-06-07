@@ -62,7 +62,7 @@ class Follower extends Model
 
             return $followingIds;
         } else {
-            return null;
+            return $followingIds = [];
         }
     }
     /**
@@ -83,7 +83,7 @@ class Follower extends Model
 
             return $followerIds;
         } else {
-            return null;
+            return $follower = [];
         }
     }
 }

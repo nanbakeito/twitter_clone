@@ -129,17 +129,12 @@ class User extends Authenticatable
      */
     public function getFollower($followerIds) {
 
-        if (isset($followerIds)){
+        foreach ($followerIds as $followerId) {
+            $follower = $this->where('id', $followerId)->get();
+            $followerData[] = $follower;
+        } 
 
-            foreach ($followerIds as $followerId) {
-                $follower = $this->where('id', $followerId)->get();
-                $followerData[] = $follower;
-            } 
-
-            return $followerData;
-        } else {
-            return null;
-        }
+        return $followerData;
     }
 
     /**
@@ -151,18 +146,13 @@ class User extends Authenticatable
      */
     public function getFollowing($followingIds) {
 
-        if (isset($followingIds)){
 
-            foreach ($followingIds as $followingId) {
-                $following = $this->where('id', $followingId)->get();
-                $followingData[] = $following;
-            } 
+    foreach ($followingIds as $followingId) {
+        $following = $this->where('id', $followingId)->get();
+        $followingData[] = $following;
+    } 
 
-            return $followingData;
-
-        } else {
-            return null;
-        }
+    return $followingData;
     }
 
     /**
@@ -177,7 +167,6 @@ class User extends Authenticatable
         // 画像が更新される時の処理
         if (isset($params['profile_image'])) {
             $fileName = $params['profile_image']->store('public/profile_image/');
-
             $this::where('id', $this->id)
                 ->update([
                     'name'          => $params['name'],
