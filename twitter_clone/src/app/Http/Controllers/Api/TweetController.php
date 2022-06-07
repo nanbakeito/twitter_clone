@@ -13,11 +13,17 @@ use App\Http\Controllers\Controller;
 class TweetController extends Controller
 {
     /**
+     * ミドルウェアによるバリデーション
+     */
+    public function __construct()  {
+        $this->middleware('validationTweet')->only(['postTweet']);
+    }
+
+    /**
      * タイムライン表示
      * 
      * @param  Illuminate\Http\Request $Request
      * @param  Follower  $follower
-     * @param  User      $user
      * @param  Tweet     $tweet
      * 
      * @return \Illuminate\Http\Response
@@ -28,6 +34,38 @@ class TweetController extends Controller
         $timeLines = $tweet->fetchTimeLines($request->user_id, $followingIds);
         
         return response()->json($timeLines);
+    }
+
+    /**
+     * tweet投稿
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Follower  $follower
+     * @param  Tweet  $tweet
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function postTweet(Request $request, Follower $follower, Tweet $tweet)
+    {
+        $data = $request->all();
+
+        if (!in_array('null', $data)) {
+            $fileName = $data['image']->store('public/image/');
+
+            Tweet::create([
+                'user_id' => $data['userId'],
+                'text' => $data['text'],
+                'image' => basename($fileName),
+            ]);
+            
+        } else {
+            Tweet::create([
+                'user_id' => $data['userId'],
+                'text' => $data['text'],
+            ]);
+        };
+
+        return response()->json();
     }
 
     /**
@@ -79,5 +117,4 @@ class TweetController extends Controller
         ];
         return response()->json($param); 
     }
-
 }

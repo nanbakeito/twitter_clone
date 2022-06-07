@@ -1,49 +1,97 @@
 <template>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 mb-3">
-            <dl v-for="timeLine in timeLines" :key="timeLine.id" >
-                <div class="card">
-                    <div class="card-haeder p-3 w-100 d-flex">
-                        <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
-                        <div class="ml-2 d-flex flex-column">
-                            <a :href="'/users/show/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
-                        </div>
-                        <div class="d-flex justify-content-end flex-grow-1">
-                            <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
-                        </div>
-                    </div>
-                    <img :src="'../storage/image/' + timeLine.image " >
-                    <div class="card-body">
-                        {{ timeLine.text }}
-                    </div>
-                    <div class="card-footer py-1 d-flex justify-content-end bg-white">
-                        <!-- 投稿者がログインユーザーなら編集、削除表示  -->
-                        <div v-if="timeLine.userId === user">
-                            <div class="dropdown mr-3 d-flex align-items-center">
-                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-fw"></i>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a :href="'/users/' + timeLine.id + '/edit/'" class="dropdown-item">編集</a>
-                                    <button type="button" class="dropdown-item del-btn" v-on:click="remove(timeLine.id)">削除</button>
+<div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 mb-3">
+                <div v-if="isActive">
+                    <button type="button" v-on:click="active">ツイートする</button>
+                </div>
+                <div v-else>
+                    <button type="button" v-on:click="active">閉じる</button>
+                </div>
+                <div v-if="isActive">
+                </div>
+                <!-- 投稿フォーム -->
+                <div v-else>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group row mb-0">
+                                <div class="col-md-12 p-3 w-100 d-flex">
+                                    <img :src="'../storage/profile_image/' + image " class="rounded-circle" width="50" height="50">
+                                    <div class="ml-2 d-flex flex-column">
+                                        <p class="mb-0">{{ name }}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="" class="col-md-4 col-form-label text-md-right">画像</label>
+                                    <div class="col-md-6">
+                                        <input @change="fileSelect" type="file" accept="image/png, image/jpeg">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <textarea class="form-control  is-invalid" name="text" required autocomplete="text" rows="4" ref="tweetText"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-0">
+                                <div class="col-md-12 text-right">
+                                    <p class="mb-4 text-danger">140文字以内</p>
+                                    <button type="submit" class="btn btn-primary" v-on:click="tweet">
+                                        ツイートする
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <!-- コメントアイコン -->
-                        <div class="mr-3 d-flex align-items-center">
-                            <a :href="'/tweets/' + timeLine.id "><i class="far fa-comment fa-fw"></i></a>
-                            <p class="mb-0 text-secondary">{{ timeLine.commentCount }}</p>
-                        </div>
-                        <!-- いいね -->
-                        <favorite-btn :login_user_id= "user" :tweet_id="timeLine.id" :favorite_count="timeLine.favoriteCount" :favorite_judge="timeLine.favoriteJudge"></favorite-btn>
                     </div>
                 </div>
-            </dl>
+            </div>
+        </div>
+    </div>
+    <!-- タイムライン -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 mb-3">
+                <dl v-for="timeLine in timeLines" :key="timeLine.id" >
+                    <div class="card">
+                        <div class="card-haeder p-3 w-100 d-flex">
+                            <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
+                            <div class="ml-2 d-flex flex-column">
+                                <a :href="'/users/show/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
+                            </div>
+                            <div class="d-flex justify-content-end flex-grow-1">
+                                <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
+                            </div>
+                        </div>
+                        <img :src="'../storage/image/' + timeLine.image " >
+                        <div class="card-body">
+                            {{ timeLine.text }}
+                        </div>
+                        <div class="card-footer py-1 d-flex justify-content-end bg-white">
+                            <!-- 投稿者がログインユーザーなら編集、削除表示  -->
+                            <div v-if="timeLine.userId === user">
+                                <div class="dropdown mr-3 d-flex align-items-center">
+                                    <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-fw"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a :href="'/users/' + timeLine.id + '/edit/'" class="dropdown-item">編集</a>
+                                        <button type="button" class="dropdown-item del-btn" v-on:click="remove(timeLine.id)">削除</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- コメントアイコン -->
+                            <div class="mr-3 d-flex align-items-center">
+                                <a :href="'/tweets/' + timeLine.id "><i class="far fa-comment fa-fw"></i></a>
+                                <p class="mb-0 text-secondary">{{ timeLine.commentCount }}</p>
+                            </div>
+                            <!-- いいね -->
+                            <favorite-btn :login_user_id= "user" :tweet_id="timeLine.id" :favorite_count="timeLine.favoriteCount" :favorite_judge="timeLine.favoriteJudge"></favorite-btn>
+                        </div>
+                    </div>
+                </dl>
+            </div>
         </div>
     </div>
 </div>
-
 </template>
 
 <script>
@@ -55,10 +103,20 @@ export default {
         user: {
             required: true
         },
+        name: {
+            required: true,
+            type: String,
+        },
+        image: {
+            required: true,
+            type: String,
+        },
     },
     data() {
         return {
             timeLines: [],
+            isActive: true,
+            selected_file: null
         };
     },
     watch: {
@@ -85,17 +143,34 @@ export default {
             });
         },
 
+        fileSelect: function(event) {
+            //選択したファイルの情報を取得しプロパティにいれる
+            this.selected_file = event.target.files[0];
+            console.log(this.selected_file);
+        },
 
-        pos: function () {
-            axios.post("/api/postComment", {
-                text: this.$refs.commentText.value,
-                user_id: this.user,
-                tweet_id: this.tweet,
-            }).then((res) => {
-                this.get();
+        tweet: function () {
+            let formData = new FormData();
+                //appendでデータを追加(第一引数は任意のキー)
+                //他に送信したいデータがある場合にはその分appendする
+                formData.append('image', this.selected_file);
+                formData.append('text', this.$refs.tweetText.value);
+                formData.append('userId', this.user);
+            let config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            };
+            axios.post('/api/postTweet',formData,config
+            ).then((res) => {
+                this.fetchTimeLines();
             }).catch((error) => {
                 alert("テキストを入れてください");
             });
+        },
+
+        active: function () {
+            this.isActive = !this.isActive;
         },
     },
 };  
