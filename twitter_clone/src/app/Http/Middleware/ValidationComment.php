@@ -20,6 +20,7 @@ class ValidationComment
     public function handle(Request $request, Closure $next)
     {
         $data = $request->all();
+        
         $validator = Validator::make($data, [
             'tweet_id' =>['required', 'integer'],
             'text'     => ['required', 'string', 'max:140']

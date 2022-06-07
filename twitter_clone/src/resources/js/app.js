@@ -1,3 +1,4 @@
+// Jsファイルをインポート
 import './bootstrap';
 import './favorite';
 import './follow';
@@ -8,12 +9,11 @@ import App from './App.vue';
 import FollowingVue from './Components/Following.vue';
 import FollowerVue from './Components/Follower.vue';
 import Test from './Components/test.vue';
-// フォローしている人を取得
-
+import Comment from './Components/comment/Comment.vue';
+// グローバルコンポーネントを定義 (ルートインスタンスはApp)
 createApp(App)
     .component("FollowingVue", FollowingVue)
     .component("FollowerVue", FollowerVue)
     .component("Test", Test)
+    .component("Comment", Comment)
     .mount("#app");
-
-

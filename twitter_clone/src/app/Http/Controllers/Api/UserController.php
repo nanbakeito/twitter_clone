@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Follower;
+use App\Http\Controllers\Controller;
 
-class VueAPIController extends Controller
+
+class UserController extends Controller
 {
     /**
+     * 
      * フォローしているユーザー取得
      *
      * @param  User  $user
@@ -18,6 +21,7 @@ class VueAPIController extends Controller
      */
     public function getFollowing(User $user, Follower $follower)
     {
+        // 未実装
         $userId = "1";
         $followingIds = $follower->followingIds($userId);
         
@@ -30,6 +34,7 @@ class VueAPIController extends Controller
     }
 
     /**
+     * 
      * フォロワー取得
      *
      * @param  User  $user
@@ -39,31 +44,12 @@ class VueAPIController extends Controller
      */
     public function getFollower(User $user, Follower $follower)
     {
+        // 未実装
         $userId = "1";
         $followerIds = $follower->followerIds($userId)->toArray();
         if (isset($followerIds)) {
             $followerIds = $follower->followerIds($userId)->toArray();
             $data = $user->getFollower($followerIds);
-
-            return response()->json($data); 
-        }
-    }
-    /**
-     * コメント投稿
-     *
-     * @param  User  $user
-     * @param  Follower  $follower
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function commentPost(User $user, Follower $follower)
-    {
-        $userId = "1";
-        $followingIds = $follower->followingIds($userId);
-        
-        if (isset($followingIds)) {
-            $followingIds = $follower->followingIds($userId)->toArray();
-            $data = $user->getFollower($followingIds);
 
             return response()->json($data); 
         }
