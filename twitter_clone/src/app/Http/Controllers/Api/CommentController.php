@@ -54,15 +54,14 @@ class CommentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Comment  $comment
-     * @param  User     $user
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getComment(Request $request, Comment $comment, User $user)
+    public function getComment(Request $request, Comment $comment)
     {
         $data = $request->all();
         $comments = $comment->fetchCommentsByTweetId($data["tweet_id"]);
-        $commentFeaturesList = isset($comments) ? $this->fetchCommentFeaturesList($comments) : $commentFeaturesList= [];
+        $commentFeaturesList = isset($comments) ? $this->fetchCommentList($comments) : $commentFeaturesList= [];
 
         return response()->json($commentFeaturesList); 
     }
@@ -74,7 +73,7 @@ class CommentController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchCommentFeaturesList(object $comments)
+    public function fetchCommentList(object $comments)
     {
             foreach ($comments as $comment) {
 
@@ -86,9 +85,9 @@ class CommentController extends Controller
                     'userName'          => $comment->user->name,
                     'userProfileImage'  => $comment->user->profile_image,
                 ]);
-                $commentFeaturesList[] = $commentFeatures;
+                $commentList[] = $commentFeatures;
             }
 
-            return $commentFeaturesList;
+            return $commentList;
     }
 }
