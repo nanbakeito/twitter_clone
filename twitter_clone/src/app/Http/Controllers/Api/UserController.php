@@ -13,16 +13,16 @@ class UserController extends Controller
     /**
      * フォローしているユーザー取得
      * 
-     * @param  Illuminate\Http\Request $Request
+     * @param  Illuminate\Http\Request $request
      * @param  User  $user
      * @param  Follower  $follower
      * 
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchFollow(Request $Request,User $user, Follower $follower)
+    public function fetchFollow(Request $request,User $user, Follower $follower)
     {
-        $userId = $Request->user_id;
+        $userId = $request->user_id;
         $followingIds = $follower->followingIds($userId);
         
         if (isset($followingIds)) {
@@ -41,9 +41,9 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchFollower(Request $Request,User $user, Follower $follower)
+    public function fetchFollower(Request $request,User $user, Follower $follower)
     {
-        $userId = $Request->user_id;
+        $userId = $request->user_id;
         $followerIds = $follower->followerIds($userId);
 
         if (isset($followerIds)) {
@@ -62,27 +62,26 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function narrowDownUserTimeLinesByRequest(Request $Request,User $user, Follower $follower)
+    public function narrowDownUserTimeLinesByRequest(Request $request,User $user, Follower $follower)
     {
-        $judge = array_map('intval', $Request->checkList);
-        $followingIds = $follower->followingIds($Request->user_id);
-        $followerIds = $follower->followerIds($Request->user_id);
+        $judge = array_map('intval', $request->checkList);
+        $followingIds = $follower->followingIds($request->user_id);
+        $followerIds = $follower->followerIds($request->user_id);
         
         if (isset($followingIds) and isset($followerIds)) {
-            $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
         
         } elseif (isset($followingIds)) {
             $followerIds = [];
-            $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
 
         } elseif (isset($followerIds)) {
             $followingIds = [];
-            $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
 
         }
 
-        $userIds = $user->fetchUserIdsByRequest($judge, $Request->user_id, $followingIds, $followerIds);
-        $userTimeLines = $user->fetchUserTimeLines($userIds, $Request->user_id);
+        $userTimeLines = $user->fetchUserTimeLines($userIds, $request->user_id);
 
         return response()->json($userTimeLines); 
     }
@@ -90,16 +89,16 @@ class UserController extends Controller
     /** 
      * ユーザータイムライン取得（自身以外）
      * 
-     * @param  Illuminate\Http\Request $Request
+     * @param  Illuminate\Http\Request $request
      * @param  User  $user
      * @param  Follower  $follower
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserTimeLines(Request $Request,User $user)
+    public function fetchUserTimeLines(Request $request,User $user)
     {
         $userIds = $user->fetchUserIds();
-        $userTimeLines = $user->fetchUserTimeLines($userIds, $Request->user_id);
+        $userTimeLines = $user->fetchUserTimeLines($userIds, $request->user_id);
     
         return response()->json($userTimeLines); 
     }

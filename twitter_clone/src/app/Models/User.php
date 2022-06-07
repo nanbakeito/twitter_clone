@@ -223,21 +223,25 @@ class User extends Authenticatable
         $follow = 0; 
         $follower = 1;
         $all = 2;
+        $me = 3;
 
         if (in_array($all, $judge)) {
             $ids = $this->fetchUserIds();
         } elseif (in_array($follow, $judge) and in_array($follower, $judge)) {
             $ids = array_unique(array_merge($followingIds, $followerIds));
-
         } elseif(in_array($follow, $judge)) {
             $ids = $followingIds;
-
         } elseif(in_array($follower, $judge)) {
             $ids = $followerIds;
-
+        } else {
+            $ids = [];
         };
         
-        return $ids ;
+        if (in_array($me, $judge)) {
+            $ids[] = $loginUserId;
+        }
+
+        return $ids;
     }
 
     /**

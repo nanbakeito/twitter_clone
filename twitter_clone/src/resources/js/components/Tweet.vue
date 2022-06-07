@@ -3,8 +3,43 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 mb-3">
+                <!-- 絞り込み -->
+                <section>
+                    <input
+                        id="follow"
+                        type="checkbox"
+                        value= 0
+                        v-model="checkList"
+                    >
+                    <label for="follow">フォロー</label>
+                    <input
+                        id="follower"
+                        type="checkbox"
+                        value= 1
+                        v-model="checkList"
+                    >
+                    <label for="follower">フォロワー</label>
+                    <input
+                        id="all"
+                        type="checkbox"
+                        value= 2
+                        v-model="checkList"
+                    >
+                    <label for="all">全員</label>
+                    <input
+                        id="me"
+                        type="checkbox"
+                        value= 3
+                        v-model="checkList"
+                    >
+                    <label for="me">自分</label>
+                    <span class="input-group-btn">
+                        <button class="submit-btn" type="button" v-on:click="narrowDownTimeLine" >絞り込み</button> 
+                    </span>
+                </section>
+                
                 <div v-if="isActive">
-                    <button type="button" v-on:click="active">ツイートする</button>
+                    <button type="button" class="btn btn-primary" v-on:click="active">ツイートする</button>
                 </div>
                 <div v-else>
                     <button type="button" v-on:click="active">閉じる</button>
@@ -115,6 +150,7 @@ export default {
     data() {
         return {
             timeLines: [],
+            checkList: [],
             isActive: true,
             selected_file: null
         };
@@ -169,14 +205,29 @@ export default {
             });
         },
 
+        narrowDownTimeLine: function() {
+            axios.get("/api/narrowDownTimeLine", {
+                params: {
+                    user_id: this.user,
+                    checkList: this.checkList
+                }
+            }).then((res) => {
+                this.timeLines = res.data
+            }).catch((error) => {
+            });
+        },
+
         active: function () {
             this.isActive = !this.isActive;
         },
+
     },
 };  
 </script>
 
 <style scoped>
-
+.input-group-btn {
+    margin-left: 20px;
+}
 </style>
 

@@ -89,36 +89,32 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTimeLines(int $userId, Array $followingIds)
+    public function fetchTimeLines(int $userId, array $followingIds)
     {
-        // 自身とフォローしているユーザIDを結合する
-        $followingIds[] = $userId;
-        $tweets = $this->whereIn('user_id', $followingIds)->orderBy('created_at', 'DESC')->get();
-        foreach($tweets as $tweet) {
-            $timeLine = ([
-                'id'                    => $tweet->id,
-                'text'                  => $tweet->text,
-                'image'                 => $tweet->image,
-                'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
-                'commentCount'          => count($tweet->comments),
-                'favoriteCount'         => count($tweet->favorites),
-                'favoriteJudge'         => $tweet->isLikedBy($userId),
-                // ユーザー情報（リレーション）
-                'userId'                => $tweet->user->id,
-                'userName'              => $tweet->user->name,
-                'userProfileImage'      => $tweet->user->profile_image,
-            ]);
-            $timeLines[] = $timeLine;
+        if ($this->whereIn('user_id', $followingIds)->exists()) {
+            $tweets = $this->whereIn('user_id', $followingIds)->orderBy('created_at', 'DESC')->get();
+
+            foreach($tweets as $tweet) {
+                $timeLine = ([
+                    'id'                    => $tweet->id,
+                    'text'                  => $tweet->text,
+                    'image'                 => $tweet->image,
+                    'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
+                    'commentCount'          => count($tweet->comments),
+                    'favoriteCount'         => count($tweet->favorites),
+                    'favoriteJudge'         => $tweet->isLikedBy($userId),
+                    // ユーザー情報（リレーション）
+                    'userId'                => $tweet->user->id,
+                    'userName'              => $tweet->user->name,
+                    'userProfileImage'      => $tweet->user->profile_image,
+                ]);
+                $timeLines[] = $timeLine;
+            }
+        } else {
+            $timeLines = [];
         }
 
         return $timeLines;
-
-
-
-
-        $timelines = $this->whereIn('user_id', $followingIds)->orderBy('created_at', 'DESC')->get();
-        // ツイートがあるかどうか
-        return $timelines;
     }
 
     /**

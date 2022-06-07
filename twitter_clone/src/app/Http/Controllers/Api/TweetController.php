@@ -31,7 +31,47 @@ class TweetController extends Controller
     public function fetchTimeLines(Request $request, Follower $follower, Tweet $tweet)
     {
         $followingIds = $follower->followingIds($request->user_id);
-        $timeLines = $tweet->fetchTimeLines($request->user_id, $followingIds);
+        if(isset($followingIds)) {
+            $timeLines = $tweet->fetchTimeLines($request->user_id, $followingIds);
+        } else {
+            $timeLines = null;
+        }
+        return response()->json($timeLines);
+    }
+
+    /**
+     * タイムライン絞り込み
+     * 
+     * @param  Illuminate\Http\Request $Request
+     * @param  Follower  $follower
+     * @param  Tweet     $tweet
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function narrowDownTimeLine(Request $request, Follower $follower, Tweet $tweet, User $user)
+    {
+        $judge = array_map('intval', $request->checkList);
+        $followingIds = $follower->followingIds($request->user_id);
+        $followerIds = $follower->followerIds($request->user_id);
+
+        if (isset($followingIds) && isset($followerIds)) {
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
+        
+        } elseif (isset($followingIds)) {
+            $followerIds = [];
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
+
+        } elseif (isset($followerIds)) {
+            $followingIds = [];
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
+
+        } else {
+            $followingIds = [];
+            $followerIds = [];
+            $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
+        }
+        
+        $timeLines = $tweet->fetchTimeLines($request->user_id, $userIds);
         
         return response()->json($timeLines);
     }

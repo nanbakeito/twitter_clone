@@ -33,6 +33,8 @@ Route::delete('/deleteComment/{id}', 'App\Http\Controllers\API\CommentController
 Route::get('/fetchTimeLines', 'App\Http\Controllers\API\TweetController@fetchTimeLines');
 Route::delete('/deleteTweet/{id}', 'App\Http\Controllers\API\TweetController@deleteTweet');
 Route::post('/postTweet', 'App\Http\Controllers\API\TweetController@postTweet')->middleware('validationTweet');
+Route::get('/narrowDownTimeLine', 'App\Http\Controllers\API\TweetController@narrowDownTimeLine');
+
 
 // いいね
 Route::get('/favorite', 'App\Http\Controllers\API\TweetController@favorite');
