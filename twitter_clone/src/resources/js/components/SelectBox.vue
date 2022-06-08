@@ -24,7 +24,7 @@
         <label for="all">全員</label>
     </section>
     <span class="input-group-btn">
-        <button class="submit-btn" type="button" v-on:click="narrowDownUserTimeLinesByRequest" >絞り込み</button> 
+        <button class="submit-btn" type="button" v-on:click="narrowDownUserTimeLines" >絞り込み</button> 
     </span>
     <div class="container">
         <div class="row justify-content-center">
@@ -46,10 +46,7 @@
         </div>
     </div>
 </div>
-
-
 </template>
-
 
 <script>
 export default {
@@ -89,8 +86,8 @@ export default {
             });
         },
 
-        narrowDownUserTimeLinesByRequest: function() {
-            axios.get("/api/narrowDownUserTimeLinesByRequest", {
+        narrowDownUserTimeLines: function() {
+            axios.get("/api/narrowDownUserTimeLines", {
                 params: {
                     user_id: this.user,
                     checkList: this.checkList
@@ -103,7 +100,6 @@ export default {
         }
     },
 };  
-
 </script>
 
 <style scoped>

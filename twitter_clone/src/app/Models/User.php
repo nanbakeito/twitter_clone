@@ -18,6 +18,11 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    // クラス定数を定義
+    private const FOLLOW = 0;
+    private const FOLLOWER = 1;
+    private const ALL = 2;
+
     /**
      * Mass Assignment 可能
      *
@@ -123,56 +128,45 @@ class User extends Authenticatable
     /**
      * フォロワー取得
      *
-     * @param  $followerIds
+     * @param  array $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollower($followerIds) {
+    public function getFollower(array $followerIds) {
 
-        if (isset($followerIds)){
+        foreach ($followerIds as $followerId) {
+            $follower = $this->where('id', $followerId)->get();
+            $followerData[] = $follower;
+        } 
 
-            foreach ($followerIds as $followerId) {
-                $follower = $this->where('id', $followerId)->get();
-                $followerData[] = $follower;
-            } 
-
-            return $followerData;
-        } else {
-            return null;
-        }
+        return $followerData;
     }
 
     /**
      * フォローしている人取得
      *
-     * @param  $followingIds
+     * @param  array $followingIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollowing($followingIds) {
+    public function getFollowing(array $followingIds) {
 
-        if (isset($followingIds)){
+        foreach ($followingIds as $followingId) {
+            $following = $this->where('id', $followingId)->get();
+            $followingData[] = $following;
+        } 
 
-            foreach ($followingIds as $followingId) {
-                $following = $this->where('id', $followingId)->get();
-                $followingData[] = $following;
-            } 
-
-            return $followingData;
-
-        } else {
-            return null;
-        }
+        return $followingData;
     }
 
     /**
      * ユーザー情報更新
      *
-     * @param  Array  $params
+     * @param  array  $params
      * 
      * @return void
      */
-    public function updateProfile(Array $params) : void
+    public function updateProfile(array $params) : void
     {
         // 画像が更新される時の処理
         if (isset($params['profile_image'])) {
@@ -201,40 +195,38 @@ class User extends Authenticatable
     public function fetchUserIds()
     {
         $users = User::all();
+
         foreach ($users as $user) {
             $ids[] = $user->id;
         };
 
-        return $ids ;
+        return $ids;
     }
 
     /**
      * ユーザーid取得（条件付き）
      *
-     * @param  Array  $judge
+     * @param  array  $checkList
      * @param  int  $loginUserId
      * @param  array  $followingIds
      * @param  array  $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIdsByRequest(array $judge,int $loginUserId, array $followingIds, array $followerIds)
+    public function fetchUserIdsByRequest(array $checkList,int $loginUserId, array $followingIds, array $followerIds)
     {
-        $follow = 0; 
-        $follower = 1;
-        $all = 2;
 
-        if (in_array($all, $judge)) {
+        if (in_array(self::ALL, $checkList)) {
             $ids = $this->fetchUserIds();
-        } elseif (in_array($follow, $judge) and in_array($follower, $judge)) {
+
+        } elseif (in_array(self::FOLLOW, $checkList) and in_array(self::FOLLOWER, $checkList)) {
             $ids = array_unique(array_merge($followingIds, $followerIds));
 
-        } elseif(in_array($follow, $judge)) {
+        } elseif(in_array(self::FOLLOW, $checkList)) {
             $ids = $followingIds;
 
-        } elseif(in_array($follower, $judge)) {
+        } elseif(in_array(self::FOLLOWER, $checkList)) {
             $ids = $followerIds;
-
         };
         
         return $ids ;
@@ -243,7 +235,7 @@ class User extends Authenticatable
     /**
      * ユーザータイムライン取得（自身以外）
      *
-     * @param  Array  $userIds
+     * @param  array  $userIds
      * @param  int  $loginUserId
      * 
      * @return \Illuminate\Http\Response
@@ -260,7 +252,7 @@ class User extends Authenticatable
                     'id'                    => $userId,
                     'userName'              => $person->name,
                     'userProfileImage'      => $person->profile_image,
-                    'followingJudgement'    => $loginUser->isFollowing($userId),
+                    'followingcheckListment'    => $loginUser->isFollowing($userId),
                 ]);
                 $userTimeLines[] = $userTimeLine;
         }
