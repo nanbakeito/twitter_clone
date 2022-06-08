@@ -60,7 +60,7 @@ class UserController extends Controller
         $checkList = array_map('intval', $Request->checkList);
         $followingIds = $follower->followingIds($Request->user_id);
         $followerIds = $follower->followerIds($Request->user_id);
-        $userIds = $user->fetchUserIdsByRequest($checkList, $Request->user_id, $followingIds, $followerIds);
+        $userIds = $user->fetchUserIdsByRequest($checkList, $followingIds, $followerIds);
         $userTimeLines = $user->fetchUserTimeLines($userIds, $Request->user_id);
 
         return response()->json($userTimeLines); 

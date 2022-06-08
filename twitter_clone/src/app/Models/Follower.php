@@ -62,6 +62,7 @@ class Follower extends Model
 
             return $followingIds;
         } else {
+
             return $followingIds = [];
         }
     }
@@ -84,6 +85,7 @@ class Follower extends Model
 
             return $followerIds;
         } else {
+            
             return $followerIds = [];
         }
     }

@@ -207,13 +207,12 @@ class User extends Authenticatable
      * ユーザーid取得（条件付き）
      *
      * @param  array  $checkLists
-     * @param  int  $loginUserId
      * @param  array  $followingIds
      * @param  array  $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIdsByRequest(array $checkLists,int $loginUserId, array $followingIds, array $followerIds)
+    public function fetchUserIdsByRequest(array $checkLists, array $followingIds, array $followerIds)
     {
 
         if (in_array(self::ALL, $checkLists)) {
