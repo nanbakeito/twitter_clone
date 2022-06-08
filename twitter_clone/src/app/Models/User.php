@@ -192,7 +192,7 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIds()
+    public function fetchAllUserIds()
     {
         $users = User::all();
 
@@ -212,11 +212,11 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIdsByRequest(array $checkLists, array $followingIds, array $followerIds)
+    public function fetchUserIds(array $checkLists, array $followingIds, array $followerIds)
     {
 
         if (in_array(self::ALL, $checkLists)) {
-            $ids = $this->fetchUserIds();
+            $ids = $this->fetchAllUserIds();
 
         } elseif (in_array(self::FOLLOW, $checkLists) and in_array(self::FOLLOWER, $checkLists)) {
             $ids = array_unique(array_merge($followingIds, $followerIds));
@@ -239,23 +239,26 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserTimeLines(array $userIds ,int $loginUserId) 
+    public function fetchUsers(array $userIds) 
     {
+        $loginUserId = auth()->user()->id;
+        $loginUser = auth()->user();
         $userIds = array_diff($userIds, array($loginUserId));
-        $loginUser = $this->where('id', $loginUserId)->first();
 
-        foreach($userIds as $userId) {
+        if (isset($userIds)) {
+            foreach($userIds as $userId) {
 
-            $person = $this->where('id', $userId)->first();
-                $userTimeLine = ([
-                    'id'                    => $userId,
-                    'userName'              => $person->name,
-                    'userProfileImage'      => $person->profile_image,
-                    'followingJudgement'    => $loginUser->isFollowing($userId),
-                ]);
-                $userTimeLines[] = $userTimeLine;
+                $user = $this->where('id', $userId)->first();
+                    $userTimeLine = ([
+                        'id'                    => $userId,
+                        'userName'              => $user->name,
+                        'userProfileImage'      => $user->profile_image,
+                        'followingJudgement'    => $loginUser->isFollowing($userId),
+                    ]);
+                    $userTimeLines[] = $userTimeLine;
+            }
         }
-
+        
         return $userTimeLines;
     }
 }

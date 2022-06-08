@@ -19,13 +19,13 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchFollow(Request $Request,User $user, Follower $follower)
+    public function fetchFollowingUser(Request $Request,User $user, Follower $follower)
     {
         $userId = $Request->user_id;
         $followingIds = $follower->followingIds($userId);
-        $data = $user->getFollower($followingIds);
+        $following = $user->getFollower($followingIds);
 
-        return response()->json($data); 
+        return response()->json($following); 
     }
 
     /**
@@ -37,13 +37,13 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchFollower(Request $Request,User $user, Follower $follower)
+    public function fetchFollowedUser(Request $Request,User $user, Follower $follower)
     {
         $userId = $Request->user_id;
         $followerIds = $follower->followerIds($userId);
-        $data = $user->getFollower($followerIds);
+        $follwers = $user->getFollower($followerIds);
 
-        return response()->json($data); 
+        return response()->json($follwers); 
     }
 
     /**
@@ -55,13 +55,13 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function narrowDownUserTimeLines(Request $Request,User $user, Follower $follower)
+    public function sortUserTimeLines(Request $Request,User $user, Follower $follower)
     {
         $checkList = array_map('intval', $Request->checkList);
         $followingIds = $follower->followingIds($Request->user_id);
         $followerIds = $follower->followerIds($Request->user_id);
-        $userIds = $user->fetchUserIdsByRequest($checkList, $followingIds, $followerIds);
-        $userTimeLines = $user->fetchUserTimeLines($userIds, $Request->user_id);
+        $userIds = $user->fetchUserIds($checkList, $followingIds, $followerIds);
+        $userTimeLines = $user->fetchUserTimeLines($userIds);
 
         return response()->json($userTimeLines); 
     }

@@ -1,43 +1,39 @@
 <template>
-<div v-if="judge">
-    <button type="button" class="btn btn-danger" v-on:click="follow" >フォロー解除</button>
+<div v-if="isFollowedByUser">
+    <button type="button" class="btn btn-danger" @click="follow" >フォロー解除</button>
 </div>
 <div v-else>
-    <button type="button" class="btn btn-primary"  v-on:click="follow">フォローする</button>                    
+    <button type="button" class="btn btn-primary"  @click="follow">フォローする</button>                    
 </div>
 </template>
 
 <script>
 export default {
     props: {
-        login_user_id: {
+        loginUserId: {
             required: true
         },
-        user_id: {
+        userId: {
             required: true
         },
-        following_judgement: {
+        followingJudgement: {
             required: true
         },
     },
     data() {
         return {
-            judge : this.following_judgement
+            isFollowedByUser : this.followingJudgement
         };
     },
-    watch: {
-            judge: function () {
-        }
-    },
     methods: {
-        follow: function () {
+        follow() {
             axios.get("/api/follow", {
                 params: {
-                    login_user_id: this.login_user_id,
-                    user_id: this.user_id
+                    loginUserId: this.loginUserId,
+                    userId: this.userId
                 }
             }).then((res) => {
-                this.judge = res.data;
+                this.isFollowedByUser = res.data;
             }).catch((error) => {
             });
         },
@@ -46,13 +42,5 @@ export default {
 </script>
 
 <style scoped>
-    p {
-        margin: 10px;
-    }
-    .positive {
-        color: blue;
-    }
-    .negative {
-        color: red;
-    }
+
 </style>

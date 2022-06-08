@@ -108,8 +108,8 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $data = $request->all();
-        $user->updateProfile($data);
+        $userData = $request->all();
+        $user->updateProfile($userData);
         
         return redirect('users/'.$user->id);
     }

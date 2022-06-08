@@ -27,10 +27,10 @@ class CommentController extends Controller
      */
     public function postComment(Request $request, Comment $comment)
     {
-        $data = $request->all();
-        $comment->commentStore($data);
+        $commentData = $request->all();
+        $comment->commentStore($commentData);
         
-        return response()->json($data["text"]); 
+        return response()->json($commentData["text"]); 
     }
 
     /**
@@ -59,8 +59,8 @@ class CommentController extends Controller
      */
     public function getComment(Request $request, Comment $comment)
     {
-        $data = $request->all();
-        $comments = $comment->fetchCommentsByTweetId($data["tweet_id"]);
+        $commentData = $request->all();
+        $comments = $comment->fetchCommentsByTweetId($commentData["tweet_id"]);
         $commentFeaturesList = isset($comments) ? $this->fetchCommentList($comments) : $commentFeaturesList= [];
 
         return response()->json($commentFeaturesList); 

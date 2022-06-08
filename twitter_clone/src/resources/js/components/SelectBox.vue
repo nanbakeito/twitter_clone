@@ -24,7 +24,7 @@
         <label for="all">全員</label>
     </section>
     <span class="input-group-btn">
-        <button class="submit-btn" type="button" v-on:click="narrowDownUserTimeLines" >絞り込み</button> 
+        <button class="submit-btn" type="button" @click="sortUserTimeLines" >絞り込み</button> 
     </span>
     <div class="container">
         <div class="row justify-content-center">
@@ -37,7 +37,7 @@
                                 <a :href="'/users/' + userTimeLine.id "><p class="mb-0">{{ userTimeLine.userName }}</p></a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
-                                <follow-btn :login_user_id= "user" :user_id="userTimeLine.id" :following_judgement="userTimeLine.followingJudgement" ></follow-btn>
+                                <follow-btn :loginUserId= "user" :userId="userTimeLine.id" :followingJudgement="userTimeLine.followingJudgement" ></follow-btn>
                             </div>
                         </div>
                     </div>
@@ -70,11 +70,11 @@ export default {
     },
     methods: {
 
-        list: function () {
+        list() {
             console.log(this.checkList);
         },
 
-        fetchUserTimeLines: function () {
+        fetchUserTimeLines() {
             axios.get("/api/fetchUserTimeLines", {
                 params: {
                     user_id: this.user,
@@ -86,8 +86,8 @@ export default {
             });
         },
 
-        narrowDownUserTimeLines: function() {
-            axios.get("/api/narrowDownUserTimeLines", {
+        sortUserTimeLines() {
+            axios.get("/api/sortUserTimeLines", {
                 params: {
                     user_id: this.user,
                     checkList: this.checkList
@@ -103,13 +103,5 @@ export default {
 </script>
 
 <style scoped>
-    p {
-        margin: 10px;
-    }
-    .positive {
-        color: blue;
-    }
-    .negative {
-        color: red;
-    }
+    
 </style>

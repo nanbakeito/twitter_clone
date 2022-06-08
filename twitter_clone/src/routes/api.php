@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/follow', 'App\Http\Controllers\API\FollowController@follow');
 // 検索　**未実装
 Route::get('/fetchUserTimeLines', 'App\Http\Controllers\API\UserController@fetchUserTimeLines');
-Route::get('/narrowDownUserTimeLines', 'App\Http\Controllers\API\UserController@narrowDownUserTimeLines');
+Route::get('/sortUserTimeLines', 'App\Http\Controllers\API\UserController@sortUserTimeLines');
 
 Route::get('/fetchFollow', 'App\Http\Controllers\API\UserController@fetchFollow');
 Route::get('/fetchFollower', 'App\Http\Controllers\API\UserController@fetchFollower');

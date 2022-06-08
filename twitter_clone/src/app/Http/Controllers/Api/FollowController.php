@@ -19,11 +19,11 @@ class FollowController extends Controller
      */
     public function follow(Request $request, Follower $follower)
     {
-        $loginUserId = $request->login_user_id; 
+        $loginUserId = auth()->user()->id; 
         $userId = $request->user_id;
-        $alreadyFollowed =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
+        $followedUser =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
         
-        if (!$alreadyFollowed) { 
+        if (!$followedUser) { 
             $follower->following_id = $loginUserId; 
             $follower->followed_id = $userId;
             $follower->save();

@@ -88,21 +88,21 @@ class TweetsController extends Controller
      */
     public function store(Request $request, Tweet $tweet)
     {
-        $data = $request->all();
+        $tweetData = $request->all();
 
-        if (isset($data['image'])) {
-            $fileName = $data['image']->store('public/image/');
+        if (isset($tweetData['image'])) {
+            $fileName = $tweetData['image']->store('public/image/');
 
             Tweet::create([
-                'user_id' => $data['userId'],
-                'text' => $data['text'],
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
                 'image' => basename($fileName),
             ]);
             
         } else {
             Tweet::create([
-                'user_id' => $data['userId'],
-                'text' => $data['text'],
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
             ]);
         };
 
@@ -141,22 +141,22 @@ class TweetsController extends Controller
      */
     public function update(Request $request, Tweet $tweet)
     {
-        $data = $request->all();
+        $tweetData = $request->all();
 
-        if (isset($data['image'])) {
-            $fileName = $data['image']->store('public/image/');
+        if (isset($tweetData['image'])) {
+            $fileName = $tweetData['image']->store('public/image/');
 
-            $tweet::where('id', $data['id'])
+            $tweet::where('id', $tweetData['id'])
             ->update([
-                'user_id' => $data['userId'],
-                'text' => $data['text'],
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
                 'image' => basename($fileName),
             ]);
         } else {
-            $tweet::where('id', $data['id'])
+            $tweet::where('id', $tweetData['id'])
             ->update([
-                'user_id' => $data['userId'],
-                'text' => $data['text'],
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
             ]);
         };
 
