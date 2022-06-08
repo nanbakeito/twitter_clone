@@ -206,26 +206,26 @@ class User extends Authenticatable
     /**
      * ユーザーid取得（条件付き）
      *
-     * @param  array  $checkList
+     * @param  array  $checkLists
      * @param  int  $loginUserId
      * @param  array  $followingIds
      * @param  array  $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIdsByRequest(array $checkList,int $loginUserId, array $followingIds, array $followerIds)
+    public function fetchUserIdsByRequest(array $checkLists,int $loginUserId, array $followingIds, array $followerIds)
     {
 
-        if (in_array(self::ALL, $checkList)) {
+        if (in_array(self::ALL, $checkLists)) {
             $ids = $this->fetchUserIds();
 
-        } elseif (in_array(self::FOLLOW, $checkList) and in_array(self::FOLLOWER, $checkList)) {
+        } elseif (in_array(self::FOLLOW, $checkLists) and in_array(self::FOLLOWER, $checkLists)) {
             $ids = array_unique(array_merge($followingIds, $followerIds));
 
-        } elseif(in_array(self::FOLLOW, $checkList)) {
+        } elseif(in_array(self::FOLLOW, $checkLists)) {
             $ids = $followingIds;
 
-        } elseif(in_array(self::FOLLOWER, $checkList)) {
+        } elseif(in_array(self::FOLLOWER, $checkLists)) {
             $ids = $followerIds;
         };
         
@@ -252,7 +252,7 @@ class User extends Authenticatable
                     'id'                    => $userId,
                     'userName'              => $person->name,
                     'userProfileImage'      => $person->profile_image,
-                    'followingcheckListment'    => $loginUser->isFollowing($userId),
+                    'followingJudgement'    => $loginUser->isFollowing($userId),
                 ]);
                 $userTimeLines[] = $userTimeLine;
         }
