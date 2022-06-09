@@ -34,10 +34,9 @@
                     >
                     <label for="me">自分</label>
                     <span class="input-group-btn">
-                        <button class="submit-btn" type="button" v-on:click="narrowDownTimeLine" >絞り込み</button> 
+                        <button class="submit-btn" type="button" v-on:click="sortTimeLine" >絞り込み</button> 
                     </span>
                 </section>
-                
                 <div v-if="isActive">
                     <button type="button" class="btn btn-primary" v-on:click="active">ツイートする</button>
                 </div>
@@ -119,7 +118,7 @@
                                 <p class="mb-0 text-secondary">{{ timeLine.commentCount }}</p>
                             </div>
                             <!-- いいね -->
-                            <favorite-btn :login_user_id= "user" :tweet_id="timeLine.id" :favorite_count="timeLine.favoriteCount" :favorite_judge="timeLine.favoriteJudge"></favorite-btn>
+                            <favorite-btn @child="favorite" :tweetId="timeLine.id" :favoriteCount="timeLine.favoriteCount" :initialBoolean="timeLine.favoriteJudge"></favorite-btn>
                         </div>
                     </div>
                 </dl>
@@ -160,7 +159,7 @@ export default {
         }
     },
     methods: {
-        fetchTimeLines: function () {
+        fetchTimeLines() {
             axios.get("/api/fetchTimeLines", {
                 params: {
                     user_id: this.user,
@@ -172,20 +171,20 @@ export default {
             });
         },
 
-        remove: function (id) {
+        remove(id) {
             axios.delete("/api/deleteTweet/" + id).then((res) => {
                 this.fetchTimeLines();
             }).catch((error) => {
             });
         },
 
-        fileSelect: function(event) {
+        fileSelect(event) {
             //選択したファイルの情報を取得しプロパティにいれる
             this.selected_file = event.target.files[0];
             console.log(this.selected_file);
         },
 
-        tweet: function () {
+        tweet() {
             let formData = new FormData();
                 //appendでデータを追加(第一引数は任意のキー)
                 //他に送信したいデータがある場合にはその分appendする
@@ -205,8 +204,8 @@ export default {
             });
         },
 
-        narrowDownTimeLine: function() {
-            axios.get("/api/narrowDownTimeLine", {
+        sortTimeLine() {
+            axios.get("/api/sortTimeLine", {
                 params: {
                     user_id: this.user,
                     checkList: this.checkList
@@ -217,8 +216,19 @@ export default {
             });
         },
 
-        active: function () {
+        active() {
             this.isActive = !this.isActive;
+        },
+
+        favorite(tweetId) {
+            axios.get("/api/favorite", {
+                params: {
+                    login_user_id: this.user,
+                    tweet_id: tweetId
+                }
+            }).then((res) => {
+            }).catch((error) => {
+            });
         },
 
     },
@@ -230,4 +240,3 @@ export default {
     margin-left: 20px;
 }
 </style>
-

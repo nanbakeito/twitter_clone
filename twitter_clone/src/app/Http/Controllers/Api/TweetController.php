@@ -30,7 +30,7 @@ class TweetController extends Controller
      */
     public function fetchTimeLines(Request $request, Follower $follower, Tweet $tweet)
     {
-        $followingIds = $follower->followingIds($request->user_id);
+        $followingIds = $follower->fetchFollowingIds($request->user_id);
         $timeLines = $tweet->fetchTimeLines($request->user_id, $followingIds);
 
         return response()->json($timeLines);
@@ -45,13 +45,15 @@ class TweetController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function narrowDownTimeLine(Request $request, Follower $follower, Tweet $tweet, User $user)
+    public function sortTimeLine(Request $request, Follower $follower, Tweet $tweet, User $user)
     {
-        $judge = array_map('intval', $request->checkList);
-        $followingIds = $follower->followingIds($request->user_id);
-        $followerIds = $follower->followerIds($request->user_id);
-        $userIds = $user->fetchUserIdsByRequest($judge, $request->user_id, $followingIds, $followerIds);
-        $timeLines = $tweet->fetchTimeLines($request->user_id, $userIds);
+        $loginUserId = auth()->user()->id;
+        // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
+        $checkList = array_map('intval', $request->checkList);
+        $followingIds = $follower->fetchFollowingIds($loginUserId);
+        $followerIds = $follower->fetchFollowerIds($loginUserId);
+        $userIds = $user->setUserIds($checkList, $followingIds, $followerIds);
+        $timeLines = $tweet->fetchTimeLines($loginUserId, $userIds);
         
         return response()->json($timeLines);
     }
@@ -67,21 +69,21 @@ class TweetController extends Controller
      */
     public function postTweet(Request $request, Follower $follower, Tweet $tweet)
     {
-        $data = $request->all();
+        $tweetData = $request->all();
 
-        if (!in_array('null', $data)) {
-            $fileName = $data['image']->store('public/image/');
+        if (!in_array('null', $tweetData)) {
+            $fileName = $tweetData['image']->store('public/image/');
 
             Tweet::create([
-                'user_id' => $data['userId'],
-                'text' => $data['text'],
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
                 'image' => basename($fileName),
             ]);
             
         } else {
             Tweet::create([
-                'user_id' => $data['userId'],
-                'text' => $data['text'],
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
             ]);
         };
 

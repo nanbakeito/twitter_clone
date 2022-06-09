@@ -50,6 +50,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('api/postComment', 'App\Http\Controllers\API\CommentController@postComment')->middleware('validationComment');
     Route::get('api/getComment', 'App\Http\Controllers\API\CommentController@getComment');
     Route::delete('api/deleteComment/{id}', 'App\Http\Controllers\API\CommentController@deleteComment');
+    // ツイート関連
+    Route::get('api/fetchTimeLines', 'App\Http\Controllers\API\TweetController@fetchTimeLines');
+    Route::delete('api/deleteTweet/{id}', 'App\Http\Controllers\API\TweetController@deleteTweet');
+    Route::post('api/postTweet', 'App\Http\Controllers\API\TweetController@postTweet')->middleware('validationTweet');
+    Route::get('api/sortTimeLine', 'App\Http\Controllers\API\TweetController@sortTimeLine');
+    Route::get('api/favorite', 'App\Http\Controllers\API\TweetController@favorite');
 }); 
 
 // ツイート関連

@@ -1,13 +1,13 @@
 <template>
-<div v-if="judge">
+<div v-if="isClicked">
     <span class="favorites">
-    <i class="fas fa-solid fa-thumbs-up favoriteToggle favorite" v-on:click="favorite"></i>
+    <i class="fas fa-solid fa-thumbs-up favoriteToggle favorite" v-on:click="child"></i>
     <span class="favoriteCounter">{{count}}</span>
     </span>
 </div>
 <div v-else>
     <span class="favorites">
-        <i class="fas fa-solid fa-thumbs-up favoriteToggle" v-on:click="favorite"></i>
+        <i class="fas fa-solid fa-thumbs-up favoriteToggle" v-on:click="child"></i>
         <span class="favoriteCounter">{{count}}</span>
     </span>
 </div>
@@ -16,57 +16,41 @@
 <script>
 export default {
     props: {
-        login_user_id: {
+        initialBoolean: {
             required: true
         },
-        tweet_id: {
+        tweetId: {
             required: true
         },
-        favorite_count: {
-            required: true
-        },
-        favorite_judge: {
+        favoriteCount: {
             required: true
         },
     },
     data() {
         return {
-            judge : this.favorite_judge,
-            count : this.favorite_count
+            isClicked: this.initialBoolean,
+            count: this.favoriteCount
         };
     },
     watch: {
-        judge: function () {
-        },
         count: function () {
         },
 
     },
     methods: {
-        favorite: function () {
-            axios.get("/api/favorite", {
-                params: {
-                    login_user_id: this.login_user_id,
-                    tweet_id: this.tweet_id
-                }
-            }).then((res) => {
-                this.judge = res.data.judge
-                this.count = res.data.tweetFavoritesCount
-            }).catch((error) => {
-            });
+        child() {
+            this.isClicked=!this.isClicked;
+            if(this.isClicked === true) {
+                this.count += 1
+            } else {
+                this.count -= 1
+            }
+            this.$emit('child', this.tweetId);
         },
     },
 };  
 </script>
 
 <style scoped>
-    p {
-        margin: 10px;
-    }
-    .positive {
-        color: blue;
-    }
-    .negative {
-        color: red;
-    }
+    
 </style>
