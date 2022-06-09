@@ -35,7 +35,7 @@ class Comment extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getComments(int $tweetId)
+    public function fetchComments(int $tweetId)
     {
         return $this->with('user')->where('tweet_id', $tweetId)->get();
     }

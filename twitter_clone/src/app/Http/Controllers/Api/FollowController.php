@@ -21,9 +21,7 @@ class FollowController extends Controller
     {
         $loginUserId = auth()->user()->id; 
         $userId = $request->userId;
-
         $followedUser =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
-        
         if (!$followedUser) { 
             $follower->following_id = $loginUserId; 
             $follower->followed_id = $userId;

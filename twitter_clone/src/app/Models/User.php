@@ -74,7 +74,7 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getAllUsers(int $userId)
+    public function fetchAllUsers(int $userId)
     {
         return $this->Where('id', '<>', $userId)->paginate(5);
     }

@@ -34,7 +34,7 @@ class TweetsController extends Controller
         if (isset($followIds)) {
             // followed_idだけ抜き出す
             $followingIds = $followIds->pluck('followed_id')->toArray();
-            $timelines = $tweet->getTimelines($user->id, $followingIds);
+            $timelines = $tweet->fetchTimelines($user->id, $followingIds);
         }
         
         return view('tweets.index', [
@@ -54,8 +54,8 @@ class TweetsController extends Controller
     public function show(Tweet $tweet, Comment $comment)
     {
         $user = auth()->user();
-        $tweet = $tweet->getTweet($tweet->id);
-        $comments = $comment->getComments($tweet->id);
+        $tweet = $tweet->fetchTweet($tweet->id);
+        $comments = $comment->fetchComments($tweet->id);
 
         return view('tweets.show', [
             'user'     => $user,
@@ -119,7 +119,7 @@ class TweetsController extends Controller
     public function edit(Tweet $tweet)
     {
         $user = auth()->user();
-        $tweets = $tweet->getEditTweet($user->id, $tweet->id);
+        $tweets = $tweet->fetchEditTweet($user->id, $tweet->id);
 
         if (!isset($tweets)) {
             return redirect('tweets');

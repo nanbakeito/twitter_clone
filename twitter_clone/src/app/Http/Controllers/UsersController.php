@@ -25,7 +25,7 @@ class UsersController extends Controller
      */
     public function index(User $user)
     {
-        $allUsers = $user->getAllUsers(auth()->user()->id);
+        $allUsers = $user->fetchAllUsers(auth()->user()->id);
 
         return view('users.index', [
             'allUsers'  => $allUsers
@@ -72,8 +72,8 @@ class UsersController extends Controller
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
     {
-        $timelines = $tweet->getUserTimeLine($user->id);
-        $tweetCount = $tweet->getTweetCount($user->id);
+        $timelines = $tweet->fetchUserTimeLine($user->id);
+        $tweetCount = $tweet->fetchTweetCount($user->id);
         $followCount = $follower->fetchFollowCount($user->id);
         $followerCount = $follower->fetchFollowerCount($user->id);
 

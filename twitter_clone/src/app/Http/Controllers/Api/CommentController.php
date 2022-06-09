@@ -55,7 +55,7 @@ class CommentController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getComment(Request $request, Comment $comment)
+    public function fetchComment(Request $request, Comment $comment)
     {
         $commentData = $request->all();
         $comments = $comment->fetchCommentsByTweetId($commentData["tweet_id"]);
