@@ -39,7 +39,19 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('comments', 'App\Http\Controllers\CommentsController', ['only' => ['store']]);
     // いいね
     Route::post('tweets/favorite/{id}', 'App\Http\Controllers\FavoritesController@favorite')->name('tweets.favorite');
+
+    // 以下API
+    // フォロー機能
+    Route::get('api/follow', 'App\Http\Controllers\API\FollowController@follow');
+    // ユーザー関連
+    Route::get('api/fetchUserTimeLines', 'App\Http\Controllers\API\UserController@fetchUserTimeLines');
+    Route::get('api/sortUserTimeLines', 'App\Http\Controllers\API\UserController@sortUserTimeLines');
+    // コメントcrud機能
+    Route::post('api/postComment', 'App\Http\Controllers\API\CommentController@postComment')->middleware('validationComment');
+    Route::get('api/getComment', 'App\Http\Controllers\API\CommentController@getComment');
+    Route::delete('api/deleteComment/{id}', 'App\Http\Controllers\API\CommentController@deleteComment');
 }); 
 
 // ツイート関連
 Route::resource('tweets', 'App\Http\Controllers\TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Tweet;
 use App\Models\Follower;
@@ -27,14 +25,15 @@ class UsersController extends Controller
      */
     public function index(User $user)
     {
-        $allUsers = $user->getAllUsers(auth()->user()->id);
+        $allUsers = $user->fetchAllUsers(auth()->user()->id);
 
         return view('users.index', [
             'allUsers'  => $allUsers
         ]);
     }
 
-    /** フォロー&解除機能　（Ajax）
+    /** 
+     * フォロー&解除機能　（Ajax）
      * 
      * @param  \Illuminate\Http\Request  $request
      * @param  Follower $follower
@@ -56,8 +55,9 @@ class UsersController extends Controller
             $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->delete();
         }
 
-        $followerCount = $follower->getFollowerCount($userId);
+        $followerCount = $follower->fetchFollowerCount($userId);
         $param = array('followerCount'=> $followerCount);
+
         return response()->json($param); 
     }
 
@@ -72,10 +72,10 @@ class UsersController extends Controller
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
     {
-        $timelines = $tweet->getUserTimeLine($user->id);
-        $tweetCount = $tweet->getTweetCount($user->id);
-        $followCount = $follower->getFollowCount($user->id);
-        $followerCount = $follower->getFollowerCount($user->id);
+        $timelines = $tweet->fetchUserTimeLine($user->id);
+        $tweetCount = $tweet->fetchTweetCount($user->id);
+        $followCount = $follower->fetchFollowCount($user->id);
+        $followerCount = $follower->fetchFollowerCount($user->id);
 
         return view('users.show', [
             'user'          => $user,
@@ -108,8 +108,8 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $data = $request->all();
-        $user->updateProfile($data);
+        $userData = $request->all();
+        $user->updateProfile($userData);
         
         return redirect('users/'.$user->id);
     }

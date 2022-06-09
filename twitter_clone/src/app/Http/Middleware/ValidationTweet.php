@@ -19,8 +19,8 @@ class ValidationTweet
      */
     public function handle(Request $request, Closure $next)
     {
-        $data = $request->all();
-        $validator = Validator::make($data, [
+        $tweetData = $request->all();
+        $validator = Validator::make($tweetData, [
             'text' => ['required', 'string', 'max:140'],
             'image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
