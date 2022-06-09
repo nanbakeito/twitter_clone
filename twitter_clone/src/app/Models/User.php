@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -19,9 +20,10 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     // クラス定数を定義
-    private const FOLLOW = 0;
-    private const FOLLOWER = 1;
-    private const ALL = 2;
+    // チェックリストをもとに絞り込みを行う際、チェックリストの項目を定数として定義
+    private const SORT_FOLLOW = 0;
+    private const SORT_FOLLOWER = 1;
+    private const SORT_ALL = 2;
 
     /**
      * Mass Assignment 可能
@@ -132,7 +134,7 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollower(array $followerIds) {
+    public function fetchFollower(array $followerIds) {
 
         foreach ($followerIds as $followerId) {
             $follower = $this->where('id', $followerId)->get();
@@ -149,7 +151,7 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollowing(array $followingIds) {
+    public function fetchFollowing(array $followingIds) {
 
         foreach ($followingIds as $followingId) {
             $following = $this->where('id', $followingId)->get();
@@ -206,25 +208,21 @@ class User extends Authenticatable
     /**
      * ユーザーid取得（条件付き）
      *
-     * @param  array  $checkLists
+     * @param  array  $checkList
      * @param  array  $followingIds
      * @param  array  $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIds(array $checkLists, array $followingIds, array $followerIds)
+    public function fetchUserIds(array $checkList, array $followingIds, array $followerIds)
     {
-
-        if (in_array(self::ALL, $checkLists)) {
+        if (in_array(self::SORT_ALL, $checkList)) {
             $ids = $this->fetchAllUserIds();
-
-        } elseif (in_array(self::FOLLOW, $checkLists) and in_array(self::FOLLOWER, $checkLists)) {
+        } elseif (in_array(self::SORT_FOLLOW, $checkList) && in_array(self::SORT_FOLLOWER, $checkList)) {
             $ids = array_unique(array_merge($followingIds, $followerIds));
-
-        } elseif(in_array(self::FOLLOW, $checkLists)) {
+        } elseif(in_array(self::SORT_FOLLOW, $checkList)) {
             $ids = $followingIds;
-
-        } elseif(in_array(self::FOLLOWER, $checkLists)) {
+        } elseif(in_array(self::SORT_FOLLOWER, $checkList)) {
             $ids = $followerIds;
         };
         
@@ -235,19 +233,15 @@ class User extends Authenticatable
      * ユーザータイムライン取得（自身以外）
      *
      * @param  array  $userIds
-     * @param  int  $loginUserId
+     * @param  object  $loginUser
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUsers(array $userIds) 
+    public function fetchUsers(array $userIds, object $loginUser) 
     {
-        $loginUserId = auth()->user()->id;
-        $loginUser = auth()->user();
-        $userIds = array_diff($userIds, array($loginUserId));
-
+        $userIds = array_diff($userIds, array($loginUser->id));
         if (isset($userIds)) {
             foreach($userIds as $userId) {
-
                 $user = $this->where('id', $userId)->first();
                     $userTimeLine = ([
                         'id'                    => $userId,

@@ -17725,33 +17725,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    loginUserId: {
+    initialBoolean: {
       required: true
     },
     userId: {
-      required: true
-    },
-    followingJudgement: {
       required: true
     }
   },
   data: function data() {
     return {
-      isFollowedByUser: this.followingJudgement
+      isClicked: this.initialBoolean
     };
   },
   methods: {
-    follow: function follow() {
-      var _this = this;
-
-      axios.get("/api/follow", {
-        params: {
-          loginUserId: this.loginUserId,
-          userId: this.userId
-        }
-      }).then(function (res) {
-        _this.isFollowedByUser = res.data;
-      })["catch"](function (error) {});
+    child: function child() {
+      this.isClicked = !this.isClicked, this.$emit('child', this.userId);
     }
   }
 });
@@ -17807,12 +17795,21 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/sortUserTimeLines", {
         params: {
-          user_id: this.user,
+          userId: this.user,
           checkList: this.checkList
         }
       }).then(function (res) {
         _this2.userTimeLines = res.data, console.log(userTimeLines);
       })["catch"](function (error) {});
+    },
+    follow: function follow(userId) {
+      console.log();
+      axios.get("/api/follow", {
+        params: {
+          loginUserId: this.user,
+          userId: userId
+        }
+      }).then(function (res) {})["catch"](function (error) {});
     }
   }
 });
@@ -17909,17 +17906,17 @@ var _hoisted_2 = {
   key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return $data.isFollowedByUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  return $data.isClicked ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-danger",
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.follow && $options.follow.apply($options, arguments);
+      return $options.child && $options.child.apply($options, arguments);
     })
   }, "フォロー解除")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-primary",
     onClick: _cache[1] || (_cache[1] = function () {
-      return $options.follow && $options.follow.apply($options, arguments);
+      return $options.child && $options.child.apply($options, arguments);
     })
   }, "フォローする")]));
 }
@@ -18040,12 +18037,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     )], 8
     /* PROPS */
     , _hoisted_12)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
-      loginUserId: $props.user,
-      userId: userTimeLine.id,
-      followingJudgement: userTimeLine.followingJudgement
+      onChild: $options.follow,
+      initialBoolean: userTimeLine.followingJudgement,
+      userId: userTimeLine.id
     }, null, 8
     /* PROPS */
-    , ["loginUserId", "userId", "followingJudgement"])])])])]);
+    , ["onChild", "initialBoolean", "userId"])])])])]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])])]);

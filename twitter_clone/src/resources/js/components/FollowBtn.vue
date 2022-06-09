@@ -1,41 +1,31 @@
 <template>
-<div v-if="isFollowedByUser">
-    <button type="button" class="btn btn-danger" @click="follow" >フォロー解除</button>
+<div v-if="isClicked">
+    <button type="button" class="btn btn-danger" @click="child" >フォロー解除</button>
 </div>
 <div v-else>
-    <button type="button" class="btn btn-primary"  @click="follow">フォローする</button>                    
+    <button type="button" class="btn btn-primary"  @click="child">フォローする</button>                    
 </div>
 </template>
 
 <script>
 export default {
     props: {
-        loginUserId: {
+        initialBoolean: {
             required: true
         },
         userId: {
             required: true
         },
-        followingJudgement: {
-            required: true
-        },
     },
-    data() {
+    data(){
         return {
-            isFollowedByUser : this.followingJudgement
-        };
+            isClicked: this.initialBoolean,
+        }
     },
     methods: {
-        follow() {
-            axios.get("/api/follow", {
-                params: {
-                    loginUserId: this.loginUserId,
-                    userId: this.userId
-                }
-            }).then((res) => {
-                this.isFollowedByUser = res.data;
-            }).catch((error) => {
-            });
+        child() {
+            this.isClicked=!this.isClicked,
+            this.$emit('child', this.userId)
         },
     },
 };  

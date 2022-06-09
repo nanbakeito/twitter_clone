@@ -37,7 +37,7 @@
                                 <a :href="'/users/' + userTimeLine.id "><p class="mb-0">{{ userTimeLine.userName }}</p></a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
-                                <follow-btn :loginUserId= "user" :userId="userTimeLine.id" :followingJudgement="userTimeLine.followingJudgement" ></follow-btn>
+                                <follow-btn @child="follow" :initialBoolean="userTimeLine.followingJudgement" :userId="userTimeLine.id" ></follow-btn>
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@ export default {
         sortUserTimeLines() {
             axios.get("/api/sortUserTimeLines", {
                 params: {
-                    user_id: this.user,
+                    userId: this.user,
                     checkList: this.checkList
                 }
             }).then((res) => {
@@ -97,7 +97,19 @@ export default {
                 console.log(userTimeLines)
             }).catch((error) => {
             });
-        }
+        },
+
+        follow(userId) {
+            console.log();
+            axios.get("/api/follow", {
+                params: {
+                    loginUserId: this.user,
+                    userId: userId
+                }
+            }).then((res) => {
+            }).catch((error) => {
+            });
+        },
     },
 };  
 </script>

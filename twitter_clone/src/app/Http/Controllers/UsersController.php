@@ -55,7 +55,7 @@ class UsersController extends Controller
             $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->delete();
         }
 
-        $followerCount = $follower->getFollowerCount($userId);
+        $followerCount = $follower->fetchFollowerCount($userId);
         $param = array('followerCount'=> $followerCount);
 
         return response()->json($param); 
@@ -74,8 +74,8 @@ class UsersController extends Controller
     {
         $timelines = $tweet->getUserTimeLine($user->id);
         $tweetCount = $tweet->getTweetCount($user->id);
-        $followCount = $follower->getFollowCount($user->id);
-        $followerCount = $follower->getFollowerCount($user->id);
+        $followCount = $follower->fetchFollowCount($user->id);
+        $followerCount = $follower->fetchFollowerCount($user->id);
 
         return view('users.show', [
             'user'          => $user,

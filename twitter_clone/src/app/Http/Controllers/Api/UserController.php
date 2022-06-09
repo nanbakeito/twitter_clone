@@ -11,42 +11,6 @@ use App\Http\Controllers\Controller;
 class UserController extends Controller
 {
     /**
-     * フォローしているユーザー取得
-     * 
-     * @param  Illuminate\Http\Request $Request
-     * @param  User  $user
-     * @param  Follower  $follower
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function fetchFollowingUser(Request $Request,User $user, Follower $follower)
-    {
-        $userId = $Request->user_id;
-        $followingIds = $follower->followingIds($userId);
-        $following = $user->getFollower($followingIds);
-
-        return response()->json($following); 
-    }
-
-    /**
-     * フォロワー取得
-     *
-     * @param  Illuminate\Http\Request $Request
-     * @param  User  $user
-     * @param  Follower  $follower
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function fetchFollowedUser(Request $Request,User $user, Follower $follower)
-    {
-        $userId = $Request->user_id;
-        $followerIds = $follower->followerIds($userId);
-        $follwers = $user->getFollower($followerIds);
-
-        return response()->json($follwers); 
-    }
-
-    /**
      * ユーザータイムライン絞り込み
      *
      * @param  Illuminate\Http\Request $Request
@@ -55,13 +19,16 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sortUserTimeLines(Request $Request,User $user, Follower $follower)
+    public function sortUserTimeLines(Request $request,User $user, Follower $follower)
     {
-        $checkList = array_map('intval', $Request->checkList);
-        $followingIds = $follower->followingIds($Request->user_id);
-        $followerIds = $follower->followerIds($Request->user_id);
+        $loginUser = auth()->user();
+        $loginUserId = $loginUser->id;
+        // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
+        $checkList = array_map('intval', $request->checkList);
+        $followingIds = $follower->fetchFollowingIds($loginUserId);
+        $followerIds = $follower->fetchFollowerIds($loginUserId);
         $userIds = $user->fetchUserIds($checkList, $followingIds, $followerIds);
-        $userTimeLines = $user->fetchUserTimeLines($userIds);
+        $userTimeLines = $user->fetchUsers($userIds, $loginUser);
 
         return response()->json($userTimeLines); 
     }
@@ -69,16 +36,16 @@ class UserController extends Controller
     /** 
      * ユーザータイムライン取得（自身以外）
      * 
-     * @param  Illuminate\Http\Request $Request
      * @param  User  $user
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserTimeLines(Request $Request,User $user)
+    public function fetchUserTimeLines(User $user)
     {
-        $userIds = $user->fetchUserIds();
-        $userTimeLines = $user->fetchUserTimeLines($userIds, $Request->user_id);
-    
+        $loginUser = auth()->user();
+        $userIds = $user->fetchAllUserIds();
+        $userTimeLines = $user->fetchUsers($userIds, $loginUser);
+
         return response()->json($userTimeLines); 
     }
 }

@@ -29,7 +29,7 @@ class TweetsController extends Controller
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
-        $followIds = $follower->followingIds($user->id);
+        $followIds = $follower->fetchFollowingIds($user->id);
 
         if (isset($followIds)) {
             // followed_idだけ抜き出す

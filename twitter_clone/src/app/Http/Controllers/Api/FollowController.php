@@ -20,7 +20,8 @@ class FollowController extends Controller
     public function follow(Request $request, Follower $follower)
     {
         $loginUserId = auth()->user()->id; 
-        $userId = $request->user_id;
+        $userId = $request->userId;
+
         $followedUser =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
         
         if (!$followedUser) { 
