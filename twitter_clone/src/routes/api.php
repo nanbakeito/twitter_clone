@@ -17,26 +17,3 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-// フォロー機能
-Route::get('/follow', 'App\Http\Controllers\API\FollowController@follow');
-// 検索　**未実装
-Route::get('/fetchUserTimeLines', 'App\Http\Controllers\API\UserController@fetchUserTimeLines');
-Route::get('/narrowDownUserTimeLinesByRequest', 'App\Http\Controllers\API\UserController@narrowDownUserTimeLinesByRequest');
-
-Route::get('/fetchFollow', 'App\Http\Controllers\API\UserController@fetchFollow');
-Route::get('/fetchFollower', 'App\Http\Controllers\API\UserController@fetchFollower');
-// コメントcrud機能
-Route::post('/postComment', 'App\Http\Controllers\API\CommentController@postComment')->middleware('validationComment');
-Route::get('/getComment', 'App\Http\Controllers\API\CommentController@getComment');
-Route::delete('/deleteComment/{id}', 'App\Http\Controllers\API\CommentController@deleteComment');
-// ツイート関連
-Route::get('/fetchTimeLines', 'App\Http\Controllers\API\TweetController@fetchTimeLines');
-Route::delete('/deleteTweet/{id}', 'App\Http\Controllers\API\TweetController@deleteTweet');
-Route::post('/postTweet', 'App\Http\Controllers\API\TweetController@postTweet')->middleware('validationTweet');
-Route::get('/narrowDownTimeLine', 'App\Http\Controllers\API\TweetController@narrowDownTimeLine');
-
-
-// いいね
-Route::get('/favorite', 'App\Http\Controllers\API\TweetController@favorite');
-
-

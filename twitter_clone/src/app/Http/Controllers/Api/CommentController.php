@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Comment;
 use App\Http\Controllers\Controller;
 
@@ -17,7 +16,6 @@ class CommentController extends Controller
     }
     
     /**
-     * 
      * コメント投稿
      *
      * @param  \Illuminate\Http\Request  $request
@@ -27,10 +25,10 @@ class CommentController extends Controller
      */
     public function postComment(Request $request, Comment $comment)
     {
-        $data = $request->all();
-        $comment->commentStore($data);
+        $commentData = $request->all();
+        $comment->commentStore($commentData);
         
-        return response()->json($data["text"]); 
+        return response()->json($commentData["text"]); 
     }
 
     /**
@@ -50,39 +48,44 @@ class CommentController extends Controller
     }
 
     /**
-     * 
-     * コメント一覧取得
+     * コメント一覧表示
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Comment  $comment
-     * @param  User     $user
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getComment(Request $request, Comment $comment, User $user)
+    public function fetchComment(Request $request, Comment $comment)
     {
-        $data = $request->all();
-        $commentLists = $comment->fetchCommentsByTweetId($data["tweet_id"]);
+        $commentData = $request->all();
+        $comments = $comment->fetchCommentsByTweetId($commentData["tweet_id"]);
+        $commentFeaturesList = isset($comments) ? $this->fetchCommentList($comments) : $commentFeaturesList= [];
 
-        if ($commentLists) {
-            foreach ($commentLists as $commentList) {
-                $commentUser = $user->where('id', $commentList->user_id)->first();
+        return response()->json($commentFeaturesList); 
+    }
+
+    /**
+     * コメント一覧取得
+     *
+     * @param  array $comments
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchCommentList(object $comments)
+    {
+            foreach ($comments as $comment) {
+
                 $commentFeatures = ([
-                    'id'                => $commentList->id,
-                    'text'              => $commentList->text,
-                    'createdAt'         => $commentList->created_at->format('Y-m-d H:i'),
-                    'userId'            => $commentUser->id,
-                    'userName'          => $commentUser->name,
-                    'userProfileImage'  => $commentUser->profile_image,
+                    'id'                => $comment->id,
+                    'text'              => $comment->text,
+                    'createdAt'         => $comment->created_at->format('Y-m-d H:i'),
+                    'userId'            => $comment->user->id,
+                    'userName'          => $comment->user->name,
+                    'userProfileImage'  => $comment->user->profile_image,
                 ]);
-                $commentFeaturesList[] = $commentFeatures;
+                $commentList[] = $commentFeatures;
             }
 
-            return response()->json($commentFeaturesList); 
-        } else {
-            $commentFeaturesList = [] ;
-            
-            return response()->json($commentFeaturesList); 
-        }
+            return $commentList;
     }
 }

@@ -43,7 +43,7 @@ class Comment extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getComments(int $tweetId)
+    public function fetchComments(int $tweetId)
     {
         return $this->with('user')->where('tweet_id', $tweetId)->get();
     }
@@ -51,15 +51,15 @@ class Comment extends Model
     /**
      * コメント保存
      *
-     * @param  array  $data
+     * @param  array  $commentData
      * 
      * @return void
      */
-    public function commentStore(Array $data) : void
+    public function commentStore(Array $commentData) : void
     {
-        $this->user_id = $data['user_id'];
-        $this->tweet_id = $data['tweet_id'];
-        $this->text = $data['text'];
+        $this->user_id = $commentData['user_id'];
+        $this->tweet_id = $commentData['tweet_id'];
+        $this->text = $commentData['text'];
         $this->save();
     }
 
@@ -84,8 +84,6 @@ class Comment extends Model
      */
     public function fetchCommentsByTweetId(int $tweetId)
     {
-        $comments = $this->where('tweet_id', $tweetId)->get();
-        
-        return $this->where('tweet_id', $tweetId)->exists() ? $comments : null ;
+        return $this->where('tweet_id', $tweetId)->exists() ? $this->where('tweet_id', $tweetId)->get() : null ;
     }
 }

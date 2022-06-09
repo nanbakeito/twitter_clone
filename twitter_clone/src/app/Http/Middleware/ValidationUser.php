@@ -19,8 +19,8 @@ class ValidationUser
      */
     public function handle(Request $request, Closure $next)
     {
-        $data = $request->all();
-        $validator = Validator::make($data, [
+        $userData = $request->all();
+        $validator = Validator::make($userData, [
             'name'          => ['required', 'string', 'max:255'],
             'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->id)]

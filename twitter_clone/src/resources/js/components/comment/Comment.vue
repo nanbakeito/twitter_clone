@@ -7,7 +7,7 @@
                         <div class="col-md-12">
                             <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="commentText">
                             <span class="input-group-btn">
-                                <button class="submit-btn" type="button" v-on:click="pos" >送信</button> 
+                                <button class="submit-btn" type="button" @click="post" >送信</button> 
                             </span>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                     {{ comment.text }}
                 </div>
                 <div class="py-3">
-                    <button class="delete-btn" type="button" v-on:click="remove(comment.id)" >削除</button>
+                    <button class="delete-btn" type="button" @click="remove(comment.id)" >削除</button>
                 </div>
             </li>
         </dl>
@@ -39,7 +39,6 @@
 <script>
 export default {
     created() {
-        console.log("debug2");
         this.get();
     },
     props: {
@@ -60,7 +59,7 @@ export default {
         }
     },
     methods: {
-        get: function () {
+        get() {
             axios.get("/api/getComment", {
                 params: {
                     user_id: this.user,
@@ -71,7 +70,7 @@ export default {
                 console.log(res.length);
             });
         },
-        pos: function () {
+        post() {
             axios.post("/api/postComment", {
                 text: this.$refs.commentText.value,
                 user_id: this.user,
@@ -82,7 +81,7 @@ export default {
                 alert("テキストを入れてください");
             });
         },
-        remove: function (id) {
+        remove(id) {
             axios.delete("/api/deleteComment/" + id).then((res) => {
                 this.get();
             }).catch((error) => {

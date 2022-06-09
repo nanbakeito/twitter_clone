@@ -19,9 +19,9 @@ class ValidationComment
      */
     public function handle(Request $request, Closure $next)
     {
-        $data = $request->all();
+        $userData = $request->all();
         
-        $validator = Validator::make($data, [
+        $validator = Validator::make($userData, [
             'tweet_id' =>['required', 'integer'],
             'text'     => ['required', 'string', 'max:140']
         ]);

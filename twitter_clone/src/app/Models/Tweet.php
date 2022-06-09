@@ -64,7 +64,7 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getUserTimeLine($userId)
+    public function fetchUserTimeLine(int $userId)
     {
         return $this->where('user_id', $userId)->orderBy('created_at', 'DESC')->paginate(50);
     }
@@ -76,7 +76,7 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getTweetCount(int $userId)
+    public function fetchTweetCount(int $userId)
     {
         return $this->where('user_id', $userId)->count();
     }
@@ -124,7 +124,7 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getTweet(int $tweetId)
+    public function fetchTweet(int $tweetId)
     {
         return $this->with('user')->where('id', $tweetId)->first();
     }
@@ -137,7 +137,7 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getEditTweet(int $userId, int $tweetId)
+    public function fetchEditTweet(int $userId, int $tweetId)
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->first();
     }

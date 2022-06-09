@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -17,6 +18,12 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    // クラス定数を定義
+    // チェックリストをもとに絞り込みを行う際、チェックリストの項目を定数として定義
+    private const SORT_FOLLOW = 0;
+    private const SORT_FOLLOWER = 1;
+    private const SORT_ALL = 2;
 
     /**
      * Mass Assignment 可能
@@ -67,7 +74,7 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getAllUsers(int $userId)
+    public function fetchAllUsers(int $userId)
     {
         return $this->Where('id', '<>', $userId)->paginate(5);
     }
@@ -123,11 +130,11 @@ class User extends Authenticatable
     /**
      * フォロワー取得
      *
-     * @param  $followerIds
+     * @param  array $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollower($followerIds) {
+    public function fetchFollower(array $followerIds) {
 
         foreach ($followerIds as $followerId) {
             $follower = $this->where('id', $followerId)->get();
@@ -140,29 +147,28 @@ class User extends Authenticatable
     /**
      * フォローしている人取得
      *
-     * @param  $followingIds
+     * @param  array $followingIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getFollowing($followingIds) {
+    public function fetchFollowing(array $followingIds) {
 
+        foreach ($followingIds as $followingId) {
+            $following = $this->where('id', $followingId)->get();
+            $followingData[] = $following;
+        } 
 
-    foreach ($followingIds as $followingId) {
-        $following = $this->where('id', $followingId)->get();
-        $followingData[] = $following;
-    } 
-
-    return $followingData;
+        return $followingData;
     }
 
     /**
      * ユーザー情報更新
      *
-     * @param  Array  $params
+     * @param  array  $params
      * 
      * @return void
      */
-    public function updateProfile(Array $params) : void
+    public function updateProfile(array $params) : void
     {
         // 画像が更新される時の処理
         if (isset($params['profile_image'])) {
@@ -187,77 +193,66 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIds()
+    public function fetchAllUserIds()
     {
         $users = User::all();
+
         foreach ($users as $user) {
             $ids[] = $user->id;
         };
 
-        return $ids ;
+        return $ids;
     }
 
     /**
-     * ユーザーid取得（条件付き）
+     * ユーザーid整形（条件に応じて）
      *
-     * @param  Array  $judge
-     * @param  int  $loginUserId
+     * @param  array  $checkList
      * @param  array  $followingIds
      * @param  array  $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIdsByRequest(array $judge,int $loginUserId, array $followingIds, array $followerIds)
+    public function setUserIds(array $checkList, array $followingIds, array $followerIds)
     {
-        $follow = 0; 
-        $follower = 1;
-        $all = 2;
-        $me = 3;
-
-        if (in_array($all, $judge)) {
-            $ids = $this->fetchUserIds();
-        } elseif (in_array($follow, $judge) and in_array($follower, $judge)) {
+        if (in_array(self::SORT_ALL, $checkList)) {
+            $ids = $this->fetchAllUserIds();
+        } elseif (in_array(self::SORT_FOLLOW, $checkList) && in_array(self::SORT_FOLLOWER, $checkList)) {
             $ids = array_unique(array_merge($followingIds, $followerIds));
-        } elseif(in_array($follow, $judge)) {
+        } elseif(in_array(self::SORT_FOLLOW, $checkList)) {
             $ids = $followingIds;
-        } elseif(in_array($follower, $judge)) {
+        } elseif(in_array(self::SORT_FOLLOWER, $checkList)) {
             $ids = $followerIds;
-        } else {
-            $ids = [];
         };
         
-        if (in_array($me, $judge)) {
-            $ids[] = $loginUserId;
-        }
-
         return $ids;
     }
 
     /**
      * ユーザータイムライン取得（自身以外）
      *
-     * @param  Array  $userIds
-     * @param  int  $loginUserId
+     * @param  array  $userIds
+     * @param  object  $loginUser
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserTimeLines(array $userIds ,int $loginUserId) 
+    public function fetchUsers(array $userIds) 
     {
-        $userIds = array_diff($userIds, array($loginUserId));
-        $loginUser = $this->where('id', $loginUserId)->first();
-
-        foreach($userIds as $userId) {
-
-            $person = $this->where('id', $userId)->first();
-                $userTimeLine = ([
-                    'id'                    => $userId,
-                    'userName'              => $person->name,
-                    'userProfileImage'      => $person->profile_image,
-                    'followingJudgement'    => $loginUser->isFollowing($userId),
-                ]);
-                $userTimeLines[] = $userTimeLine;
+        $loginUser = auth()->user();
+        $userIds = array_diff($userIds, array($loginUser->id));
+        if (isset($userIds)) {
+            foreach($userIds as $userId) {
+                $user = $this->where('id', $userId)->first();
+                    $userTimeLine = ([
+                        'id'                    => $userId,
+                        'userName'              => $user->name,
+                        'userProfileImage'      => $user->profile_image,
+                        'followingJudgement'    => $loginUser->isFollowing($userId),
+                    ]);
+                    $userTimeLines[] = $userTimeLine;
+            }
         }
-
+        
         return $userTimeLines;
     }
 }
