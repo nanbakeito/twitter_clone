@@ -206,7 +206,7 @@ class User extends Authenticatable
     }
 
     /**
-     * ユーザーid取得（条件付き）
+     * ユーザーid整形（条件に応じて）
      *
      * @param  array  $checkList
      * @param  array  $followingIds
@@ -214,7 +214,7 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserIds(array $checkList, array $followingIds, array $followerIds)
+    public function setUserIds(array $checkList, array $followingIds, array $followerIds)
     {
         if (in_array(self::SORT_ALL, $checkList)) {
             $ids = $this->fetchAllUserIds();
@@ -226,7 +226,7 @@ class User extends Authenticatable
             $ids = $followerIds;
         };
         
-        return $ids ;
+        return $ids;
     }
 
     /**
@@ -237,8 +237,9 @@ class User extends Authenticatable
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUsers(array $userIds, object $loginUser) 
+    public function fetchUsers(array $userIds) 
     {
+        $loginUser = auth()->user();
         $userIds = array_diff($userIds, array($loginUser->id));
         if (isset($userIds)) {
             foreach($userIds as $userId) {
