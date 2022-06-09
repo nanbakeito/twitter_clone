@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Follower;
 use App\Models\Tweet;
+use App\Models\User;
 use App\Models\Favorite;
 use App\Http\Controllers\Controller;
 
@@ -22,7 +22,7 @@ class TweetController extends Controller
     /**
      * タイムライン表示
      * 
-     * @param  Illuminate\Http\Request $Request
+     * @param  Illuminate\Http\Request $request
      * @param  Follower  $follower
      * @param  Tweet     $tweet
      * 
@@ -39,13 +39,14 @@ class TweetController extends Controller
     /**
      * タイムライン絞り込み
      * 
-     * @param  Illuminate\Http\Request $Request
+     * @param  Illuminate\Http\Request $request
      * @param  Follower  $follower
      * @param  Tweet     $tweet
+     * @param  User      $user
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sortTimeLine(Request $request, Follower $follower, Tweet $tweet, User $user)
+    public function sortTimeLine(Request $request, Follower $follower, Tweet $tweet,User $user)
     {
         $loginUserId = auth()->user()->id;
         // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
@@ -62,30 +63,14 @@ class TweetController extends Controller
      * tweet投稿
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Follower  $follower
      * @param  Tweet  $tweet
      * 
      * @return \Illuminate\Http\Response
      */
-    public function postTweet(Request $request, Follower $follower, Tweet $tweet)
+    public function postTweet(Request $request, Tweet $tweet)
     {
         $tweetData = $request->all();
-
-        if (!in_array('null', $tweetData)) {
-            $fileName = $tweetData['image']->store('public/image/');
-
-            Tweet::create([
-                'user_id' => $tweetData['userId'],
-                'text' => $tweetData['text'],
-                'image' => basename($fileName),
-            ]);
-            
-        } else {
-            Tweet::create([
-                'user_id' => $tweetData['userId'],
-                'text' => $tweetData['text'],
-            ]);
-        };
+        $tweet->saveTweet($tweetData);
 
         return response()->json();
     }
@@ -113,30 +98,12 @@ class TweetController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function favorite(Request $request)
+    public function favorite(Request $request, Favorite $favorite)
     {
-        $loginUserId = $request->login_user_id; 
+        $loginUserId = auth()->user()->id; 
         $tweetId = $request->tweet_id; 
-        $alreadyFavorite = Favorite::where('user_id', $loginUserId)->where('tweet_id', $tweetId)->first();
-    
-        // ユーザーがいいねを押していない場合
-        if (!$alreadyFavorite) { 
-            $favorite = new Favorite; 
-            $favorite->tweet_id = $tweetId; 
-            $favorite->user_id = $loginUserId;
-            $favorite->save();
-            $judge = true;
-
-        } else { 
-            Favorite::where('tweet_id', $tweetId)->where('user_id', $loginUserId)->delete();
-            $judge = false;
-        }
+        $favorite->favorite($loginUserId, $tweetId);
         
-        $tweetFavoritesCount = Tweet::withCount('favorites')->findOrFail($tweetId)->favoriteCount($tweetId);
-        $param = [
-            'tweetFavoritesCount' => $tweetFavoritesCount,
-            'judge'               => $judge,
-        ];
-        return response()->json($param); 
+        return response()->json(); 
     }
 }

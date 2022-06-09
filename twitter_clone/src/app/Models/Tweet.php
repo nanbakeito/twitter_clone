@@ -165,4 +165,30 @@ class Tweet extends Model
     {
         return $this->favorites()->where('tweet_id', $tweetId)->count();
     }
+
+    /**
+     * tweet投稿
+     *
+     * @param  array $tweetData
+     * 
+     * @return  void
+     */
+    public function saveTweet(array $tweetData) : void
+    {
+        if (!in_array('null', $tweetData)) {
+            $fileName = $tweetData['image']->store('public/image/');
+
+            Tweet::create([
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
+                'image' => basename($fileName),
+            ]);
+            
+        } else {
+            Tweet::create([
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
+            ]);
+        };
+    }
 }

@@ -223,7 +223,6 @@ export default {
         favorite(tweetId) {
             axios.get("/api/favorite", {
                 params: {
-                    login_user_id: this.user,
                     tweet_id: tweetId
                 }
             }).then((res) => {

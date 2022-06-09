@@ -17968,7 +17968,6 @@ __webpack_require__.r(__webpack_exports__);
     favorite: function favorite(tweetId) {
       axios.get("/api/favorite", {
         params: {
-          login_user_id: this.user,
           tweet_id: tweetId
         }
       }).then(function (res) {})["catch"](function (error) {});
