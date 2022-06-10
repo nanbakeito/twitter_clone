@@ -35,7 +35,6 @@ export default {
     watch: {
         count: function () {
         },
-
     },
     methods: {
         child() {

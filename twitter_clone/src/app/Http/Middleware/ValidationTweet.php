@@ -19,7 +19,7 @@ class ValidationTweet
     public function handle(Request $request, Closure $next)
     {
         $tweetData = $request->all();
-        if (!in_array('null', $tweetData)) {
+        if (!in_array('null', $tweetData['image'])) {
             $validator = Validator::make($tweetData, [
                 'text' => ['required', 'string', 'max:140'],
                 'image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],

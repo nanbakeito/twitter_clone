@@ -91,8 +91,8 @@ class Tweet extends Model
      */
     public function fetchTimeLine(int $userId, array $userIds)
     {
-        if ($this->whereIn('user_id', $userIds)->exists()) {
             $tweets = $this->whereIn('user_id', $userIds)->orderBy('created_at', 'DESC')->get();
+            $timeLine = [];
             foreach($tweets as $tweet) {
                 $tweetInfo = ([
                     'id'                    => $tweet->id,
@@ -109,13 +109,10 @@ class Tweet extends Model
                 ]);
                 $timeLine[] = $tweetInfo;
             }
-        } else {
-            $timeLine = [];
-        }
 
         return $timeLine;
     }
-    
+
     /**
      * 投稿した際の自らのtweet情報取得
      * 
