@@ -48,9 +48,9 @@ class Tweet extends Model
     /**
      * いいねされているかを判定するメソッド
      *
-     * @param  int $userId
+     * @param  int  $userId
      * 
-     * @return \Illuminate\Http\Response
+     * @return  boolean
      */
     public function isLikedBy(int $userId): bool
     {
@@ -60,7 +60,7 @@ class Tweet extends Model
     /**
      * タイムライン情報取得しページネイト
      *
-     * @param  $userId
+     * @param  int  $userId
      * 
      * @return \Illuminate\Http\Response
      */
@@ -85,36 +85,62 @@ class Tweet extends Model
      * フォローしているuserのtimeline作成
      *
      * @param  int  $userId
-     * @param  array  $followIds
+     * @param  array  $followingIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTimeLines(int $userId, array $followingIds)
+    public function fetchTimeLine(int $userId, array $userIds)
     {
-        if ($this->whereIn('user_id', $followingIds)->exists()) {
-            $tweets = $this->whereIn('user_id', $followingIds)->orderBy('created_at', 'DESC')->get();
-
+        
+        if ($this->whereIn('user_id', $userIds)->exists()) {
+            $tweets = $this->whereIn('user_id', $userIds)->orderBy('created_at', 'DESC')->get();
             foreach($tweets as $tweet) {
-                $timeLine = ([
+                $tweetInfo = ([
                     'id'                    => $tweet->id,
                     'text'                  => $tweet->text,
                     'image'                 => $tweet->image,
                     'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
                     'commentCount'          => count($tweet->comments),
                     'favoriteCount'         => count($tweet->favorites),
-                    'favoriteJudge'         => $tweet->isLikedBy($userId),
+                    'alreadyFavorite'       => $tweet->isLikedBy($userId),
                     // ユーザー情報（リレーション）
                     'userId'                => $tweet->user->id,
                     'userName'              => $tweet->user->name,
                     'userProfileImage'      => $tweet->user->profile_image,
                 ]);
-                $timeLines[] = $timeLine;
+                $timeLine[] = $tweetInfo;
             }
         } else {
-            $timeLines = [];
+            $timeLine = [];
         }
 
-        return $timeLines;
+        return $timeLine;
+    }
+        /**
+     * 投稿した際の自らのtweet情報取得
+     *
+     * @param  int  $loginUserId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchTweetInfo(int $loginUserId)
+    {
+        $tweet = $this->where('user_id', $loginUserId)->orderBy('created_at', 'DESC')->first();
+        $tweetInfo = ([
+            'id'                    => $tweet->id,
+            'text'                  => $tweet->text,
+            'image'                 => $tweet->image,
+            'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
+            'commentCount'          => count($tweet->comments),
+            'favoriteCount'         => count($tweet->favorites),
+            'alreadyFavorite'       => $tweet->isLikedBy($loginUserId),
+            // ユーザー情報（リレーション）
+            'userId'                => $tweet->user->id,
+            'userName'              => $tweet->user->name,
+            'userProfileImage'      => $tweet->user->profile_image,
+        ]);
+
+        return $tweetInfo;
     }
 
     /**

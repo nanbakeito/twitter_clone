@@ -28,12 +28,12 @@ class TweetController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTimeLines(Request $request, Follower $follower, Tweet $tweet)
+    public function fetchTimeLine(Request $request, Follower $follower, Tweet $tweet)
     {
         $followingIds = $follower->fetchFollowingIds($request->user_id);
-        $timeLines = $tweet->fetchTimeLines($request->user_id, $followingIds);
+        $timeLine = $tweet->fetchTimeLine($request->user_id, $followingIds);
 
-        return response()->json($timeLines);
+        return response()->json($timeLine);
     }
 
     /**
@@ -48,15 +48,15 @@ class TweetController extends Controller
      */
     public function sortTimeLine(Request $request, Follower $follower, Tweet $tweet,User $user)
     {
-        $loginUserId = auth()->user()->id;
+        $userId = $request->user_id;
         // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
         $checkList = array_map('intval', $request->checkList);
-        $followingIds = $follower->fetchFollowingIds($loginUserId);
-        $followerIds = $follower->fetchFollowerIds($loginUserId);
-        $userIds = $user->setUserIds($checkList, $followingIds, $followerIds);
-        $timeLines = $tweet->fetchTimeLines($loginUserId, $userIds);
+        $followingIds = $follower->fetchFollowingIds($userId);
+        $followerIds = $follower->fetchFollowerIds($userId);
+        $userIds = $user->setUserIds($userId, $checkList, $followingIds, $followerIds);
+        $timeLine = $tweet->fetchTimeLine($userId, $userIds);
         
-        return response()->json($timeLines);
+        return response()->json($timeLine);
     }
 
     /**
@@ -69,10 +69,13 @@ class TweetController extends Controller
      */
     public function postTweet(Request $request, Tweet $tweet)
     {
+        $loginUserId = auth()->user()->id;
         $tweetData = $request->all();
         $tweet->saveTweet($tweetData);
-
-        return response()->json();
+        $userIds[] = $loginUserId;
+        $tweetInfo = $tweet->fetchTweetInfo($loginUserId);
+        
+        return response()->json($tweetInfo);
     }
 
     /**

@@ -1,13 +1,13 @@
 <template>
 <div v-if="isClicked">
     <span class="favorites">
-    <i class="fas fa-solid fa-thumbs-up favoriteToggle favorite" v-on:click="child"></i>
+    <i class="fas fa-solid fa-thumbs-up favoriteToggle favorite" @click="child"></i>
     <span class="favoriteCounter">{{count}}</span>
     </span>
 </div>
 <div v-else>
     <span class="favorites">
-        <i class="fas fa-solid fa-thumbs-up favoriteToggle" v-on:click="child"></i>
+        <i class="fas fa-solid fa-thumbs-up favoriteToggle" @click="child"></i>
         <span class="favoriteCounter">{{count}}</span>
     </span>
 </div>

@@ -4,44 +4,50 @@
         <div class="row justify-content-center">
             <div class="col-md-8 mb-3">
                 <!-- 絞り込み -->
-                <section>
-                    <input
-                        id="follow"
-                        type="checkbox"
-                        value= 0
-                        v-model="checkList"
-                    >
-                    <label for="follow">フォロー</label>
-                    <input
-                        id="follower"
-                        type="checkbox"
-                        value= 1
-                        v-model="checkList"
-                    >
-                    <label for="follower">フォロワー</label>
-                    <input
-                        id="all"
-                        type="checkbox"
-                        value= 2
-                        v-model="checkList"
-                    >
-                    <label for="all">全員</label>
-                    <input
-                        id="me"
-                        type="checkbox"
-                        value= 3
-                        v-model="checkList"
-                    >
-                    <label for="me">自分</label>
-                    <span class="input-group-btn">
-                        <button class="submit-btn" type="button" v-on:click="sortTimeLine" >絞り込み</button> 
-                    </span>
-                </section>
+                <div class="selectBox">
+                    <section>
+                        <input
+                            class="check"
+                            id="follow"
+                            type="checkbox"
+                            value= 0
+                            v-model="checkList"
+                        >
+                        <label for="follow">フォロー</label>
+                        <input
+                            class="check"
+                            id="follower"
+                            type="checkbox"
+                            value= 1
+                            v-model="checkList"
+                        >
+                        <label for="follower">フォロワー</label>
+                        <input
+                            class="check"
+                            id="all"
+                            type="checkbox"
+                            value= 2
+                            v-model="checkList"
+                        >
+                        <label for="all">全員</label>
+                        <input
+                            class="check"
+                            id="oneself"
+                            type="checkbox"
+                            value= 3
+                            v-model="checkList"
+                        >
+                        <label for="oneself">{{name}}</label>
+                        <span class="input-group-btn">
+                            <button class="submit-btn" type="button" @click="sortTimeLine" >絞り込み</button> 
+                        </span>
+                    </section>
+                </div>
                 <div v-if="isActive">
-                    <button type="button" class="btn btn-primary" v-on:click="active">ツイートする</button>
+                    <button type="button" class="btn btn-primary" @click="active">投稿フォームを開く</button>
                 </div>
                 <div v-else>
-                    <button type="button" v-on:click="active">閉じる</button>
+                    
                 </div>
                 <div v-if="isActive">
                 </div>
@@ -69,7 +75,8 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-12 text-right">
                                     <p class="mb-4 text-danger">140文字以内</p>
-                                    <button type="submit" class="btn btn-primary" v-on:click="tweet">
+                                    <button type="button" class="btn btn-danger" @click="active">閉じる</button>
+                                    <button type="submit" class="btn btn-primary" @click="postTweet">
                                         ツイートする
                                     </button>
                                 </div>
@@ -95,7 +102,7 @@
                                 <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
                             </div>
                         </div>
-                        <img :src="'../storage/image/' + timeLine.image " >
+                        <img :src="'../storage/image/' + timeLine.image ">
                         <div class="card-body">
                             {{ timeLine.text }}
                         </div>
@@ -107,8 +114,8 @@
                                         <i class="fas fa-ellipsis-v fa-fw"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <a :href="'/users/' + timeLine.id + '/edit/'" class="dropdown-item">編集</a>
-                                        <button type="button" class="dropdown-item del-btn" v-on:click="remove(timeLine.id)">削除</button>
+                                        <a :href="'/tweets/' + timeLine.id + '/edit/'" class="dropdown-item">編集</a>
+                                        <button type="button" class="dropdown-item del-btn" @click="remove(timeLine.id)">削除</button>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +125,7 @@
                                 <p class="mb-0 text-secondary">{{ timeLine.commentCount }}</p>
                             </div>
                             <!-- いいね -->
-                            <favorite-btn @child="favorite" :tweetId="timeLine.id" :favoriteCount="timeLine.favoriteCount" :initialBoolean="timeLine.favoriteJudge"></favorite-btn>
+                            <favorite-btn @child="favorite" :tweetId="timeLine.id" :favoriteCount="timeLine.favoriteCount" :initialBoolean="timeLine.alreadyFavorite"></favorite-btn>
                         </div>
                     </div>
                 </dl>
@@ -131,7 +138,7 @@
 <script>
 export default {
     created() {
-        this.fetchTimeLines();
+        this.fetchTimeLine();
     },
     props: {
         user: {
@@ -159,21 +166,21 @@ export default {
         }
     },
     methods: {
-        fetchTimeLines() {
-            axios.get("/api/fetchTimeLines", {
+        fetchTimeLine() {
+            axios.get("/api/fetchTimeLine", {
                 params: {
                     user_id: this.user,
                 }
             }).then((res) => {
                 this.timeLines = res.data;
             }).catch((error) => {
-                console.log(error);
             });
         },
 
-        remove(id) {
-            axios.delete("/api/deleteTweet/" + id).then((res) => {
-                this.fetchTimeLines();
+        removeTweet(id) {
+            axios.delete("/api/deleteTweet/" + id
+            ).then((res) => {
+                this.timeLines = this.timeLines.filter(item => item.id !== id)
             }).catch((error) => {
             });
         },
@@ -181,10 +188,9 @@ export default {
         fileSelect(event) {
             //選択したファイルの情報を取得しプロパティにいれる
             this.selected_file = event.target.files[0];
-            console.log(this.selected_file);
         },
 
-        tweet() {
+        postTweet() {
             let formData = new FormData();
                 //appendでデータを追加(第一引数は任意のキー)
                 //他に送信したいデータがある場合にはその分appendする
@@ -198,7 +204,7 @@ export default {
             };
             axios.post('/api/postTweet',formData,config
             ).then((res) => {
-                this.fetchTimeLines();
+                this.timeLines.unshift(res.data)
             }).catch((error) => {
                 alert("テキストを入れてください");
             });
@@ -238,4 +244,9 @@ export default {
 .input-group-btn {
     margin-left: 20px;
 }
+
+.selectBox {
+    text-align: center;
+}
+
 </style>

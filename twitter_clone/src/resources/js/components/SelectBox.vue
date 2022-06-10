@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="selectBox">
     <section>
         <input
             id="follow"
@@ -115,5 +115,7 @@ export default {
 </script>
 
 <style scoped>
-    
+.selectBox {
+    text-align: center;
+}
 </style>

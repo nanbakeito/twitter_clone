@@ -32,35 +32,6 @@ class UsersController extends Controller
         ]);
     }
 
-    /** 
-     * フォロー&解除機能　（Ajax）
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Follower $follower
-     * 
-     * @return  \Illuminate\Http\Response
-    */
-    public function follow(Request $request, Follower $follower)
-    {
-        $loginUserId = Auth()->user()->id; 
-        $userId = $request->userId;
-        $alreadyFollowed =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
-
-        if (!$alreadyFollowed) { 
-            $follower->following_id = $loginUserId; 
-            $follower->followed_id = $userId;
-            $follower->save();
-
-        } else { 
-            $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->delete();
-        }
-
-        $followerCount = $follower->fetchFollowerCount($userId);
-        $param = array('followerCount'=> $followerCount);
-        
-        return response()->json($param); 
-    }
-
     /**
      * ユーザー詳細画面
      *
@@ -112,5 +83,31 @@ class UsersController extends Controller
         $user->updateProfile($userData);
         
         return redirect('users/'.$user->id);
+    }
+
+    /**
+     * フォロー&解除機能 Ajax
+     * 
+     * @param  Illuminate\Http\Request $Request
+     * @param  Follower  $follower
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function follow(Request $request, Follower $follower)
+    {
+        $loginUserId = auth()->user()->id; 
+        $userId = $request->userId;
+        $followedUser =  $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->first();
+        if (!$followedUser) { 
+            $follower->following_id = $loginUserId; 
+            $follower->followed_id = $userId;
+            $follower->save();
+
+            return response(true); 
+        } else { 
+            $follower->where('following_id', $loginUserId)->where('followed_id', $userId)->delete();
+
+            return response(false);
+        }
     }
 }
