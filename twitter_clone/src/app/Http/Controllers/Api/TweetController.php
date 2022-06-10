@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\TweetCreateRequest;
 use Illuminate\Http\Request;
 use App\Models\Follower;
 use App\Models\Tweet;
@@ -12,13 +13,6 @@ use App\Http\Controllers\Controller;
 
 class TweetController extends Controller
 {
-    /**
-     * ミドルウェアによるバリデーション
-     */
-    public function __construct()  {
-        $this->middleware('validationTweet')->only(['postTweet']);
-    }
-
     /**
      * タイムライン表示
      * 
@@ -67,8 +61,9 @@ class TweetController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function postTweet(Request $request, Tweet $tweet)
+    public function postTweet(TweetCreateRequest $request, Tweet $tweet)
     {
+        dd($request->all());
         $loginUserId = auth()->user()->id;
         $tweetData = $request->all();
         $tweet->saveTweet($tweetData);

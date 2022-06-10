@@ -25,7 +25,7 @@ class Favorite extends Model
     }
 
     /**
-     * tweetsテーブルとのリレーションを定義する
+     * いいね機能
      * 
      * @param  int  $loginUserId
      * @param  int  $tweetId
