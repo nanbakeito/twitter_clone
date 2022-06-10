@@ -248,5 +248,4 @@ export default {
 .selectBox {
     text-align: center;
 }
-
 </style>

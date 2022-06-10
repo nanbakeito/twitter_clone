@@ -50,9 +50,9 @@ class Tweet extends Model
      *
      * @param  int  $userId
      * 
-     * @return  boolean
+     * @return  bool
      */
-    public function isLikedBy(int $userId): bool
+    public function isLikedBy(int $userId)
     {
         return Favorite::where('user_id', $userId)->where('tweet_id', $this->id)->first() !==null;
     }
@@ -91,7 +91,6 @@ class Tweet extends Model
      */
     public function fetchTimeLine(int $userId, array $userIds)
     {
-        
         if ($this->whereIn('user_id', $userIds)->exists()) {
             $tweets = $this->whereIn('user_id', $userIds)->orderBy('created_at', 'DESC')->get();
             foreach($tweets as $tweet) {
@@ -116,15 +115,15 @@ class Tweet extends Model
 
         return $timeLine;
     }
-        /**
+    
+    /**
      * 投稿した際の自らのtweet情報取得
-     *
-     * @param  int  $loginUserId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTweetInfo(int $loginUserId)
+    public function fetchTweetInfo()
     {
+        $loginUserId = auth()->user()->id;
         $tweet = $this->where('user_id', $loginUserId)->orderBy('created_at', 'DESC')->first();
         $tweetInfo = ([
             'id'                    => $tweet->id,

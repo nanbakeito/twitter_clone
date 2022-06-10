@@ -46,7 +46,7 @@ class TweetController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sortTimeLine(Request $request, Follower $follower, Tweet $tweet,User $user)
+    public function sortTimeLine(Request $request, Follower $follower, Tweet $tweet, User $user)
     {
         $userId = $request->user_id;
         // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
@@ -73,7 +73,7 @@ class TweetController extends Controller
         $tweetData = $request->all();
         $tweet->saveTweet($tweetData);
         $userIds[] = $loginUserId;
-        $tweetInfo = $tweet->fetchTweetInfo($loginUserId);
+        $tweetInfo = $tweet->fetchTweetInfo();
         
         return response()->json($tweetInfo);
     }

@@ -23,10 +23,10 @@
                                 <div class="d-flex justify-content-end flex-grow-1">
                                     @if (auth()->user()->isFollowing($user->id))
                                         <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="followBtn" class="btn btn-danger follow" data-user-id="{{ $user->id }}">フォロー解除</button>
+                                        <button type="button" class="btn btn-danger" data-user-id="{{ $user->id }}">フォロー解除</button>
                                     @else
                                         <input name="userId" type="hidden" value="{{ auth()->user()->id }}">
-                                        <button type="button" id="followBtn" class="btn btn-primary f" data-user-id="{{ $user->id }}">フォローする</button>                                                    
+                                        <button type="button" class="btn btn-primary" data-user-id="{{ $user->id }}">フォローする</button>                                                    
                                     @endif
                                 </div>
                                     @if (auth()->user()->isFollowed($user->id))
