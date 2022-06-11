@@ -172,6 +172,7 @@ export default {
                     user_id: this.user,
                 }
             }).then((res) => {
+                console.log(res.data),
                 this.timeLines = res.data;
             }).catch((error) => {
             });

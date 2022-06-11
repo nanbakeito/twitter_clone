@@ -52,7 +52,7 @@ class Tweet extends Model
      * 
      * @return  bool
      */
-    public function isLikedBy(int $userId)
+    public function isLikedBy(int $userId) : bool
     {
         return Favorite::where('user_id', $userId)->where('tweet_id', $this->id)->first() !==null;
     }
@@ -64,7 +64,7 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchUserTimeLine(int $userId)
+    public function fetchUserTimeLine(int $userId) 
     {
         return $this->where('user_id', $userId)->orderBy('created_at', 'DESC')->paginate(50);
     }
@@ -89,9 +89,13 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTimeLine(int $userId, array $userIds)
+    public function fetchTimeLine(int $userId, object $users) : array
     {
-            $tweets = $this->whereIn('user_id', $userIds)->orderBy('created_at', 'DESC')->get();
+            // $tweets = $this->whereIn('user_id', $userIds)->orderBy('created_at', 'DESC')->get();
+            foreach($users as $user) {
+                $tweets[] = $user->tweets ? $user->tweets : null;
+            }
+            dd($tweets);
             $timeLine = [];
             foreach($tweets as $tweet) {
                 $tweetInfo = ([
@@ -118,7 +122,7 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTweetInfo()
+    public function fetchTweetInfo() : array
     {
         $loginUserId = auth()->user()->id;
         $tweet = $this->where('user_id', $loginUserId)->orderBy('created_at', 'DESC')->first();

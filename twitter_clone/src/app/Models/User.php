@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+// use Illuminate\Database\Eloquent\App\Models\Model;
+
 
 
 class User extends Authenticatable
@@ -88,6 +90,14 @@ class User extends Authenticatable
     }
 
     /**
+     * tweetテーブルリレーション　
+     */
+    public function tweets()
+    {
+        return $this->hasMany(Tweet::class);
+    }
+
+    /**
      * フォロワーテーブルリレーション　フォロワー　（1対多）
      */
     public function followers()
@@ -130,35 +140,31 @@ class User extends Authenticatable
     /**
      * フォロワー取得
      *
-     * @param  array $followerIds
+     * @param  int $userId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchFollower(array $followerIds) {
+    public function fetchFollowers(int $userId) {
 
-        foreach ($followerIds as $followerId) {
-            $follower = $this->where('id', $followerId)->get();
-            $followerData[] = $follower;
-        } 
-
-        return $followerData;
+        $user = $this->where('id', $userId)->first();
+        $followers = $user->followers()->with('tweets')->get();
+        
+;        return $followers;
     }
 
     /**
      * フォローしている人取得
      *
-     * @param  array $followingIds
+     * @param  int $userId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchFollowing(array $followingIds) {
+    public function fetchFollowUsers(int $userId) {
 
-        foreach ($followingIds as $followingId) {
-            $following = $this->where('id', $followingId)->get();
-            $followingData[] = $following;
-        } 
+        $user = $this->where('id', $userId)->first();
+        $followUsers = $user->follows()->with('tweets')->get();
 
-        return $followingData;
+        return $followUsers;
     }
 
     /**

@@ -22,12 +22,12 @@ class TweetController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTimeLine(Request $request, Follower $follower, Tweet $tweet)
+    public function fetchTimeLine(Request $request, Follower $follower, Tweet $tweet, User $user)
     {
-        $followingIds = $follower->fetchFollowingIds($request->user_id);
-        $timeLine = $tweet->fetchTimeLine($request->user_id, $followingIds);
+        $followUsers = $user->fetchFollowUsers($request->user_id);
+        $timeLine = $tweet->fetchTimeLine($request->user_id, $followUsers);
 
-        return response()->json($timeLine);
+        return response()->json($followUsers);
     }
 
     /**
@@ -63,7 +63,6 @@ class TweetController extends Controller
      */
     public function postTweet(TweetCreateRequest $request, Tweet $tweet)
     {
-        dd($request->all());
         $loginUserId = auth()->user()->id;
         $tweetData = $request->all();
         $tweet->saveTweet($tweetData);

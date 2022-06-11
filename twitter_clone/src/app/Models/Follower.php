@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Follower extends Model
 {
@@ -53,16 +54,9 @@ class Follower extends Model
      */
     public function fetchFollowingIds(int $userId)
     {
-        if ($this->fetchFollowCount($userId) > 0) {
-            $followings = $this->where('following_id', $userId)->get();
-            foreach ($followings as $following) {
-                $followingIds[] = $following->followed_id;
-            }
-
-            return $followingIds;
-        } else {
-            return $followingIds = [];
-        }
+        $followingIds = DB::table('followers')->where('following_id', $userId)->get('following_id');
+        return $followingIds->count() > 0 ? $followingIds : [];
+    
     }
 
     /**
@@ -74,15 +68,9 @@ class Follower extends Model
      */
     public function fetchFollowerIds(int $userId)
     {
-        if ($this->fetchFollowerCount($userId) > 0) {
-            $followers = $this->where('followed_id', $userId)->get();
-            foreach ($followers as $follower) {
-                $followerIds[] = $follower->following_id;
-            }
+        $followerIds = DB::table('followers')->where('followed_id', $userId)->get('followed_id');
+        
+        return $followerIds->count() > 0 ? $followerIds : [];
 
-            return $followerIds;
-        } else {     
-            return $followerIds = [];
-        }
     }
 }
