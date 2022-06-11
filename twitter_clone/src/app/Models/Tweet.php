@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\softDeletes;
 use App\Models\Comment;
 
 class Tweet extends Model
 {
-    use SoftDeletes;
 
     /**
      * Mass Assignment 可能
