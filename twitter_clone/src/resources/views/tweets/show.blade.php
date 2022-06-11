@@ -41,7 +41,7 @@
                         </div>
                     @endif
                     <!-- いいね -->
-                    @if (!$tweet->isLikedBy(auth()->user()))
+                    @if (!$tweet->isLikedBy(auth()->user()->id))
                         <span class="favorites">
                             <i class="fas fa-solid fa-thumbs-up favoriteToggle" data-tweet-id="{{ $tweet->id }}"></i>
                             <span class="favoriteCounter">{{$tweet->favoriteCount($tweet->id)}}</span>

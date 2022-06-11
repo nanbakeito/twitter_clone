@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\softDeletes;
+use App\Models\Comment;
 
 class Tweet extends Model
 {
@@ -47,13 +48,13 @@ class Tweet extends Model
     /**
      * いいねされているかを判定するメソッド
      *
-     * @param  $user
+     * @param  int  $userId
      * 
-     * @return \Illuminate\Http\Response
+     * @return  bool
      */
-    public function isLikedBy($user): bool
+    public function isLikedBy(int $userId)
     {
-        return Favorite::where('user_id', $user->id)->where('tweet_id', $this->id)->first() !==null;
+        return Favorite::where('user_id', $userId)->where('tweet_id', $this->id)->first() !==null;
     }
     
     /**
@@ -84,17 +85,58 @@ class Tweet extends Model
      * フォローしているuserのtimeline作成
      *
      * @param  int  $userId
-     * @param  array  $followIds
+     * @param  array  $followingIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function fetchTimeLines(int $userId, Array $followIds)
+    public function fetchTimeLine(int $userId, array $userIds)
     {
-        // 自身とフォローしているユーザIDを結合する
-        $followIds[] = $userId;
-        $timelines = $this->whereIn('user_id', $followIds)->orderBy('created_at', 'DESC')->paginate(50);
-        // ツイートがあるかどうか
-        return $this->wherein('user_id', $followIds)->exists() ? $timelines : null ;
+            $tweets = $this->whereIn('user_id', $userIds)->orderBy('created_at', 'DESC')->get();
+            $timeLine = [];
+            foreach($tweets as $tweet) {
+                $tweetInfo = ([
+                    'id'                    => $tweet->id,
+                    'text'                  => $tweet->text,
+                    'image'                 => $tweet->image,
+                    'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
+                    'commentCount'          => count($tweet->comments),
+                    'favoriteCount'         => count($tweet->favorites),
+                    'alreadyFavorite'       => $tweet->isLikedBy($userId),
+                    // ユーザー情報（リレーション）
+                    'userId'                => $tweet->user->id,
+                    'userName'              => $tweet->user->name,
+                    'userProfileImage'      => $tweet->user->profile_image,
+                ]);
+                $timeLine[] = $tweetInfo;
+            }
+
+        return $timeLine;
+    }
+
+    /**
+     * 投稿した際の自らのtweet情報取得
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchTweetInfo()
+    {
+        $loginUserId = auth()->user()->id;
+        $tweet = $this->where('user_id', $loginUserId)->orderBy('created_at', 'DESC')->first();
+        $tweetInfo = ([
+            'id'                    => $tweet->id,
+            'text'                  => $tweet->text,
+            'image'                 => $tweet->image,
+            'createdAt'             => $tweet->created_at->format('Y-m-d H:i'),
+            'commentCount'          => count($tweet->comments),
+            'favoriteCount'         => count($tweet->favorites),
+            'alreadyFavorite'       => $tweet->isLikedBy($loginUserId),
+            // ユーザー情報（リレーション）
+            'userId'                => $tweet->user->id,
+            'userName'              => $tweet->user->name,
+            'userProfileImage'      => $tweet->user->profile_image,
+        ]);
+
+        return $tweetInfo;
     }
 
     /**
@@ -125,14 +167,13 @@ class Tweet extends Model
     /**
      * tweet削除
      *
-     * @param  int  $userId
      * @param  int  $tweetId
      * 
      * @return \Illuminate\Http\Response
      */
-    public function tweetDestroy(int $userId, int $tweetId)
+    public function tweetDelete(int $tweetId)
     {
-        return $this->where('user_id', $userId)->where('id', $tweetId)->delete();
+        return $this->where('id', $tweetId)->delete();
     }
 
     /**
@@ -145,5 +186,31 @@ class Tweet extends Model
     public function favoriteCount(int $tweetId)
     {
         return $this->favorites()->where('tweet_id', $tweetId)->count();
+    }
+
+    /**
+     * tweet投稿
+     *
+     * @param  array $tweetData
+     * 
+     * @return  void
+     */
+    public function saveTweet(array $tweetData) : void
+    {
+        if (!in_array('null', $tweetData)) {
+            $fileName = $tweetData['image']->store('public/image/');
+
+            Tweet::create([
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
+                'image' => basename($fileName),
+            ]);
+            
+        } else {
+            Tweet::create([
+                'user_id' => $tweetData['userId'],
+                'text' => $tweetData['text'],
+            ]);
+        };
     }
 }

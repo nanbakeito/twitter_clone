@@ -6,7 +6,6 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Update</div>
-
                 <div class="card-body">
                     <form method="POST" action="{{ route('tweets.update', $tweets->id) }}" enctype="multipart/form-data">
                         @csrf

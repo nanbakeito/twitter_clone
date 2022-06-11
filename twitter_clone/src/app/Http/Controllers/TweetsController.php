@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Tweet;
 use App\Models\Comment;
-use App\Models\Follower;
-use App\Models\Favorite;
 
 class TweetsController extends Controller
 {
@@ -20,26 +17,15 @@ class TweetsController extends Controller
 
     /**
      * tweet一覧機能
-     *
-     * @param  Tweet  $tweet
-     * @param  Follower  $follower
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(Tweet $tweet, Follower $follower)
+    public function index()
     {
         $user = auth()->user();
-        $followIds = $follower->fetchFollowingIds($user->id);
-
-        if (isset($followIds)) {
-            // followed_idだけ抜き出す
-            $followingIds = $followIds->pluck('followed_id')->toArray();
-            $timelines = $tweet->fetchTimelines($user->id, $followingIds);
-        }
         
         return view('tweets.index', [
             'user'      => $user,
-            'timelines' => $timelines
         ]);
     }
 

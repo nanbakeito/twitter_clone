@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,6 +23,7 @@ class User extends Authenticatable
     private const SORT_FOLLOW = 0;
     private const SORT_FOLLOWER = 1;
     private const SORT_ALL = 2;
+    private const SORT_ONESELF = 3;
 
     /**
      * Mass Assignment 可能
@@ -173,7 +173,6 @@ class User extends Authenticatable
         // 画像が更新される時の処理
         if (isset($params['profile_image'])) {
             $fileName = $params['profile_image']->store('public/profile_image/');
-
             $this::where('id', $this->id)
                 ->update([
                     'name'          => $params['name'],
@@ -207,14 +206,15 @@ class User extends Authenticatable
 
     /**
      * ユーザーid整形（条件に応じて）
-     *
+     * 
+     * @param  int    $userId
      * @param  array  $checkList
      * @param  array  $followingIds
      * @param  array  $followerIds
      * 
      * @return \Illuminate\Http\Response
      */
-    public function setUserIds(array $checkList, array $followingIds, array $followerIds)
+    public function setUserIds(int $userId, array $checkList, array $followingIds, array $followerIds)
     {
         if (in_array(self::SORT_ALL, $checkList)) {
             $ids = $this->fetchAllUserIds();
@@ -224,7 +224,13 @@ class User extends Authenticatable
             $ids = $followingIds;
         } elseif(in_array(self::SORT_FOLLOWER, $checkList)) {
             $ids = $followerIds;
+        } else {
+            $ids = [];
         };
+
+        if (in_array(self::SORT_ONESELF, $checkList)) {
+            $ids[] = $userId;
+        }
         
         return $ids;
     }
@@ -244,13 +250,13 @@ class User extends Authenticatable
         if (isset($userIds)) {
             foreach($userIds as $userId) {
                 $user = $this->where('id', $userId)->first();
-                    $userTimeLine = ([
-                        'id'                    => $userId,
-                        'userName'              => $user->name,
-                        'userProfileImage'      => $user->profile_image,
-                        'followingJudgement'    => $loginUser->isFollowing($userId),
-                    ]);
-                    $userTimeLines[] = $userTimeLine;
+                $userTimeLine = ([
+                    'id'                    => $userId,
+                    'userName'              => $user->name,
+                    'userProfileImage'      => $user->profile_image,
+                    'followingJudgement'    => $loginUser->isFollowing($userId),
+                ]);
+                $userTimeLines[] = $userTimeLine;
             }
         }
         

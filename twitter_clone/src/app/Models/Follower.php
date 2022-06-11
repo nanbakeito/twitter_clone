@@ -55,14 +55,12 @@ class Follower extends Model
     {
         if ($this->fetchFollowCount($userId) > 0) {
             $followings = $this->where('following_id', $userId)->get();
-
             foreach ($followings as $following) {
                 $followingIds[] = $following->followed_id;
             }
 
             return $followingIds;
         } else {
-
             return $followingIds = [];
         }
     }
@@ -78,14 +76,12 @@ class Follower extends Model
     {
         if ($this->fetchFollowerCount($userId) > 0) {
             $followers = $this->where('followed_id', $userId)->get();
-
             foreach ($followers as $follower) {
                 $followerIds[] = $follower->following_id;
             }
 
             return $followerIds;
-        } else {
-            
+        } else {     
             return $followerIds = [];
         }
     }

@@ -19,14 +19,14 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sortUserTimeLines(Request $request,User $user, Follower $follower)
+    public function sortUserTimeLines(Request $request, User $user, Follower $follower)
     {
         $loginUserId = auth()->user()->id;
         // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
         $checkList = array_map('intval', $request->checkList);
         $followingIds = $follower->fetchFollowingIds($loginUserId);
         $followerIds = $follower->fetchFollowerIds($loginUserId);
-        $userIds = $user->setUserIds($checkList, $followingIds, $followerIds);
+        $userIds = $user->setUserIds($loginUserId, $checkList, $followingIds, $followerIds);
         $userTimeLines = $user->fetchUsers($userIds);
 
         return response()->json($userTimeLines); 
