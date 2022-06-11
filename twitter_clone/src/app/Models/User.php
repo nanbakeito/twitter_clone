@@ -247,6 +247,7 @@ class User extends Authenticatable
     {
         $loginUser = auth()->user();
         $userIds = array_diff($userIds, array($loginUser->id));
+        $userTimeLines = [];
         if (isset($userIds)) {
             foreach($userIds as $userId) {
                 $user = $this->where('id', $userId)->first();

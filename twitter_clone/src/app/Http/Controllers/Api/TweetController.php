@@ -63,7 +63,6 @@ class TweetController extends Controller
      */
     public function postTweet(TweetCreateRequest $request, Tweet $tweet)
     {
-        dd($request->all());
         $loginUserId = auth()->user()->id;
         $tweetData = $request->all();
         $tweet->saveTweet($tweetData);

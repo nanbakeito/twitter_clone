@@ -40,6 +40,24 @@ Route::group(['middleware' => 'auth'], function() {
     // いいね
     Route::post('tweets/favorite/{id}', 'App\Http\Controllers\FavoritesController@favorite')->name('tweets.favorite');
 
+    // 以下API
+    // フォロー機能
+    Route::get('api/follow', 'App\Http\Controllers\Api\FollowController@follow');
+    // ユーザー関連
+    Route::get('api/fetchUserTimeLines', 'App\Http\Controllers\Api\UserController@fetchUserTimeLines');
+    Route::get('api/sortUserTimeLines', 'App\Http\Controllers\Api\UserController@sortUserTimeLines');
+    // コメントcrud機能
+    Route::post('api/postComment', 'App\Http\Controllers\Api\CommentController@postComment')->middleware('validationComment');
+    Route::get('api/getComment', 'App\Http\Controllers\Api\CommentController@getComment');
+    Route::delete('api/deleteComment/{id}', 'App\Http\Controllers\Api\CommentController@deleteComment');
+    // ツイート関連
+    Route::get('api/fetchTimeLine', 'App\Http\Controllers\Api\TweetController@fetchTimeLine');
+    Route::delete('api/deleteTweet/{id}', 'App\Http\Controllers\Api\TweetController@deleteTweet');
+    Route::post('api/postTweet', 'App\Http\Controllers\Api\TweetController@postTweet');
+    Route::get('api/sortTimeLine', 'App\Http\Controllers\Api\TweetController@sortTimeLine');
+    Route::get('api/favorite', 'App\Http\Controllers\Api\TweetController@favorite');
+
+
 }); 
 
 // ツイート関連
