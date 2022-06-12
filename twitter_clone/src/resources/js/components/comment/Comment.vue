@@ -7,7 +7,7 @@
                         <div class="col-md-12">
                             <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="commentText">
                             <span class="input-group-btn">
-                                <button class="submit-btn" type="button" @click="post" >送信</button> 
+                                <button class="submit-btn" type="button"  :disabled="isActive" @click="post" >送信</button> 
                             </span>
                         </div>
                     </div>
@@ -52,6 +52,7 @@ export default {
     data() {
         return {
             comments: [],
+            isActive: false,
         };
     },
     watch: {
@@ -67,16 +68,17 @@ export default {
                 }
             }).then((res) => {
                 this.comments = res.data.reverse();
-                console.log(res.length);
             });
         },
         post() {
+            this.isActive = true;
             axios.post("/api/postComment", {
                 text: this.$refs.commentText.value,
                 user_id: this.user,
                 tweet_id: this.tweet,
             }).then((res) => {
                 this.get();
+                this.isActive = false;
             }).catch((error) => {
                 alert("テキストを入れてください");
             });
