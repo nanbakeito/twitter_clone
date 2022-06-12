@@ -32,7 +32,12 @@
                 <dl v-for="userTimeLine in userTimeLines" :key="userTimeLine.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
-                            <img :src="'../storage/profile_image/' + userTimeLine.userProfileImage " class="rounded-circle" width="50" height="50">
+                            <div v-if="userTimeLine.userProfileImage === null">
+                                <img :src="'../storage/profile_image/noimage.png'"  class="rounded-circle" width="50" height="50">
+                            </div>
+                            <div v-else>
+                                <img :src="'../storage/profile_image/' + userTimeLine.userProfileImage " class="rounded-circle" width="50" height="50">
+                            </div>
                             <div class="ml-2 d-flex flex-column">
                                 <a :href="'/users/' + userTimeLine.id "><p class="mb-0">{{ userTimeLine.userName }}</p></a>
                             </div>
@@ -81,7 +86,7 @@ export default {
                 }
             }).then((res) => {
                 this.userTimeLines = res.data,
-                console.log(userTimeLines)
+                console.log(this.userTimeLines)
             }).catch((error) => {
             });
         },
@@ -93,8 +98,7 @@ export default {
                     checkList: this.checkList
                 }
             }).then((res) => {
-                this.userTimeLines = res.data,
-                console.log(userTimeLines)
+                this.userTimeLines = res.data
             }).catch((error) => {
             });
         },

@@ -53,7 +53,9 @@
                                     <a href="{{ route('tweets.create') }}" class="btn btn-md ">ツイートする</a>
                                 </li>
                                 <li class="nav-item">
-                                    <img src="{{ asset('storage/profile_image/' .auth()->user()->profile_image) }}" class="rounded-circle" width="50" height="50">
+                                    @if(isset(auth()->user()->profile_image))
+                                        <img src="{{ asset('storage/profile_image/' .auth()->user()->profile_image) }}" class="rounded-circle" width="50" height="50">
+                                    @endif
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

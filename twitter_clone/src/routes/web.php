@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('api/sortUserTimeLines', 'App\Http\Controllers\Api\UserController@sortUserTimeLines');
     // コメントcrud機能
     Route::post('api/postComment', 'App\Http\Controllers\Api\CommentController@postComment')->middleware('validationComment');
-    Route::get('api/getComment', 'App\Http\Controllers\Api\CommentController@getComment');
+    Route::get('api/fetchComment', 'App\Http\Controllers\Api\CommentController@fetchComment');
     Route::delete('api/deleteComment/{id}', 'App\Http\Controllers\Api\CommentController@deleteComment');
     // ツイート関連
     Route::get('api/fetchTimeLine', 'App\Http\Controllers\Api\TweetController@fetchTimeLine');
