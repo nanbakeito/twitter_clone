@@ -33,7 +33,7 @@
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
                             <div v-if="userTimeLine.userProfileImage === null">
-                                <img :src="'public/starage/noimage.png'"  class="rounded-circle" width="50" height="50">
+                                <img :src="'../starage/noimage.png'"  class="rounded-circle" width="50" height="50">
                             </div>
                             <div v-else>
                                 <img :src="'../storage/profile_image/' + userTimeLine.userProfileImage " class="rounded-circle" width="50" height="50">
