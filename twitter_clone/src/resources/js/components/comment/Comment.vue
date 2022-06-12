@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         get() {
-            axios.get("/api/getComment", {
+            axios.get("/api/fetchComment", {
                 params: {
                     user_id: this.user,
                     tweet_id: this.tweet,
