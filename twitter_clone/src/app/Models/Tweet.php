@@ -169,9 +169,12 @@ class Tweet extends Model
      * 
      * @return \Illuminate\Http\Response
      */
-    public function tweetDelete(int $tweetId)
+    public function tweetDelete(int $tweetId) 
     {
-        return $this->where('id', $tweetId)->delete();
+        $tweet = $this->where('id', $tweetId)->first();
+        $tweet->favorites()->delete();
+        $tweet->delete();
+        return $tweet;
     }
 
     /**

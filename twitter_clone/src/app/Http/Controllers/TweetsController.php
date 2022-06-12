@@ -152,16 +152,16 @@ class TweetsController extends Controller
 
     /**
      * tweet削除
-     *
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @param  Tweet  $tweet
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Tweet $tweet)
+    public function destroy(Request $request,Tweet $tweet)
     {
-        $user = auth()->user();
-        $tweet->tweetDestroy($user->id, $tweet->id);
+        $tweet->tweetDelete($request->id);
 
-        return back();
+        return redirect()->route('users.show', $tweet->user->id);
     }
 }
