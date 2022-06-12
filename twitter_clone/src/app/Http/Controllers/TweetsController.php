@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TweetCreateRequest;
 use Illuminate\Http\Request;
 use App\Models\Tweet;
 use App\Models\Comment;
 
 class TweetsController extends Controller
 {
-    /**
-     * ミドルウェアによるバリデーション
-     */
-    public function __construct()  {
-        $this->middleware('validationTweet')->only(['store','update']);
-    }
+    // /**
+    //  * ミドルウェアによるバリデーション
+    //  */
+    // public function __construct()  {
+    //     $this->middleware('validationTweet')->only(['store','update']);
+    // }
 
     /**
      * tweet一覧機能
@@ -125,7 +126,7 @@ class TweetsController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Tweet $tweet)
+    public function update(TweetCreateRequest $request, Tweet $tweet)
     {
         $tweetData = $request->all();
 

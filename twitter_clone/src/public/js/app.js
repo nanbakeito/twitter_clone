@@ -18612,7 +18612,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "button",
       "class": "dropdown-item del-btn",
       onClick: function onClick($event) {
-        return _ctx.remove(timeLine.id);
+        return $options.removeTweet(timeLine.id);
       }
     }, "削除", 8
     /* PROPS */

@@ -115,7 +115,7 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a :href="'/tweets/' + timeLine.id + '/edit/'" class="dropdown-item">編集</a>
-                                        <button type="button" class="dropdown-item del-btn" @click="remove(timeLine.id)">削除</button>
+                                        <button type="button" class="dropdown-item del-btn" @click="removeTweet(timeLine.id)">削除</button>
                                     </div>
                                 </div>
                             </div>
