@@ -46,18 +46,20 @@
                 <div v-if="isActive">
                     <button type="button" class="btn btn-primary" @click="active">投稿フォームを開く</button>
                 </div>
-                <div v-else>
-                    
-                </div>
-                <div v-if="isActive">
-                </div>
+                <div v-else></div>
+                <div v-if="isActive"></div>
                 <!-- 投稿フォーム -->
                 <div v-else>
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group row mb-0">
                                 <div class="col-md-12 p-3 w-100 d-flex">
-                                    <img :src="'../storage/profile_image/' + image " class="rounded-circle" width="50" height="50">
+                                    <div v-if="image !== null">
+                                        <img :src="'../storage/profile_image/' + image " class="rounded-circle" width="50" height="50">
+                                    </div>
+                                    <div v-else>
+                                        <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
+                                    </div>
                                     <div class="ml-2 d-flex flex-column">
                                         <p class="mb-0">{{ name }}</p>
                                     </div>
@@ -96,6 +98,9 @@
                         <div class="card-haeder p-3 w-100 d-flex">
                             <div v-if="timeLine.userProfileImage !== null">
                                 <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
+                            </div>
+                            <div v-else>
+                                <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
                             </div>
                             <div class="ml-2 d-flex flex-column">
                                 <a :href="'/users/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>

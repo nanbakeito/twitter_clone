@@ -56,6 +56,9 @@
                             <div v-if="timeLine.userProfileImage !== null">
                                 <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
+                            <div v-else>
+                                <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
+                            </div>
                             <div class="ml-2 d-flex flex-column">
                                 <a :href="'/users/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
                             </div>
@@ -63,7 +66,9 @@
                                 <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
                             </div>
                         </div>
-                        <img v-if="timeLine.image !== null" :src="'../storage/image/' + timeLine.image ">
+                        <div v-if="timeLine.image !== null">
+                            <img :src="'../storage/image/' + timeLine.image" class="rounded-circle" width="50" height="50">
+                        </div>
                         <div class="card-body">
                             {{ timeLine.text }}
                         </div>

@@ -14,7 +14,11 @@
                         <input name="userId" type="hidden" value="{{ $tweet->user_id }}">
                         <div class="form-group row mb-0">
                             <div class="col-md-12 p-3 w-100 d-flex">
-                                <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
+                                @if(isset($user->profile_image))
+                                    <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
+                                @else
+                                    <img src="{{ asset('storage/profile_image/noimage.png') }}" class="rounded-circle" width="50" height="50">
+                                @endif
                                 <div class="ml-2 d-flex flex-column">
                                     <a href="{{ route('users.show', $user->id) }}" class="text-secondary">
                                         <p class="mb-0">{{ $user->name }}</p>
