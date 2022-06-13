@@ -28,7 +28,7 @@
                 <div class="py-3">
                     {{ comment.text }}
                 </div>
-                <div class="py-3">
+                <div v-if="user === tweetUser || user === comment.userId" class="py-3">
                     <button class="delete-btn" type="button" @click="remove(comment.id)" >削除</button>
                 </div>
             </li>
@@ -43,6 +43,9 @@ export default {
     },
     props: {
         user: {
+            required: true
+        },
+        tweetUser: {
             required: true
         },
         tweet: {
@@ -63,7 +66,6 @@ export default {
         get() {
             axios.get("/api/fetchComment", {
                 params: {
-                    user_id: this.user,
                     tweet_id: this.tweet,
                 }
             }).then((res) => {

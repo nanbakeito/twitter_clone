@@ -32,10 +32,7 @@
                 <dl v-for="userTimeLine in userTimeLines" :key="userTimeLine.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
-                            <div v-if="userTimeLine.userProfileImage === null">
-                                <img :src="'../starage/noimage.png'"  class="rounded-circle" width="50" height="50">
-                            </div>
-                            <div v-else>
+                            <div v-if="userTimeLine.userProfileImage !== null">
                                 <img :src="'../storage/profile_image/' + userTimeLine.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
                             <div class="ml-2 d-flex flex-column">
