@@ -35,7 +35,7 @@
                                 <div class="col-md-12 text-right">
                                     <p class="mb-4 text-danger">140文字以内</p>
                                     <button type="button" class="btn btn-danger" @click="active">閉じる</button>
-                                    <button type="submit" class="btn btn-primary" @click="postTweet">
+                                    <button type="submit" class="btn btn-primary" @click="postTweet" :disabled="isActivePost">
                                         ツイートする
                                     </button>
                                 </div>
@@ -122,6 +122,7 @@ export default {
             timeLines: [],
             checkList: [3],
             isActive: true,
+            isActivePost: false,
             selected_file: null
         };
     },
@@ -168,10 +169,12 @@ export default {
                     'content-type': 'multipart/form-data'
                 }
             };
+            this.isActivePost = true;
             axios.post('/api/postTweet',formData,config
             ).then((res) => {
                 this.timeLines.unshift(res.data)
                 this.$emit("tweetActive", true);
+                this.isActivePost = false;
             }).catch((error) => {
                 alert("テキストを入れてください");
             });
