@@ -8,6 +8,8 @@
                 <div class="card-haeder p-3 w-100 d-flex">
                     @if(isset($tweet->user->profile_image))
                         <img src="{{ asset('storage/profile_image/' .$tweet->user->profile_image) }}" class="rounded-circle" width="50" height="50">
+                    @else
+                        <img src="{{ asset('storage/profile_image/noimage.png') }}" class="rounded-circle" width="50" height="50">
                     @endif
                     <div class="ml-2 d-flex flex-column">
                         <a href="{{ route('users.show', $tweet->user->id) }}" class="text-secondary">
@@ -20,6 +22,8 @@
                 </div>
                 @if (isset($tweet->image))
                     <img src="{{ asset('storage/image/' .$tweet->image) }}" >
+                @else
+                    <img src="{{ asset('storage/image/noimage.png') }}" >
                 @endif
                 <div class="card-body">
                     {!! nl2br(e($tweet->text)) !!}

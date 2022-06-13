@@ -35,13 +35,15 @@
                             <div v-if="userTimeLine.userProfileImage !== null">
                                 <img :src="'../storage/profile_image/' + userTimeLine.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
+                            <div v-else>
+                                <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
+                            </div>
                             <div class="ml-2 d-flex flex-column">
                                 <a :href="'/users/' + userTimeLine.id "><p class="mb-0">{{ userTimeLine.userName }}</p></a>
                             </div>
                             <div v-if="userTimeLine.isFollowed">
                                 <span class="mt-2 px-1 bg-secondary text-light">フォローされています</span>
                             </div>
-
                             <div class="d-flex justify-content-end flex-grow-1">
                                 <follow-btn @child="follow" :initialBoolean="userTimeLine.followingJudgement" :userId="userTimeLine.id" ></follow-btn>
                             </div>

@@ -9,6 +9,9 @@
                             <div v-if="image !== null">
                                 <img :src="'../storage/profile_image/' + image " class="rounded-circle" width="50" height="50">
                             </div>
+                            <div v-else>
+                                <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
+                            </div>
                             <div class="mt-3 d-flex flex-column">
                                 <h4 class="mb-0 font-weight-bold">{{ name }}</h4>
                             </div>
