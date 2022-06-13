@@ -38,6 +38,10 @@
                             <div class="ml-2 d-flex flex-column">
                                 <a :href="'/users/' + userTimeLine.id "><p class="mb-0">{{ userTimeLine.userName }}</p></a>
                             </div>
+                            <div v-if="userTimeLine.isFollowed">
+                                <span class="mt-2 px-1 bg-secondary text-light">フォローされています</span>
+                            </div>
+
                             <div class="d-flex justify-content-end flex-grow-1">
                                 <follow-btn @child="follow" :initialBoolean="userTimeLine.followingJudgement" :userId="userTimeLine.id" ></follow-btn>
                             </div>

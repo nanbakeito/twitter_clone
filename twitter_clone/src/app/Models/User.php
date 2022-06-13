@@ -256,6 +256,7 @@ class User extends Authenticatable
                     'userName'              => $user->name,
                     'userProfileImage'      => $user->profile_image,
                     'followingJudgement'    => $loginUser->isFollowing($userId),
+                    'isFollowed'            => $loginUser->isFollowed($userId),
                 ]);
                 $userTimeLines[] = $userTimeLine;
             }

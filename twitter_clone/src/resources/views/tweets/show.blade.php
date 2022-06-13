@@ -65,8 +65,8 @@
                 <comment 
                 :user= "@json(auth()->user()->id)" 
                 :tweet= "@json($tweet->id)"
-                :tweetUser= "@json($tweet->user->id)" 
-                ></comment>
+                :tweet-user= "@json($tweet->user->id)" 
+                ><comment>
             </ul>
         </div>
     </div>

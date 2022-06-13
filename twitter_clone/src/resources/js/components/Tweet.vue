@@ -94,20 +94,17 @@
                 <dl v-for="timeLine in timeLines" :key="timeLine.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
-                            <div v-if="timeLine.userProfileImage === null">
-                                <img :src="'../storage/profile_image/noimage.png'"  class="rounded-circle" width="50" height="50">
-                            </div>
-                            <div v-else>
+                            <div v-if="timeLine.userProfileImage !== null">
                                 <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
                             <div class="ml-2 d-flex flex-column">
-                                <a :href="'/users/show/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
+                                <a :href="'/users/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
                                 <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
                             </div>
                         </div>
-                        <img :src="'../storage/image/' + timeLine.image "  v-if="timeLine.image !== null" >
+                        <img v-if="timeLine.image !== null" :src="'../storage/image/' + timeLine.image ">
                         <div class="card-body">
                             {{ timeLine.text }}
                         </div>
