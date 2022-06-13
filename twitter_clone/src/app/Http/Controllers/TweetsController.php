@@ -114,7 +114,7 @@ class TweetsController extends Controller
 
         return view('tweets.edit', [
             'user'   => $user,
-            'tweet'  => $tweet
+            'tweet' => $tweet
         ]);
     }
 
