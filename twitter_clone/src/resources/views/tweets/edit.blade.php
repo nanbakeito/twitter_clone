@@ -7,11 +7,11 @@
             <div class="card">
                 <div class="card-header">Update</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('tweets.update', $tweets->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('tweets.update', $tweet->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <input name="id" type="hidden" value="{{ $tweets->id }}">
-                        <input name="userId" type="hidden" value="{{ $tweets->user_id }}">
+                        <input name="id" type="hidden" value="{{ $tweet->id }}">
+                        <input name="userId" type="hidden" value="{{ $tweet->user_id }}">
                         <div class="form-group row mb-0">
                             <div class="col-md-12 p-3 w-100 d-flex">
                                 <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <textarea class="form-control @error('text') is-invalid @enderror" name="text" required autocomplete="text" rows="4">{{ old('text') }}</textarea>
+                                <textarea class="form-control @error('text') is-invalid @enderror" name="text" required autocomplete="text" rows="4">{{$tweet->text}}</textarea>
                                 @error('text')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
