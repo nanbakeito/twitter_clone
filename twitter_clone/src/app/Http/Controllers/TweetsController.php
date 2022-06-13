@@ -147,7 +147,7 @@ class TweetsController extends Controller
             ]);
         };
 
-        return redirect('tweets');
+        return redirect()->route('users.show', $request->userId);
     }
 
     /**
