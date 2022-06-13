@@ -106,15 +106,15 @@ class TweetsController extends Controller
     public function edit(Tweet $tweet)
     {
         $user = auth()->user();
-        $tweets = $tweet->fetchEditTweet($user->id, $tweet->id);
+        $tweet = $tweet->fetchEditTweet($user->id, $tweet->id);
 
-        if (!isset($tweets)) {
+        if (!isset($tweet)) {
             return redirect('tweets');
         }
 
         return view('tweets.edit', [
             'user'   => $user,
-            'tweets' => $tweets
+            'tweet'  => $tweet
         ]);
     }
 

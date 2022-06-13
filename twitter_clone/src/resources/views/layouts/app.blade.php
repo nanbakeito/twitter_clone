@@ -55,6 +55,8 @@
                                 <li class="nav-item">
                                     @if(isset(auth()->user()->profile_image))
                                         <img src="{{ asset('storage/profile_image/' .auth()->user()->profile_image) }}" class="rounded-circle" width="50" height="50">
+                                    @else
+                                        <img src="{{ asset('storage/profile_image/noimage.png') }}" class="rounded-circle" width="50" height="50">
                                     @endif
                                 </li>
                                 <li class="nav-item dropdown">
