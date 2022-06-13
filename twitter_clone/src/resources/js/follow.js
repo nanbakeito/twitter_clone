@@ -1,5 +1,5 @@
 $(function () {
-	let favorite = $('.btn '); 
+	let favorite = $('.btna '); 
 	let followerCount = $('.followerCount '); 
     let followUserId; 
     favorite.on('click', function () { //onはイベントハンドラー

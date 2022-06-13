@@ -1,53 +1,12 @@
 <template>
 <div>
-    <div class="container">
+    <div v-if="user === loginUser" class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 mb-3">
-                <!-- 絞り込み -->
-                <div class="selectBox">
-                    <section>
-                        <input
-                            class="check"
-                            id="follow"
-                            type="checkbox"
-                            value= 0
-                            v-model="checkList"
-                        >
-                        <label for="follow">フォロー</label>
-                        <input
-                            class="check"
-                            id="follower"
-                            type="checkbox"
-                            value= 1
-                            v-model="checkList"
-                        >
-                        <label for="follower">フォロワー</label>
-                        <input
-                            class="check"
-                            id="all"
-                            type="checkbox"
-                            value= 2
-                            v-model="checkList"
-                        >
-                        <label for="all">全員</label>
-                        <input
-                            class="check"
-                            id="oneself"
-                            type="checkbox"
-                            value= 3
-                            v-model="checkList"
-                        >
-                        <label for="oneself">{{name}}</label>
-                        <span class="input-group-btn">
-                            <button class="submit-btn" type="button" @click="sortTimeLine" >絞り込み</button> 
-                        </span>
-                    </section>
-                </div>
                 <div v-if="isActive">
                     <button type="button" class="btn btn-primary" @click="active">投稿フォームを開く</button>
                 </div>
                 <div v-else>
-                    
                 </div>
                 <div v-if="isActive">
                 </div>
@@ -101,7 +60,7 @@
                                 <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
                             <div class="ml-2 d-flex flex-column">
-                                <a :href="'/users/show/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
+                                <a :href="'/users/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
                                 <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
@@ -113,7 +72,7 @@
                         </div>
                         <div class="card-footer py-1 d-flex justify-content-end bg-white">
                             <!-- 投稿者がログインユーザーなら編集、削除表示  -->
-                            <div v-if="timeLine.userId === user">
+                            <div v-if="timeLine.userId === loginUser">
                                 <div class="dropdown mr-3 d-flex align-items-center">
                                     <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v fa-fw"></i>
@@ -146,6 +105,9 @@ export default {
         this.fetchTimeLine();
     },
     props: {
+        loginUser: {
+            required: true
+        },
         user: {
             required: true
         },
@@ -161,7 +123,7 @@ export default {
     data() {
         return {
             timeLines: [],
-            checkList: [],
+            checkList: [3],
             isActive: true,
             selected_file: null
         };
@@ -172,12 +134,13 @@ export default {
     },
     methods: {
         fetchTimeLine() {
-            axios.get("/api/fetchTimeLine", {
+            axios.get("/api/sortTimeLine", {
                 params: {
                     user_id: this.user,
+                    checkList: this.checkList
                 }
             }).then((res) => {
-                this.timeLines = res.data;
+                this.timeLines = res.data
             }).catch((error) => {
             });
         },
@@ -214,18 +177,6 @@ export default {
                 this.$emit("tweetActive", true);
             }).catch((error) => {
                 alert("テキストを入れてください");
-            });
-        },
-
-        sortTimeLine() {
-            axios.get("/api/sortTimeLine", {
-                params: {
-                    user_id: this.user,
-                    checkList: this.checkList
-                }
-            }).then((res) => {
-                this.timeLines = res.data
-            }).catch((error) => {
             });
         },
 

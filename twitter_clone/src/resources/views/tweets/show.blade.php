@@ -62,7 +62,11 @@
         <div class="col-md-8 mb-3">
             <ul class="list-group">
                 {{-- comment.vue内のテンプレートを呼び出している（内容：コメント投稿フォーム，コメントリスト） --}}
-                <comment :user= "@json(auth()->user()->id)" :tweet= "@json($tweet->id)"></comment>
+                <comment 
+                :user= "@json(auth()->user()->id)" 
+                :tweet= "@json($tweet->id)"
+                :tweetUser= "@json($tweet->user->id)" 
+                ></comment>
             </ul>
         </div>
     </div>
