@@ -86,6 +86,7 @@ export default {
             });
         },
         remove(id) {
+            if(confirm('削除してよろしいですか?'))
             axios.delete("/api/deleteComment/" + id).then((res) => {
                 this.get();
             }).catch((error) => {

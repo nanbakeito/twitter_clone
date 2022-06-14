@@ -17947,7 +17947,7 @@ __webpack_require__.r(__webpack_exports__);
     removeTweet: function removeTweet(id) {
       var _this2 = this;
 
-      axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
+      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
         _this2.timeLines = _this2.timeLines.filter(function (item) {
           return item.id !== id;
         });
@@ -18124,7 +18124,7 @@ __webpack_require__.r(__webpack_exports__);
     removeTweet: function removeTweet(id) {
       var _this2 = this;
 
-      axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
+      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
         _this2.timeLines = _this2.timeLines.filter(function (item) {
           return item.id !== id;
         });
@@ -18254,7 +18254,7 @@ __webpack_require__.r(__webpack_exports__);
     remove: function remove(id) {
       var _this3 = this;
 
-      axios["delete"]("/api/deleteComment/" + id).then(function (res) {
+      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/deleteComment/" + id).then(function (res) {
         _this3.get();
       })["catch"](function (error) {});
     }

@@ -186,6 +186,7 @@ export default {
         },
 
         removeTweet(id) {
+            if(confirm('削除してよろしいですか?'))
             axios.delete("/api/deleteTweet/" + id
             ).then((res) => {
                 this.timeLines = this.timeLines.filter(item => item.id !== id)
