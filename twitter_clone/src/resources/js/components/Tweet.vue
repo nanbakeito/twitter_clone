@@ -219,6 +219,7 @@ export default {
                 this.isActivePost = false;
             }).catch((error) => {
                 alert("テキストを入れてください");
+                this.isActivePost = false;
             });
         },
 
