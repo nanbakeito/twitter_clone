@@ -18968,6 +18968,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_4]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    id: "qq",
     "class": "submit-btn",
     type: "button",
     onClick: _cache[3] || (_cache[3] = function () {
@@ -24848,7 +24849,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.selectBox[data-v-46110418] {\n    text-align: center;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.selectBox[data-v-46110418] {\n    text-align: center;\n}\ninput[type=\"button\"][data-v-46110418] {\n        border: 1px solid #ccc;\n        background-color: white;\n        border-radius: 5px;\n}\ninput[type=\"button\"][data-v-46110418]:hover {\n        background-color: transparent;\n}\ninput[type=\"button\"][data-v-46110418]:active {\n        background-color: transparent;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
