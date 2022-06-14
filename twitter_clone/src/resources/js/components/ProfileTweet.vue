@@ -35,7 +35,7 @@
                                 <div class="col-md-12 text-right">
                                     <p class="mb-4 text-danger">140文字以内</p>
                                     <button type="button" class="btn btn-danger" @click="active">閉じる</button>
-                                    <button type="submit" class="btn btn-primary" @click="postTweet" :disabled="isActivePost">
+                                    <button type="submit" class="btn btn-primary" @click="createTweet" :disabled="isActivePost">
                                         ツイートする
                                     </button>
                                 </div>
@@ -136,33 +136,20 @@ export default {
         }
     },
     methods: {
+        // タイムライン取得 
         fetchTimeLine() {
-            axios.get("/api/sortTimeLine", {
+            axios.get("/api/tweets", {
                 params: {
                     user_id: this.user,
-                    checkList: this.checkList
                 }
             }).then((res) => {
-                this.timeLines = res.data
+                this.timeLines = res.data;
             }).catch((error) => {
             });
         },
-
-        removeTweet(id) {
-            axios.delete("/api/deleteTweet/" + id
-            ).then((res) => {
-                this.timeLines = this.timeLines.filter(item => item.id !== id)
-                this.$emit("tweetActive", false);
-            }).catch((error) => {
-            });
-        },
-
-        fileSelect(event) {
-            //選択したファイルの情報を取得しプロパティにいれる
-            this.selected_file = event.target.files[0];
-        },
-
-        postTweet() {
+        // ツイート新規投稿
+        createTweet() {
+            // フォームデータ成形
             let formData = new FormData();
                 //appendでデータを追加(第一引数は任意のキー)
                 //他に送信したいデータがある場合にはその分appendする
@@ -174,8 +161,9 @@ export default {
                     'content-type': 'multipart/form-data'
                 }
             };
+            // 連続クリック制御
             this.isActivePost = true;
-            axios.post('/api/postTweet',formData,config
+            axios.post('/api/tweets',formData,config
             ).then((res) => {
                 this.timeLines.unshift(res.data)
                 this.$emit("tweetActive", true);
@@ -183,6 +171,30 @@ export default {
             }).catch((error) => {
                 alert("テキストを入れてください");
             });
+        },
+        // ツイート削除
+        removeTweet(id) {
+            axios.delete("/api/tweets/" + id
+            ).then((res) => {
+                this.timeLines = this.timeLines.filter(item => item.id !== id)
+                this.$emit("tweetActive", false);
+            }).catch((error) => {
+            });
+        },
+        // 一覧絞り込み（API通信せずにVue側でデータ編集した方が良いため改善）
+        sortTimeLine() {
+            axios.put("/api/tweets", {
+                user_id: this.user,
+                checkList: this.checkList
+            }).then((res) => {
+                this.timeLines = res.data
+            }).catch((error) => {
+            });
+        },
+
+        fileSelect(event) {
+            //選択したファイルの情報を取得しプロパティにいれる
+            this.selected_file = event.target.files[0];
         },
 
         active() {

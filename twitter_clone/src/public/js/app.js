@@ -17810,9 +17810,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  created: function created() {
-    console.log(this.user);
-  },
   props: {
     loginUser: {
       required: true
@@ -17859,6 +17856,7 @@ __webpack_require__.r(__webpack_exports__);
     tweetCountData: function tweetCountData() {}
   },
   methods: {
+    // 子component(profile-tweet)で起こったイベント(投稿or削除)に応じてツイート数を操作
     fluctuationTweet: function fluctuationTweet(_boolean) {
       if (_boolean) {
         this.tweetCountData += 1;
@@ -17866,10 +17864,10 @@ __webpack_require__.r(__webpack_exports__);
         this.tweetCountData -= 1;
       }
     },
-    follow: function follow(userId) {
+    // フォロー、アンフォロー
+    followAction: function followAction(userId) {
       var _this = this;
 
-      console.log();
       axios.get("/api/follow", {
         params: {
           loginUserId: this.loginUser,
@@ -17932,36 +17930,23 @@ __webpack_require__.r(__webpack_exports__);
     timeLines: function timeLines() {}
   },
   methods: {
+    // タイムライン取得 
     fetchTimeLine: function fetchTimeLine() {
       var _this = this;
 
-      axios.get("/api/sortTimeLine", {
+      axios.get("/api/tweets", {
         params: {
-          user_id: this.user,
-          checkList: this.checkList
+          user_id: this.user
         }
       }).then(function (res) {
         _this.timeLines = res.data;
       })["catch"](function (error) {});
     },
-    removeTweet: function removeTweet(id) {
+    // ツイート新規投稿
+    createTweet: function createTweet() {
       var _this2 = this;
 
-      axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
-        _this2.timeLines = _this2.timeLines.filter(function (item) {
-          return item.id !== id;
-        });
-
-        _this2.$emit("tweetActive", false);
-      })["catch"](function (error) {});
-    },
-    fileSelect: function fileSelect(event) {
-      //選択したファイルの情報を取得しプロパティにいれる
-      this.selected_file = event.target.files[0];
-    },
-    postTweet: function postTweet() {
-      var _this3 = this;
-
+      // フォームデータ成形
       var formData = new FormData(); //appendでデータを追加(第一引数は任意のキー)
       //他に送信したいデータがある場合にはその分appendする
 
@@ -17972,17 +17957,45 @@ __webpack_require__.r(__webpack_exports__);
         headers: {
           'content-type': 'multipart/form-data'
         }
-      };
+      }; // 連続クリック制御
+
       this.isActivePost = true;
-      axios.post('/api/postTweet', formData, config).then(function (res) {
-        _this3.timeLines.unshift(res.data);
+      axios.post('/api/tweets', formData, config).then(function (res) {
+        _this2.timeLines.unshift(res.data);
 
-        _this3.$emit("tweetActive", true);
+        _this2.$emit("tweetActive", true);
 
-        _this3.isActivePost = false;
+        _this2.isActivePost = false;
       })["catch"](function (error) {
         alert("テキストを入れてください");
       });
+    },
+    // ツイート削除
+    removeTweet: function removeTweet(id) {
+      var _this3 = this;
+
+      axios["delete"]("/api/tweets/" + id).then(function (res) {
+        _this3.timeLines = _this3.timeLines.filter(function (item) {
+          return item.id !== id;
+        });
+
+        _this3.$emit("tweetActive", false);
+      })["catch"](function (error) {});
+    },
+    // 一覧絞り込み（API通信せずにVue側でデータ編集した方が良いため改善）
+    sortTimeLine: function sortTimeLine() {
+      var _this4 = this;
+
+      axios.put("/api/tweets", {
+        user_id: this.user,
+        checkList: this.checkList
+      }).then(function (res) {
+        _this4.timeLines = res.data;
+      })["catch"](function (error) {});
+    },
+    fileSelect: function fileSelect(event) {
+      //選択したファイルの情報を取得しプロパティにいれる
+      this.selected_file = event.target.files[0];
     },
     active: function active() {
       this.isActive = !this.isActive;
@@ -18012,7 +18025,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.fetchUserTimeLines();
+    this.fetchUsers();
   },
   props: {
     user: {
@@ -18022,41 +18035,37 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       checkList: [],
-      userTimeLines: []
+      users: []
     };
   },
   watch: {
-    userTimeLines: function userTimeLines() {}
+    users: function users() {}
   },
   methods: {
-    list: function list() {
-      console.log(this.checkList);
-    },
-    fetchUserTimeLines: function fetchUserTimeLines() {
+    // ユーザー一覧取得
+    fetchUsers: function fetchUsers() {
       var _this = this;
 
-      axios.get("/api/fetchUserTimeLines", {
+      axios.get("/api/users", {
         params: {
           user_id: this.user
         }
       }).then(function (res) {
-        _this.userTimeLines = res.data, console.log(_this.userTimeLines);
+        _this.users = res.data, console.log(_this.users);
       })["catch"](function (error) {});
     },
-    sortUserTimeLines: function sortUserTimeLines() {
+    // ユーザー一覧絞り込み
+    sortUsers: function sortUsers() {
       var _this2 = this;
 
-      axios.get("/api/sortUserTimeLines", {
-        params: {
-          userId: this.user,
-          checkList: this.checkList
-        }
+      axios.put("/api/users", {
+        userId: this.user,
+        checkList: this.checkList
       }).then(function (res) {
-        _this2.userTimeLines = res.data;
+        _this2.users = res.data;
       })["catch"](function (error) {});
     },
     follow: function follow(userId) {
-      console.log();
       axios.get("/api/follow", {
         params: {
           loginUserId: this.user,
@@ -18110,10 +18119,11 @@ __webpack_require__.r(__webpack_exports__);
     timeLines: function timeLines() {}
   },
   methods: {
+    // タイムライン取得 
     fetchTimeLine: function fetchTimeLine() {
       var _this = this;
 
-      axios.get("/api/fetchTimeLine", {
+      axios.get("/api/tweets", {
         params: {
           user_id: this.user
         }
@@ -18121,24 +18131,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.timeLines = res.data;
       })["catch"](function (error) {});
     },
-    removeTweet: function removeTweet(id) {
+    // ツイート新規投稿
+    createTweet: function createTweet() {
       var _this2 = this;
 
-      axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
-        _this2.timeLines = _this2.timeLines.filter(function (item) {
-          return item.id !== id;
-        });
-
-        _this2.$emit("tweetActive", false);
-      })["catch"](function (error) {});
-    },
-    fileSelect: function fileSelect(event) {
-      //選択したファイルの情報を取得しプロパティにいれる
-      this.selected_file = event.target.files[0];
-    },
-    postTweet: function postTweet() {
-      var _this3 = this;
-
+      // フォームデータ成形
       var formData = new FormData(); //appendでデータを追加(第一引数は任意のキー)
       //他に送信したいデータがある場合にはその分appendする
 
@@ -18149,29 +18146,45 @@ __webpack_require__.r(__webpack_exports__);
         headers: {
           'content-type': 'multipart/form-data'
         }
-      };
+      }; // 連続クリック制御
+
       this.isActivePost = true;
-      axios.post('/api/postTweet', formData, config).then(function (res) {
-        _this3.timeLines.unshift(res.data);
+      axios.post('/api/tweets', formData, config).then(function (res) {
+        _this2.timeLines.unshift(res.data);
 
-        _this3.$emit("tweetActive", true);
+        _this2.$emit("tweetActive", true);
 
-        _this3.isActivePost = false;
+        _this2.isActivePost = false;
       })["catch"](function (error) {
         alert("テキストを入れてください");
       });
     },
+    // ツイート削除
+    removeTweet: function removeTweet(id) {
+      var _this3 = this;
+
+      axios["delete"]("/api/tweets/" + id).then(function (res) {
+        _this3.timeLines = _this3.timeLines.filter(function (item) {
+          return item.id !== id;
+        });
+
+        _this3.$emit("tweetActive", false);
+      })["catch"](function (error) {});
+    },
+    // 一覧絞り込み（API通信せずにVue側でデータ編集した方が良いため改善）
     sortTimeLine: function sortTimeLine() {
       var _this4 = this;
 
-      axios.get("/api/sortTimeLine", {
-        params: {
-          user_id: this.user,
-          checkList: this.checkList
-        }
+      axios.put("/api/tweets", {
+        user_id: this.user,
+        checkList: this.checkList
       }).then(function (res) {
         _this4.timeLines = res.data;
       })["catch"](function (error) {});
+    },
+    fileSelect: function fileSelect(event) {
+      //選択したファイルの情報を取得しプロパティにいれる
+      this.selected_file = event.target.files[0];
     },
     active: function active() {
       this.isActive = !this.isActive;
@@ -18201,7 +18214,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.get();
+    this.fetchComments();
   },
   props: {
     user: {
@@ -18224,10 +18237,11 @@ __webpack_require__.r(__webpack_exports__);
     comments: function comments() {}
   },
   methods: {
-    get: function get() {
+    // コメント取得
+    fetchComments: function fetchComments() {
       var _this = this;
 
-      axios.get("/api/fetchComment", {
+      axios.get("/api/comments", {
         params: {
           tweet_id: this.tweet
         }
@@ -18235,11 +18249,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.comments = res.data.reverse();
       });
     },
-    post: function post() {
+    // コメント新規投稿
+    createComments: function createComments() {
       var _this2 = this;
 
       this.isActive = true;
-      axios.post("/api/postComment", {
+      axios.post("/api/comments", {
         text: this.$refs.commentText.value,
         user_id: this.user,
         tweet_id: this.tweet
@@ -18251,11 +18266,12 @@ __webpack_require__.r(__webpack_exports__);
         alert("テキストを入れてください");
       });
     },
-    remove: function remove(id) {
+    // コメント削除
+    removeComments: function removeComments(id) {
       var _this3 = this;
 
-      axios["delete"]("/api/deleteComment/" + id).then(function (res) {
-        _this3.get();
+      axios["delete"]("/api/comments/" + id).then(function (res) {
+        _this3.fetchComments();
       })["catch"](function (error) {});
     }
   }
@@ -18504,7 +18520,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, "プロフィールを編集する", 8
   /* PROPS */
   , _hoisted_16)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
-    onChild: $options.follow,
+    onChild: $options.followAction,
     initialBoolean: $props.isFollowing,
     userId: $props.user
   }, null, 8
@@ -18767,7 +18783,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "submit",
     "class": "btn btn-primary",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.postTweet && $options.postTweet.apply($options, arguments);
+      return $options.createTweet && $options.createTweet.apply($options, arguments);
     }),
     disabled: $data.isActivePost
   }, " ツイートする ", 8
@@ -18971,13 +18987,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.sortUserTimeLines && $options.sortUserTimeLines.apply($options, arguments);
+      return $options.sortUsers && $options.sortUsers.apply($options, arguments);
     })
-  }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.userTimeLines, function (userTimeLine) {
+  }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.users, function (user) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
-      key: userTimeLine.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [userTimeLine.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      src: '../storage/profile_image/' + userTimeLine.userProfileImage,
+      key: user.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [user.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      src: '../storage/profile_image/' + user.userProfileImage,
       "class": "rounded-circle",
       width: "50",
       height: "50"
@@ -18991,15 +19007,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, null, 8
     /* PROPS */
     , _hoisted_14)])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/users/' + userTimeLine.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(userTimeLine.userName), 1
+      href: '/users/' + user.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.userName), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_16)]), userTimeLine.isFollowed ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, _hoisted_20)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
+    , _hoisted_16)]), user.isFollowed ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, _hoisted_20)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
       onChild: $options.follow,
-      initialBoolean: userTimeLine.followingJudgement,
-      userId: userTimeLine.id
+      initialBoolean: user.followingJudgement,
+      userId: user.id
     }, null, 8
     /* PROPS */
     , ["onChild", "initialBoolean", "userId"])])])])]);
@@ -19332,7 +19348,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "submit",
     "class": "btn btn-primary",
     onClick: _cache[8] || (_cache[8] = function () {
-      return $options.postTweet && $options.postTweet.apply($options, arguments);
+      return $options.createTweet && $options.createTweet.apply($options, arguments);
     }),
     disabled: $data.isActivePost
   }, " ツイートする ", 8
@@ -19479,7 +19495,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     disabled: $data.isActive,
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.post && $options.post.apply($options, arguments);
+      return $options.createComments && $options.createComments.apply($options, arguments);
     })
   }, "送信", 8
   /* PROPS */
@@ -19507,7 +19523,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "delete-btn",
       type: "button",
       onClick: function onClick($event) {
-        return $options.remove(comment.id);
+        return $options.removeComments(comment.id);
       }
     }, "削除", 8
     /* PROPS */

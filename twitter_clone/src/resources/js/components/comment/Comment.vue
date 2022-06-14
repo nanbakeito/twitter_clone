@@ -7,7 +7,7 @@
                         <div class="col-md-12">
                             <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="commentText">
                             <span class="input-group-btn">
-                                <button class="submit-btn" type="button" :disabled="isActive" @click="post" >送信</button> 
+                                <button class="submit-btn" type="button" :disabled="isActive" @click="createComments" >送信</button> 
                             </span>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                     {{ comment.text }}
                 </div>
                 <div v-if="user === tweetUser || user === comment.userId" class="py-3">
-                    <button class="delete-btn" type="button" @click="remove(comment.id)" >削除</button>
+                    <button class="delete-btn" type="button" @click="removeComments(comment.id)" >削除</button>
                 </div>
             </li>
         </dl>
@@ -39,7 +39,7 @@
 <script>
 export default {
     created() {
-        this.get();
+        this.fetchComments();
     },
     props: {
         user: {
@@ -63,8 +63,9 @@ export default {
         }
     },
     methods: {
-        get() {
-            axios.get("/api/fetchComment", {
+        // コメント取得
+        fetchComments() {
+            axios.get("/api/comments", {
                 params: {
                     tweet_id: this.tweet,
                 }
@@ -72,9 +73,10 @@ export default {
                 this.comments = res.data.reverse();
             });
         },
-        post() {
+        // コメント新規投稿
+        createComments() {
             this.isActive = true;
-            axios.post("/api/postComment", {
+            axios.post("/api/comments", {
                 text: this.$refs.commentText.value,
                 user_id: this.user,
                 tweet_id: this.tweet,
@@ -85,9 +87,10 @@ export default {
                 alert("テキストを入れてください");
             });
         },
-        remove(id) {
-            axios.delete("/api/deleteComment/" + id).then((res) => {
-                this.get();
+        // コメント削除
+        removeComments(id) {
+            axios.delete("/api/comments/" + id).then((res) => {
+                this.fetchComments();
             }).catch((error) => {
             });
         },
