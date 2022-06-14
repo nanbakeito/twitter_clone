@@ -214,7 +214,7 @@ export default {
             this.isActivePost = true;
             axios.post('/api/postTweet',formData,config
             ).then((res) => {
-                this.timeLines.unshift(res.data)
+                this.timeLines.unshift(res.data);
                 this.$emit("tweetActive", true);
                 this.isActivePost = false;
             }).catch((error) => {
@@ -247,7 +247,6 @@ export default {
             }).catch((error) => {
             });
         },
-
     },
 };  
 </script>
@@ -259,5 +258,9 @@ export default {
 
 .selectBox {
     text-align: center;
+}
+
+.card-body {
+    white-space: pre-wrap;
 }
 </style>
