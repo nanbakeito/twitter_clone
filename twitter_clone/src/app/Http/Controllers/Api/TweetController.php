@@ -44,7 +44,7 @@ class TweetController extends Controller
     {
         $userId = $request->user_id;
         // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
-        $checkList = array_map('intval', $request->checkList);
+        $checkList = array_map('intval', $request->conditions);
         $followingIds = $follower->fetchFollowingIds($userId);
         $followerIds = $follower->fetchFollowerIds($userId);
         $userIds = $user->setUserIds($userId, $checkList, $followingIds, $followerIds);
