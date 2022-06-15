@@ -58,7 +58,6 @@
         <profile-tweet :user= "user" :name= "name" :image= "image" :loginUser= "loginUser" ></profile-tweet>
     </div>
 </div>
-
 </template>
 
 <script>
