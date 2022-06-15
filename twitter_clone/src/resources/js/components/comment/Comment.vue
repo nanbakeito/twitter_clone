@@ -85,6 +85,7 @@ export default {
                 this.isActive = false;
             }).catch((error) => {
                 alert("テキストを入れてください");
+                this.isActive = false;
             });
         },
         // コメント削除
