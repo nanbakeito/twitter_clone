@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $loginUserId = auth()->user()->id;
         // Vueから送られたチェックリスト（この配列の中身を見て絞り込みを行う）
-        $checkList = array_map('intval', $request->checkList);
+        $checkList = array_map('intval', $request->conditions);
         $followingIds = $follower->fetchFollowingIds($loginUserId);
         $followerIds = $follower->fetchFollowerIds($loginUserId);
         $userIds = $user->setUserIds($loginUserId, $checkList, $followingIds, $followerIds);

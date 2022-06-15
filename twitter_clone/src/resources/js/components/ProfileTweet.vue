@@ -24,7 +24,7 @@
                                 <div class="form-group row">
                                     <label for="" class="col-md-4 col-form-label text-md-right">画像</label>
                                     <div class="col-md-6">
-                                        <input @change="fileSelect" type="file" accept="image/png, image/jpeg">
+                                        <input @change="selectFile" type="file" accept="image/png, image/jpeg">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -35,7 +35,7 @@
                                 <div class="col-md-12 text-right">
                                     <p class="mb-4 text-danger">140文字以内</p>
                                     <button type="button" class="btn btn-danger" @click="active">閉じる</button>
-                                    <button type="submit" class="btn btn-primary" @click="postTweet" :disabled="isActivePost">
+                                    <button type="submit" class="btn btn-primary" @click="createTweet" :disabled="isActivePost">
                                         ツイートする
                                     </button>
                                 </div>
@@ -50,48 +50,48 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 mb-3">
-                <dl v-for="timeLine in timeLines" :key="timeLine.id" >
+                <dl v-for=" tweet in  tweets" :key=" tweet.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
-                            <div v-if="timeLine.userProfileImage !== null">
-                                <img :src="'../storage/profile_image/' + timeLine.userProfileImage " class="rounded-circle" width="50" height="50">
+                            <div v-if=" tweet.userProfileImage !== null">
+                                <img :src="'../storage/profile_image/' +  tweet.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
                             <div v-else>
                                 <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
                             </div>
                             <div class="ml-2 d-flex flex-column">
-                                <a :href="'/users/' + timeLine.userId "><p class="mb-0">{{ timeLine.userName }}</p></a>
+                                <a :href="'/users/' +  tweet.userId "><p class="mb-0">{{  tweet.userName }}</p></a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
-                                <p class="mb-0 text-secondary">{{ timeLine.createdAt }}</p>
+                                <p class="mb-0 text-secondary">{{  tweet.createdAt }}</p>
                             </div>
                         </div>
-                        <div v-if="timeLine.image !== null">
-                            <img :src="'../storage/image/' + timeLine.image" class="rounded-circle" width="50" height="50">
+                        <div v-if=" tweet.image !== null">
+                            <img :src="'../storage/image/' +  tweet.image" class="rounded-circle" width="50" height="50">
                         </div>
                         <div class="card-body">
-                            {{ timeLine.text }}
+                            {{  tweet.text }}
                         </div>
                         <div class="card-footer py-1 d-flex justify-content-end bg-white">
                             <!-- 投稿者がログインユーザーなら編集、削除表示  -->
-                            <div v-if="timeLine.userId === loginUser">
+                            <div v-if=" tweet.userId === loginUser">
                                 <div class="dropdown mr-3 d-flex align-items-center">
                                     <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v fa-fw"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <a :href="'/tweets/' + timeLine.id + '/edit/'" class="dropdown-item">編集</a>
-                                        <button type="button" class="dropdown-item del-btn" @click="removeTweet(timeLine.id)">削除</button>
+                                        <a :href="'/tweets/' +  tweet.id + '/edit/'" class="dropdown-item">編集</a>
+                                        <button type="button" class="dropdown-item del-btn" @click="deleteTweet( tweet.id)">削除</button>
                                     </div>
                                 </div>
                             </div>
                             <!-- コメントアイコン -->
                             <div class="mr-3 d-flex align-items-center">
-                                <a :href="'/tweets/' + timeLine.id "><i class="far fa-comment fa-fw"></i></a>
-                                <p class="mb-0 text-secondary">{{ timeLine.commentCount }}</p>
+                                <a :href="'/tweets/' +  tweet.id "><i class="far fa-comment fa-fw"></i></a>
+                                <p class="mb-0 text-secondary">{{  tweet.commentCount }}</p>
                             </div>
                             <!-- いいね -->
-                            <favorite-btn @child="favorite" :tweetId="timeLine.id" :favoriteCount="timeLine.favoriteCount" :initialBoolean="timeLine.alreadyFavorite"></favorite-btn>
+                            <favorite-btn @child="favorite" :tweetId=" tweet.id" :favoriteCount=" tweet.favoriteCount" :initialBoolean=" tweet.alreadyFavorite"></favorite-btn>
                         </div>
                     </div>
                 </dl>
@@ -104,7 +104,7 @@
 <script>
 export default {
     created() {
-        this.fetchTimeLine();
+        this.fetchtTweets();
     },
     props: {
         loginUser: {
@@ -124,45 +124,32 @@ export default {
     },
     data() {
         return {
-            timeLines: [],
-            checkList: [3],
+            tweets: [],
+            conditions: [3],
             isActive: true,
             isActivePost: false,
             selected_file: null
         };
     },
     watch: {
-        timeLines: function () {
+        tweets: function () {
         }
     },
     methods: {
-        fetchTimeLine() {
-            axios.get("/api/sortTimeLine", {
+        // タイムライン取得 
+        fetchTweets() {
+            axios.get("/api/tweets", {
                 params: {
                     user_id: this.user,
-                    checkList: this.checkList
                 }
             }).then((res) => {
-                this.timeLines = res.data
+                this.tweets = res.data;
             }).catch((error) => {
             });
         },
-
-        removeTweet(id) {
-            axios.delete("/api/deleteTweet/" + id
-            ).then((res) => {
-                this.timeLines = this.timeLines.filter(item => item.id !== id)
-                this.$emit("tweetActive", false);
-            }).catch((error) => {
-            });
-        },
-
-        fileSelect(event) {
-            //選択したファイルの情報を取得しプロパティにいれる
-            this.selected_file = event.target.files[0];
-        },
-
-        postTweet() {
+        // ツイート新規投稿
+        createTweet() {
+            // フォームデータ成形
             let formData = new FormData();
                 //appendでデータを追加(第一引数は任意のキー)
                 //他に送信したいデータがある場合にはその分appendする
@@ -174,15 +161,29 @@ export default {
                     'content-type': 'multipart/form-data'
                 }
             };
+            // 連続クリック制御
             this.isActivePost = true;
-            axios.post('/api/postTweet',formData,config
+            axios.post('/api/tweets',formData,config
             ).then((res) => {
-                this.timeLines.unshift(res.data)
+                this.tweets.unshift(res.data)
                 this.$emit("tweetActive", true);
                 this.isActivePost = false;
             }).catch((error) => {
                 alert("テキストを入れてください");
             });
+        },
+        // ツイート削除
+        deleteTweet(id) {
+            axios.delete("/api/tweets/" + id
+            ).then((res) => {
+                this.tweets = this.tweets.filter(item => item.id !== id)
+                this.$emit("tweetActive", false);
+            }).catch((error) => {
+            });
+        },
+        selectFile(event) {
+            //選択したファイルの情報を取得しプロパティにいれる
+            this.selected_file = event.target.files[0];
         },
 
         active() {
