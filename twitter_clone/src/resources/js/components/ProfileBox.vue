@@ -23,7 +23,7 @@
                                         <a :href="'/users/' + user + '/edit'"  class="btn btn-primary">プロフィールを編集する</a>                      
                                     </div>
                                     <div v-else class="d-flex justify-content-end flex-grow-1">
-                                        <follow-btn @child="follow" :initialBoolean="isFollowing" :userId="user" ></follow-btn>
+                                        <follow-btn @child="followAction" :initialBoolean="isFollowing" :userId="user" ></follow-btn>
                                     </div>
                                     <div v-if="isFollowed">
                                         <span class="mt-2 px-1 bg-secondary text-light">フォローされています</span>
@@ -62,9 +62,6 @@
 
 <script>
 export default {
-    created(){
-        console.log(this.user)
-    },
     props: {
         loginUser: {
             required: true
@@ -113,6 +110,7 @@ export default {
         }
     },
     methods: {
+        // 子component(profile-tweet)で起こったイベント(投稿or削除)に応じてツイート数を操作
         fluctuationTweet(boolean){
             if (boolean) {
                 this.tweetCountData += 1
@@ -120,8 +118,8 @@ export default {
                 this.tweetCountData -= 1
             }
         },
-        follow(userId) {
-            console.log();
+        // フォロー、アンフォロー
+        followAction(userId) {
             axios.get("/api/follow", {
                 params: {
                     loginUserId: this.loginUser,
