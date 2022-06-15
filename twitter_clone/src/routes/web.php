@@ -44,19 +44,18 @@ Route::group(['middleware' => 'auth'], function() {
     // フォロー機能
     Route::get('api/follow', 'App\Http\Controllers\Api\FollowController@follow');
     // ユーザー関連
-    Route::get('api/fetchUserTimeLines', 'App\Http\Controllers\Api\UserController@fetchUserTimeLines');
-    Route::get('api/sortUserTimeLines', 'App\Http\Controllers\Api\UserController@sortUserTimeLines');
+    Route::get('api/users', 'App\Http\Controllers\Api\UserController@fetchUserTimeLines');
+    Route::put('api/users', 'App\Http\Controllers\Api\UserController@sortUserTimeLines');
     // コメントcrud機能
-    Route::post('api/postComment', 'App\Http\Controllers\Api\CommentController@postComment')->middleware('validationComment');
-    Route::get('api/fetchComment', 'App\Http\Controllers\Api\CommentController@fetchComment');
-    Route::delete('api/deleteComment/{id}', 'App\Http\Controllers\Api\CommentController@deleteComment');
+    Route::post('api/comments', 'App\Http\Controllers\Api\CommentController@postComment')->middleware('validationComment');
+    Route::get('api/comments', 'App\Http\Controllers\Api\CommentController@fetchComment');
+    Route::delete('api/comments/{id}', 'App\Http\Controllers\Api\CommentController@deleteComment');
     // ツイート関連
-    Route::get('api/fetchTimeLine', 'App\Http\Controllers\Api\TweetController@fetchTimeLine');
-    Route::delete('api/deleteTweet/{id}', 'App\Http\Controllers\Api\TweetController@deleteTweet');
-    Route::post('api/postTweet', 'App\Http\Controllers\Api\TweetController@postTweet');
-    Route::get('api/sortTimeLine', 'App\Http\Controllers\Api\TweetController@sortTimeLine');
+    Route::get('api/tweets', 'App\Http\Controllers\Api\TweetController@fetchTimeLine');
+    Route::delete('api/tweets/{id}', 'App\Http\Controllers\Api\TweetController@deleteTweet');
+    Route::post('api/tweets', 'App\Http\Controllers\Api\TweetController@postTweet');
+    Route::put('api/tweets', 'App\Http\Controllers\Api\TweetController@sortTimeLine');
     Route::get('api/favorite', 'App\Http\Controllers\Api\TweetController@favorite');
-
 
 }); 
 
