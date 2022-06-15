@@ -68,7 +68,7 @@ class TweetController extends Controller
         $tweet->saveTweet($tweetData);
         $userIds[] = $loginUserId;
         $tweetInfo = $tweet->fetchTweetInfo();
-        
+
         return response()->json($tweetInfo);
     }
 

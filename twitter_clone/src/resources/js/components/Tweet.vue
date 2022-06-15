@@ -265,7 +265,6 @@ export default {
             }).catch((error) => {
             });
         },
-
     },
 };  
 </script>
@@ -277,5 +276,9 @@ export default {
 
 .selectBox {
     text-align: center;
+}
+
+.card-body {
+    white-space: pre-wrap;
 }
 </style>
