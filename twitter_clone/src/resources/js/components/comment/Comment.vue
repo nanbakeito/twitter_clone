@@ -90,6 +90,7 @@ export default {
         },
         // コメント削除
         removeComment(id) {
+            if(confirm('削除してよろしいですか?'))
             axios.delete("/api/comments/" + id).then((res) => {
                 this.fetchComments();
             }).catch((error) => {

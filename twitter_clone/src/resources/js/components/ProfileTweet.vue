@@ -147,6 +147,22 @@ export default {
             }).catch((error) => {
             });
         },
+
+        removeTweet(id) {
+            if(confirm('削除してよろしいですか?'))
+            axios.delete("/api/deleteTweet/" + id
+            ).then((res) => {
+                this.timeLines = this.timeLines.filter(item => item.id !== id)
+                this.$emit("tweetActive", false);
+            }).catch((error) => {
+            });
+        },
+
+        fileSelect(event) {
+            //選択したファイルの情報を取得しプロパティにいれる
+            this.selected_file = event.target.files[0];
+        },
+
         // ツイート新規投稿
         createTweet() {
             // フォームデータ成形

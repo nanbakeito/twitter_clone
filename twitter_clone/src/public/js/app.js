@@ -17890,114 +17890,9 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ProfileTweet.vue?vue&type=script&lang=js ***!
   \******************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  created: function created() {
-    this.fetchtTweets();
-  },
-  props: {
-    loginUser: {
-      required: true
-    },
-    user: {
-      required: true
-    },
-    name: {
-      required: true,
-      type: String
-    },
-    image: {
-      required: true,
-      type: String
-    }
-  },
-  data: function data() {
-    return {
-      tweets: [],
-      conditions: [3],
-      isActive: true,
-      isActivePost: false,
-      selected_file: null
-    };
-  },
-  watch: {
-    tweets: function tweets() {}
-  },
-  methods: {
-    // タイムライン取得 
-    fetchTweets: function fetchTweets() {
-      var _this = this;
-
-      axios.get("/api/tweets", {
-        params: {
-          user_id: this.user
-        }
-      }).then(function (res) {
-        _this.tweets = res.data;
-      })["catch"](function (error) {});
-    },
-    // ツイート新規投稿
-    createTweet: function createTweet() {
-      var _this2 = this;
-
-      // フォームデータ成形
-      var formData = new FormData(); //appendでデータを追加(第一引数は任意のキー)
-      //他に送信したいデータがある場合にはその分appendする
-
-      formData.append('image', this.selected_file);
-      formData.append('text', this.$refs.tweetText.value);
-      formData.append('userId', this.user);
-      var config = {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-      }; // 連続クリック制御
-
-      this.isActivePost = true;
-      axios.post('/api/tweets', formData, config).then(function (res) {
-        _this2.tweets.unshift(res.data);
-
-        _this2.$emit("tweetActive", true);
-
-        _this2.isActivePost = false;
-      })["catch"](function (error) {
-        alert("テキストを入れてください");
-      });
-    },
-    // ツイート削除
-    deleteTweet: function deleteTweet(id) {
-      var _this3 = this;
-
-      axios["delete"]("/api/tweets/" + id).then(function (res) {
-        _this3.tweets = _this3.tweets.filter(function (item) {
-          return item.id !== id;
-        });
-
-        _this3.$emit("tweetActive", false);
-      })["catch"](function (error) {});
-    },
-    selectFile: function selectFile(event) {
-      //選択したファイルの情報を取得しプロパティにいれる
-      this.selected_file = event.target.files[0];
-    },
-    active: function active() {
-      this.isActive = !this.isActive;
-    },
-    favorite: function favorite(tweetId) {
-      axios.get("/api/favorite", {
-        params: {
-          tweet_id: tweetId
-        }
-      }).then(function (res) {})["catch"](function (error) {});
-    }
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /data/resources/js/Components/ProfileTweet.vue: Unexpected token (47:0)\n\n\u001b[0m \u001b[90m 45 |\u001b[39m             })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 46 |\u001b[39m         }\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m \u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 48 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 49 |\u001b[39m         removeTweet(id) {\u001b[0m\n\u001b[0m \u001b[90m 50 |\u001b[39m             \u001b[36mif\u001b[39m(confirm(\u001b[32m'削除してよろしいですか?'\u001b[39m))\u001b[0m\n    at instantiate (/data/node_modules/@babel/parser/lib/index.js:72:32)\n    at constructor (/data/node_modules/@babel/parser/lib/index.js:358:12)\n    at Parser.raise (/data/node_modules/@babel/parser/lib/index.js:3335:19)\n    at Parser.unexpected (/data/node_modules/@babel/parser/lib/index.js:3373:16)\n    at Parser.parsePropertyName (/data/node_modules/@babel/parser/lib/index.js:13748:24)\n    at Parser.parsePropertyDefinition (/data/node_modules/@babel/parser/lib/index.js:13579:22)\n    at Parser.parseObjectLike (/data/node_modules/@babel/parser/lib/index.js:13499:21)\n    at Parser.parseExprAtom (/data/node_modules/@babel/parser/lib/index.js:12890:23)\n    at Parser.parseExprSubscripts (/data/node_modules/@babel/parser/lib/index.js:12540:23)\n    at Parser.parseUpdate (/data/node_modules/@babel/parser/lib/index.js:12519:21)");
 
 /***/ }),
 
@@ -18071,122 +17966,9 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tweet.vue?vue&type=script&lang=js ***!
   \***********************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  created: function created() {
-    this.fetchTweet();
-  },
-  props: {
-    user: {
-      required: true
-    },
-    name: {
-      required: true,
-      type: String
-    },
-    image: {
-      required: true,
-      type: String
-    }
-  },
-  data: function data() {
-    return {
-      tweets: [],
-      conditions: [],
-      isActive: true,
-      isActivePost: false,
-      selected_file: null
-    };
-  },
-  watch: {
-    tweets: function tweets() {}
-  },
-  methods: {
-    // タイムライン取得 
-    fetchTweet: function fetchTweet() {
-      var _this = this;
-
-      axios.get("/api/tweets", {
-        params: {
-          user_id: this.user
-        }
-      }).then(function (res) {
-        _this.tweets = res.data;
-      })["catch"](function (error) {});
-    },
-    // ツイート新規投稿
-    createTweet: function createTweet() {
-      var _this2 = this;
-
-      // フォームデータ成形
-      var formData = new FormData(); //appendでデータを追加(第一引数は任意のキー)
-      //他に送信したいデータがある場合にはその分appendする
-
-      formData.append('image', this.selected_file);
-      formData.append('text', this.$refs.tweetText.value);
-      formData.append('userId', this.user);
-      var config = {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-      }; // 連続クリック制御
-
-      this.isActivePost = true;
-      axios.post('/api/tweets', formData, config).then(function (res) {
-        _this2.tweets.unshift(res.data);
-
-        _this2.$emit("tweetActive", true);
-
-        _this2.isActivePost = false;
-      })["catch"](function (error) {
-        alert("テキストを入れてください");
-      });
-    },
-    // ツイート削除
-    deleteTweet: function deleteTweet(id) {
-      var _this3 = this;
-
-      axios["delete"]("/api/tweets/" + id).then(function (res) {
-        _this3.tweets = _this3.tweets.filter(function (item) {
-          return item.id !== id;
-        });
-
-        _this3.$emit("tweetActive", false);
-      })["catch"](function (error) {});
-    },
-    // 一覧絞り込み（API通信せずにVue側でデータ編集した方が良いため改善）
-    fetchSortedTweets: function fetchSortedTweets() {
-      var _this4 = this;
-
-      axios.put("/api/tweets", {
-        user_id: this.user,
-        conditions: this.conditions
-      }).then(function (res) {
-        _this4.tweets = res.data;
-      })["catch"](function (error) {});
-    },
-    selectFile: function selectFile(event) {
-      //選択したファイルの情報を取得しプロパティにいれる
-      this.selected_file = event.target.files[0];
-    },
-    active: function active() {
-      this.isActive = !this.isActive;
-    },
-    favorite: function favorite(tweetId) {
-      axios.get("/api/favorite", {
-        params: {
-          tweet_id: tweetId
-        }
-      }).then(function (res) {})["catch"](function (error) {});
-    }
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /data/resources/js/Components/Tweet.vue: Unexpected token (44:0)\n\n\u001b[0m \u001b[90m 42 |\u001b[39m             })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 43 |\u001b[39m         }\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 44 |\u001b[39m \u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 45 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 46 |\u001b[39m         removeTweet(id) {\u001b[0m\n\u001b[0m \u001b[90m 47 |\u001b[39m             \u001b[36mif\u001b[39m(confirm(\u001b[32m'削除してよろしいですか?'\u001b[39m))\u001b[0m\n    at instantiate (/data/node_modules/@babel/parser/lib/index.js:72:32)\n    at constructor (/data/node_modules/@babel/parser/lib/index.js:358:12)\n    at Parser.raise (/data/node_modules/@babel/parser/lib/index.js:3335:19)\n    at Parser.unexpected (/data/node_modules/@babel/parser/lib/index.js:3373:16)\n    at Parser.parsePropertyName (/data/node_modules/@babel/parser/lib/index.js:13748:24)\n    at Parser.parsePropertyDefinition (/data/node_modules/@babel/parser/lib/index.js:13579:22)\n    at Parser.parseObjectLike (/data/node_modules/@babel/parser/lib/index.js:13499:21)\n    at Parser.parseExprAtom (/data/node_modules/@babel/parser/lib/index.js:12890:23)\n    at Parser.parseExprSubscripts (/data/node_modules/@babel/parser/lib/index.js:12540:23)\n    at Parser.parseUpdate (/data/node_modules/@babel/parser/lib/index.js:12519:21)");
 
 /***/ }),
 
@@ -18194,77 +17976,9 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/comment/Comment.vue?vue&type=script&lang=js ***!
   \*********************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  created: function created() {
-    this.fetchComments();
-  },
-  props: {
-    user: {
-      required: true
-    },
-    tweetUser: {
-      required: true
-    },
-    tweet: {
-      required: true
-    }
-  },
-  data: function data() {
-    return {
-      comments: [],
-      isActive: false
-    };
-  },
-  watch: {
-    comments: function comments() {}
-  },
-  methods: {
-    // コメント取得
-    fetchComments: function fetchComments() {
-      var _this = this;
-
-      axios.get("/api/comments", {
-        params: {
-          tweet_id: this.tweet
-        }
-      }).then(function (res) {
-        _this.comments = res.data.reverse();
-      });
-    },
-    // コメント新規投稿
-    createComment: function createComment() {
-      var _this2 = this;
-
-      this.isActive = true;
-      axios.post("/api/comments", {
-        text: this.$refs.commentText.value,
-        user_id: this.user,
-        tweet_id: this.tweet
-      }).then(function (res) {
-        _this2.get();
-
-        _this2.isActive = false;
-      })["catch"](function (error) {
-        alert("テキストを入れてください");
-      });
-    },
-    // コメント削除
-    removeComment: function removeComment(id) {
-      var _this3 = this;
-
-      axios["delete"]("/api/comments/" + id).then(function (res) {
-        _this3.fetchComments();
-      })["catch"](function (error) {});
-    }
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /data/resources/js/Components/comment/Comment.vue: Unexpected token (53:0)\n\n\u001b[0m \u001b[90m 51 |\u001b[39m             })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 52 |\u001b[39m         }\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 53 |\u001b[39m \u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 54 |\u001b[39m         remove(id) {\u001b[0m\n\u001b[0m \u001b[90m 55 |\u001b[39m             \u001b[36mif\u001b[39m(confirm(\u001b[32m'削除してよろしいですか?'\u001b[39m))\u001b[0m\n\u001b[0m \u001b[90m 56 |\u001b[39m             axios\u001b[33m.\u001b[39m\u001b[36mdelete\u001b[39m(\u001b[32m\"/api/deleteComment/\"\u001b[39m \u001b[33m+\u001b[39m id)\u001b[33m.\u001b[39mthen((res) \u001b[33m=>\u001b[39m {\u001b[0m\n    at instantiate (/data/node_modules/@babel/parser/lib/index.js:72:32)\n    at constructor (/data/node_modules/@babel/parser/lib/index.js:358:12)\n    at Parser.raise (/data/node_modules/@babel/parser/lib/index.js:3335:19)\n    at Parser.unexpected (/data/node_modules/@babel/parser/lib/index.js:3373:16)\n    at Parser.parsePropertyName (/data/node_modules/@babel/parser/lib/index.js:13748:24)\n    at Parser.parsePropertyDefinition (/data/node_modules/@babel/parser/lib/index.js:13579:22)\n    at Parser.parseObjectLike (/data/node_modules/@babel/parser/lib/index.js:13499:21)\n    at Parser.parseExprAtom (/data/node_modules/@babel/parser/lib/index.js:12890:23)\n    at Parser.parseExprSubscripts (/data/node_modules/@babel/parser/lib/index.js:12540:23)\n    at Parser.parseUpdate (/data/node_modules/@babel/parser/lib/index.js:12519:21)");
 
 /***/ }),
 
@@ -18732,29 +18446,29 @@ var _hoisted_50 = [_hoisted_49];
 var _hoisted_51 = {
   "class": "mb-0 text-secondary"
 };
-function render(_ctx, _cache, $props, $setup, $data, $options) {
+function render(_ctx, _cache) {
   var _component_favorite_btn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("favorite-btn");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [$props.user === $props.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [$data.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_ctx.user === _ctx.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_ctx.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-primary",
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.active && $options.active.apply($options, arguments);
+      return _ctx.active && _ctx.active.apply(_ctx, arguments);
     })
-  }, "投稿フォームを開く")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5)), $data.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  }, "投稿フォームを開く")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5)), _ctx.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 3
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿フォーム "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-    src: '../storage/profile_image/' + $props.image,
+    src: '../storage/profile_image/' + _ctx.image,
     "class": "rounded-circle",
     width: "50",
     height: "50"
   }, null, 8
   /* PROPS */
-  , _hoisted_11), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.name), 1
+  , _hoisted_11), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.name), 1
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     onChange: _cache[1] || (_cache[1] = function () {
-      return $options.selectFile && $options.selectFile.apply($options, arguments);
+      return _ctx.selectFile && _ctx.selectFile.apply(_ctx, arguments);
     }),
     type: "file",
     accept: "image/png, image/jpeg"
@@ -18766,20 +18480,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     "class": "btn btn-danger",
     onClick: _cache[2] || (_cache[2] = function () {
-      return $options.active && $options.active.apply($options, arguments);
+      return _ctx.active && _ctx.active.apply(_ctx, arguments);
     })
   }, "閉じる"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn btn-primary",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.createTweet && $options.createTweet.apply($options, arguments);
+      return _ctx.createTweet && _ctx.createTweet.apply(_ctx, arguments);
     }),
-    disabled: $data.isActivePost
+    disabled: _ctx.isActivePost
   }, " ツイートする ", 8
   /* PROPS */
   , _hoisted_22)])])])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tweets, function (tweet) {
+  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.tweets, function (tweet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: tweet.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [tweet.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -18813,7 +18527,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* PROPS */
     , _hoisted_38)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.text), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === $props.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === _ctx.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       href: '/tweets/' + tweet.id + '/edit/',
       "class": "dropdown-item"
     }, "編集", 8
@@ -18822,7 +18536,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "button",
       "class": "dropdown-item del-btn",
       onClick: function onClick($event) {
-        return $options.deleteTweet(tweet.id);
+        return _ctx.deleteTweet(tweet.id);
       }
     }, "削除", 8
     /* PROPS */
@@ -18833,7 +18547,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , _hoisted_48), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.commentCount), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" いいね "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_favorite_btn, {
-      onChild: $options.favorite,
+      onChild: _ctx.favorite,
       tweetId: tweet.id,
       favoriteCount: tweet.favoriteCount,
       initialBoolean: tweet.alreadyFavorite
@@ -19242,7 +18956,7 @@ var _hoisted_58 = [_hoisted_57];
 var _hoisted_59 = {
   "class": "mb-0 text-secondary"
 };
-function render(_ctx, _cache, $props, $setup, $data, $options) {
+function render(_ctx, _cache) {
   var _component_favorite_btn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("favorite-btn");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 絞り込み "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -19251,58 +18965,58 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "checkbox",
     value: "0",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.conditions = $event;
+      return _ctx.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.conditions]]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "follower",
     type: "checkbox",
     value: "1",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $data.conditions = $event;
+      return _ctx.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.conditions]]), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "all",
     type: "checkbox",
     value: "2",
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $data.conditions = $event;
+      return _ctx.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.conditions]]), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "oneself",
     type: "checkbox",
     value: "3",
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $data.conditions = $event;
+      return _ctx.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.name), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.conditions]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.name), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[4] || (_cache[4] = function () {
-      return $options.fetchSortedTweets && $options.fetchSortedTweets.apply($options, arguments);
+      return _ctx.fetchSortedTweets && _ctx.fetchSortedTweets.apply(_ctx, arguments);
     })
-  }, "絞り込み")])])]), $data.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, "絞り込み")])])]), _ctx.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-primary",
     onClick: _cache[5] || (_cache[5] = function () {
-      return $options.active && $options.active.apply($options, arguments);
+      return _ctx.active && _ctx.active.apply(_ctx, arguments);
     })
-  }, "投稿フォームを開く")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11)), $data.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  }, "投稿フォームを開く")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11)), _ctx.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 3
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿フォーム "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [$props.image !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-    src: '../storage/profile_image/' + $props.image,
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿フォーム "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_ctx.image !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    src: '../storage/profile_image/' + _ctx.image,
     "class": "rounded-circle",
     width: "50",
     height: "50"
@@ -19315,11 +19029,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     height: "50"
   }, null, 8
   /* PROPS */
-  , _hoisted_20)])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.name), 1
+  , _hoisted_20)])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.name), 1
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [_hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     onChange: _cache[6] || (_cache[6] = function () {
-      return $options.selectFile && $options.selectFile.apply($options, arguments);
+      return _ctx.selectFile && _ctx.selectFile.apply(_ctx, arguments);
     }),
     type: "file",
     accept: "image/png, image/jpeg"
@@ -19331,20 +19045,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     "class": "btn btn-danger",
     onClick: _cache[7] || (_cache[7] = function () {
-      return $options.active && $options.active.apply($options, arguments);
+      return _ctx.active && _ctx.active.apply(_ctx, arguments);
     })
   }, "閉じる"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "btn btn-primary",
     onClick: _cache[8] || (_cache[8] = function () {
-      return $options.createTweet && $options.createTweet.apply($options, arguments);
+      return _ctx.createTweet && _ctx.createTweet.apply(_ctx, arguments);
     }),
-    disabled: $data.isActivePost
+    disabled: _ctx.isActivePost
   }, " ツイートする ", 8
   /* PROPS */
   , _hoisted_31)])])])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tweets, function (tweet) {
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.tweets, function (tweet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: tweet.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [tweet.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -19376,7 +19090,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* PROPS */
     , _hoisted_46)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.text), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === _ctx.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       href: '/tweets/' + tweet.id + '/edit/',
       "class": "dropdown-item"
     }, "編集", 8
@@ -19385,7 +19099,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "button",
       "class": "dropdown-item del-btn",
       onClick: function onClick($event) {
-        return $options.deleteTweet(tweet.id);
+        return _ctx.deleteTweet(tweet.id);
       }
     }, "削除", 8
     /* PROPS */
@@ -19396,7 +19110,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , _hoisted_56), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.commentCount), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" いいね "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_favorite_btn, {
-      onChild: $options.favorite,
+      onChild: _ctx.favorite,
       tweetId: tweet.id,
       favoriteCount: tweet.favoriteCount,
       initialBoolean: tweet.alreadyFavorite
@@ -19476,19 +19190,19 @@ var _hoisted_18 = {
   "class": "py-3"
 };
 var _hoisted_19 = ["onClick"];
-function render(_ctx, _cache, $props, $setup, $data, $options) {
+function render(_ctx, _cache) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", _hoisted_6, null, 512
   /* NEED_PATCH */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "submit-btn",
     type: "button",
-    disabled: $data.isActive,
+    disabled: _ctx.isActive,
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.createComment && $options.createComment.apply($options, arguments);
+      return _ctx.createComment && _ctx.createComment.apply(_ctx, arguments);
     })
   }, "送信", 8
   /* PROPS */
-  , _hoisted_8)])])])])])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.comments, function (comment) {
+  , _hoisted_8)])])])])])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.comments, function (comment) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: comment.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -19508,11 +19222,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(comment.text), 1
     /* TEXT */
-    ), $props.user === $props.tweetUser || $props.user === comment.userId ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    ), _ctx.user === _ctx.tweetUser || _ctx.user === comment.userId ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "delete-btn",
       type: "button",
       onClick: function onClick($event) {
-        return $options.removeComment(comment.id);
+        return _ctx.removeComment(comment.id);
       }
     }, "削除", 8
     /* PROPS */
@@ -53832,6 +53546,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ProfileTweet_vue_vue_type_template_id_728b33da_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProfileTweet.vue?vue&type=template&id=728b33da&scoped=true */ "./resources/js/Components/ProfileTweet.vue?vue&type=template&id=728b33da&scoped=true");
 /* harmony import */ var _ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileTweet.vue?vue&type=script&lang=js */ "./resources/js/Components/ProfileTweet.vue?vue&type=script&lang=js");
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 /* harmony import */ var _ProfileTweet_vue_vue_type_style_index_0_id_728b33da_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ProfileTweet.vue?vue&type=style&index=0&id=728b33da&scoped=true&lang=css */ "./resources/js/Components/ProfileTweet.vue?vue&type=style&index=0&id=728b33da&scoped=true&lang=css");
 /* harmony import */ var _data_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
@@ -53894,6 +53611,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Tweet_vue_vue_type_template_id_2ef95a94_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Tweet.vue?vue&type=template&id=2ef95a94&scoped=true */ "./resources/js/Components/Tweet.vue?vue&type=template&id=2ef95a94&scoped=true");
 /* harmony import */ var _Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tweet.vue?vue&type=script&lang=js */ "./resources/js/Components/Tweet.vue?vue&type=script&lang=js");
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 /* harmony import */ var _Tweet_vue_vue_type_style_index_0_id_2ef95a94_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tweet.vue?vue&type=style&index=0&id=2ef95a94&scoped=true&lang=css */ "./resources/js/Components/Tweet.vue?vue&type=style&index=0&id=2ef95a94&scoped=true&lang=css");
 /* harmony import */ var _data_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
@@ -53925,6 +53645,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Comment_vue_vue_type_template_id_5563d3b4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Comment.vue?vue&type=template&id=5563d3b4 */ "./resources/js/Components/comment/Comment.vue?vue&type=template&id=5563d3b4");
 /* harmony import */ var _Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Comment.vue?vue&type=script&lang=js */ "./resources/js/Components/comment/Comment.vue?vue&type=script&lang=js");
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 /* harmony import */ var _data_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
@@ -54013,9 +53736,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport default from dynamic */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default.a)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ProfileTweet.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ProfileTweet.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProfileTweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
  
 
 /***/ }),
@@ -54045,9 +53772,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport default from dynamic */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default.a)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Tweet.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tweet.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Tweet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
  
 
 /***/ }),
@@ -54061,9 +53792,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport default from dynamic */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default.a)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Comment.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/comment/Comment.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Comment_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
  
 
 /***/ }),
