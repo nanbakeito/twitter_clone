@@ -46,65 +46,85 @@
             </div>
         </div>
     </div>
+    <paginate
+        :v-model="currentPage"
+        :page-count="getPaginateCount()"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :click-handler="paginateClickCallback"
+        :container-class="'pagination justify-content-center'"
+    ></paginate>
     <!-- タイムライン -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 mb-3">
-                <dl v-for=" tweet in  tweets" :key=" tweet.id" >
+                <dl v-for=" e in  getTweetsEachPage()" :key=" e.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
-                            <div v-if=" tweet.userProfileImage !== null">
-                                <img :src="'../storage/profile_image/' +  tweet.userProfileImage " class="rounded-circle" width="50" height="50">
+                            <div v-if=" e.userProfileImage !== null">
+                                <img :src="'../storage/profile_image/' +  e.userProfileImage " class="rounded-circle" width="50" height="50">
                             </div>
                             <div v-else>
                                 <img :src="'../storage/profile_image/noimage.png'" class="rounded-circle" width="50" height="50">
                             </div>
                             <div class="ml-2 d-flex flex-column">
-                                <a :href="'/users/' +  tweet.userId "><p class="mb-0">{{  tweet.userName }}</p></a>
+                                <a :href="'/users/' +  e.userId "><p class="mb-0">{{  e.userName }}</p></a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
-                                <p class="mb-0 text-secondary">{{  tweet.createdAt }}</p>
+                                <p class="mb-0 text-secondary">{{  e.createdAt }}</p>
                             </div>
                         </div>
-                        <div v-if=" tweet.image !== null">
-                            <img :src="'../storage/image/' +  tweet.image" class="rounded-circle" width="50" height="50">
+                        <div v-if=" e.image !== null">
+                            <img :src="'../storage/image/' +  e.image" class="rounded-circle" width="50" height="50">
                         </div>
                         <div class="card-body">
-                            {{  tweet.text }}
+                            {{  e.text }}
                         </div>
                         <div class="card-footer py-1 d-flex justify-content-end bg-white">
                             <!-- 投稿者がログインユーザーなら編集、削除表示  -->
-                            <div v-if=" tweet.userId === loginUser">
+                            <div v-if=" e.userId === loginUser">
                                 <div class="dropdown mr-3 d-flex align-items-center">
                                     <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v fa-fw"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <a :href="'/tweets/' +  tweet.id + '/edit/'" class="dropdown-item">編集</a>
-                                        <button type="button" class="dropdown-item del-btn" @click="deleteTweet( tweet.id)">削除</button>
+                                        <a :href="'/tweets/' +  e.id + '/edit/'" class="dropdown-item">編集</a>
+                                        <button type="button" class="dropdown-item del-btn" @click="deleteTweet( e.id)">削除</button>
                                     </div>
                                 </div>
                             </div>
                             <!-- コメントアイコン -->
                             <div class="mr-3 d-flex align-items-center">
-                                <a :href="'/tweets/' +  tweet.id "><i class="far fa-comment fa-fw"></i></a>
-                                <p class="mb-0 text-secondary">{{  tweet.commentCount }}</p>
+                                <a :href="'/tweets/' +  e.id "><i class="far fa-comment fa-fw"></i></a>
+                                <p class="mb-0 text-secondary">{{  e.commentCount }}</p>
                             </div>
                             <!-- いいね -->
-                            <favorite-btn @child="favorite" :tweetId=" tweet.id" :favoriteCount=" tweet.favoriteCount" :initialBoolean=" tweet.alreadyFavorite"></favorite-btn>
+                            <favorite-btn @child="favorite" :tweetId=" e.id" :favoriteCount=" e.favoriteCount" :initialBoolean=" e.alreadyFavorite"></favorite-btn>
                         </div>
                     </div>
                 </dl>
             </div>
         </div>
     </div>
+    <paginate
+        :v-model="currentPage"
+        :page-count="getPaginateCount()"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :click-handler="paginateClickCallback"
+        :container-class="'pagination justify-content-center'"
+    ></paginate>
 </div>
 </template>
 
 <script>
+import Paginate from 'vuejs-paginate-next';
 export default {
+    components: {
+        paginate: Paginate,
+    },
     created() {
-        this.fetchtTweets();
+        this.fetchTweets();
     },
     props: {
         loginUser: {
@@ -128,7 +148,8 @@ export default {
             conditions: [3],
             isActive: true,
             isActivePost: false,
-            selected_file: null
+            selected_file: null,
+            currentPage: 1,
         };
     },
     watch: {
@@ -138,12 +159,11 @@ export default {
     methods: {
         // タイムライン取得 
         fetchTweets() {
-            axios.get("/api/tweets", {
-                params: {
-                    user_id: this.user,
-                }
+            axios.put("/api/tweets", {
+                user_id: this.user,
+                conditions: this.conditions
             }).then((res) => {
-                this.tweets = res.data;
+                this.tweets = res.data
             }).catch((error) => {
             });
         },
@@ -184,6 +204,7 @@ export default {
                 this.tweets.unshift(res.data)
                 this.$emit("tweetActive", true);
                 this.isActivePost = false;
+                this.isActive = true;
             }).catch((error) => {
                 alert("テキストを入れてください");
                 this.isActivePost = false;
@@ -216,7 +237,20 @@ export default {
             }).catch((error) => {
             });
         },
-
+        // 以下pagination関係　
+        // ページ総数取得
+        getPaginateCount() {
+            return Math.ceil(this.tweets.length / 5);
+        },
+        // ページごとのtweets取得
+        getTweetsEachPage() {
+            let start = (this.currentPage - 1) * 5;
+            let end = this.currentPage * 5;
+            return this.tweets.slice(start, end);
+        },
+        paginateClickCallback(pageNum) {
+            this.currentPage = Number(pageNum);
+        },
     },
 };  
 </script>
