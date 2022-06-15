@@ -13,6 +13,7 @@ import Tweet from './Components/Tweet.vue';
 import ProfileTweet from './Components/ProfileTweet.vue';
 import FavoriteBtn from './Components/FavoriteBtn.vue';
 import Comment from './Components/comment/Comment.vue';
+import Paginate from "vuejs-paginate-next";
 // グローバルコンポーネントを定義 (ルートインスタンスはApp)
 createApp(App)
     .component("SelectBox", SelectBox)
@@ -22,4 +23,5 @@ createApp(App)
     .component("ProfileTweet", ProfileTweet)
     .component("FavoriteBtn", FavoriteBtn)
     .component("Comment", Comment)
+    .use(Paginate)
     .mount("#app");

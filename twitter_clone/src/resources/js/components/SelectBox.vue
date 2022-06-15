@@ -53,11 +53,45 @@
             </div>
         </div>
     </div>
+    <paginate
+        :page-count="getPaginateCount"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :click-handler="paginateClickCallback"
+        :container-class="'pagination justify-content-center'"
+        :page-class="'page-item'"
+        :page-link-class="'page-link'"
+        :prev-class="'page-item'"
+        :prev-link-class="'page-link'"
+        :next-class="'page-item'"
+        :next-link-class="'page-link'"
+        :first-last-button="true"
+        :first-button-text="'<<'"
+        :last-button-text="'>>'"    >
+    </paginate>
 </div>
 </template>
 
 <script>
+import Paginate from 'vuejs-paginate-next';
 export default {
+    // pagintion 
+    components: {
+        paginate: Paginate,
+    },
+    data(){
+        return {
+            currentPage: 1,
+            perPage: 10,
+        }
+    },
+
+    methods: {
+        clickCallback (pageNum) {
+            console.log(pageNum)
+        }
+    },
+    //
     created (){
         this.fetchUserTimeLines();
     },
