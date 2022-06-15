@@ -7,6 +7,10 @@
     color: rgb(255, 0, 212);
 }
 
+.fas.fa-solid.fa-thumbs-up.favoriteToggle:hover{
+    opacity:0.5;
+}
+
 .btn .delete .red {
     color: #000;
 }

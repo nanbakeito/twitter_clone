@@ -17810,9 +17810,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  created: function created() {
-    console.log(this.user);
-  },
   props: {
     loginUser: {
       required: true
@@ -17859,6 +17856,7 @@ __webpack_require__.r(__webpack_exports__);
     tweetCountData: function tweetCountData() {}
   },
   methods: {
+    // 子component(profile-tweet)で起こったイベント(投稿or削除)に応じてツイート数を操作
     fluctuationTweet: function fluctuationTweet(_boolean) {
       if (_boolean) {
         this.tweetCountData += 1;
@@ -17866,10 +17864,10 @@ __webpack_require__.r(__webpack_exports__);
         this.tweetCountData -= 1;
       }
     },
-    follow: function follow(userId) {
+    // フォロー、アンフォロー
+    followAction: function followAction(userId) {
       var _this = this;
 
-      console.log();
       axios.get("/api/follow", {
         params: {
           loginUserId: this.loginUser,
@@ -17901,7 +17899,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.fetchTimeLine();
+    this.fetchtTweets();
   },
   props: {
     loginUser: {
@@ -17921,33 +17919,33 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      timeLines: [],
-      checkList: [3],
+      tweets: [],
+      conditions: [3],
       isActive: true,
       isActivePost: false,
       selected_file: null
     };
   },
   watch: {
-    timeLines: function timeLines() {}
+    tweets: function tweets() {}
   },
   methods: {
-    fetchTimeLine: function fetchTimeLine() {
+    // タイムライン取得 
+    fetchTweets: function fetchTweets() {
       var _this = this;
 
-      axios.get("/api/sortTimeLine", {
+      axios.get("/api/tweets", {
         params: {
-          user_id: this.user,
-          checkList: this.checkList
+          user_id: this.user
         }
       }).then(function (res) {
-        _this.timeLines = res.data;
+        _this.tweets = res.data;
       })["catch"](function (error) {});
     },
     removeTweet: function removeTweet(id) {
       var _this2 = this;
 
-      axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
+      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
         _this2.timeLines = _this2.timeLines.filter(function (item) {
           return item.id !== id;
         });
@@ -17959,9 +17957,11 @@ __webpack_require__.r(__webpack_exports__);
       //選択したファイルの情報を取得しプロパティにいれる
       this.selected_file = event.target.files[0];
     },
-    postTweet: function postTweet() {
+    // ツイート新規投稿
+    createTweet: function createTweet() {
       var _this3 = this;
 
+      // フォームデータ成形
       var formData = new FormData(); //appendでデータを追加(第一引数は任意のキー)
       //他に送信したいデータがある場合にはその分appendする
 
@@ -17972,17 +17972,35 @@ __webpack_require__.r(__webpack_exports__);
         headers: {
           'content-type': 'multipart/form-data'
         }
-      };
+      }; // 連続クリック制御
+
       this.isActivePost = true;
-      axios.post('/api/postTweet', formData, config).then(function (res) {
-        _this3.timeLines.unshift(res.data);
+      axios.post('/api/tweets', formData, config).then(function (res) {
+        _this3.tweets.unshift(res.data);
 
         _this3.$emit("tweetActive", true);
 
         _this3.isActivePost = false;
       })["catch"](function (error) {
         alert("テキストを入れてください");
+        _this3.isActivePost = false;
       });
+    },
+    // ツイート削除
+    deleteTweet: function deleteTweet(id) {
+      var _this4 = this;
+
+      axios["delete"]("/api/tweets/" + id).then(function (res) {
+        _this4.tweets = _this4.tweets.filter(function (item) {
+          return item.id !== id;
+        });
+
+        _this4.$emit("tweetActive", false);
+      })["catch"](function (error) {});
+    },
+    selectFile: function selectFile(event) {
+      //選択したファイルの情報を取得しプロパティにいれる
+      this.selected_file = event.target.files[0];
     },
     active: function active() {
       this.isActive = !this.isActive;
@@ -18012,7 +18030,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.fetchUserTimeLines();
+    this.fetchUsers();
   },
   props: {
     user: {
@@ -18021,42 +18039,38 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      checkList: [],
-      userTimeLines: []
+      conditions: [],
+      users: []
     };
   },
   watch: {
-    userTimeLines: function userTimeLines() {}
+    users: function users() {}
   },
   methods: {
-    list: function list() {
-      console.log(this.checkList);
-    },
-    fetchUserTimeLines: function fetchUserTimeLines() {
+    // ユーザー一覧取得
+    fetchUsers: function fetchUsers() {
       var _this = this;
 
-      axios.get("/api/fetchUserTimeLines", {
+      axios.get("/api/users", {
         params: {
           user_id: this.user
         }
       }).then(function (res) {
-        _this.userTimeLines = res.data, console.log(_this.userTimeLines);
+        _this.users = res.data;
       })["catch"](function (error) {});
     },
-    sortUserTimeLines: function sortUserTimeLines() {
+    // ユーザー一覧絞り込み
+    fetchSortedUsers: function fetchSortedUsers() {
       var _this2 = this;
 
-      axios.get("/api/sortUserTimeLines", {
-        params: {
-          userId: this.user,
-          checkList: this.checkList
-        }
+      axios.put("/api/users", {
+        userId: this.user,
+        conditions: this.conditions
       }).then(function (res) {
-        _this2.userTimeLines = res.data;
+        _this2.users = res.data;
       })["catch"](function (error) {});
     },
     follow: function follow(userId) {
-      console.log();
       axios.get("/api/follow", {
         params: {
           loginUserId: this.user,
@@ -18082,7 +18096,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.fetchTimeLine();
+    this.fetchTweet();
   },
   props: {
     user: {
@@ -18099,32 +18113,33 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      timeLines: [],
-      checkList: [],
+      tweets: [],
+      conditions: [],
       isActive: true,
       isActivePost: false,
       selected_file: null
     };
   },
   watch: {
-    timeLines: function timeLines() {}
+    tweets: function tweets() {}
   },
   methods: {
-    fetchTimeLine: function fetchTimeLine() {
+    // タイムライン取得 
+    fetchTweet: function fetchTweet() {
       var _this = this;
 
-      axios.get("/api/fetchTimeLine", {
+      axios.get("/api/tweets", {
         params: {
           user_id: this.user
         }
       }).then(function (res) {
-        _this.timeLines = res.data;
+        _this.tweets = res.data;
       })["catch"](function (error) {});
     },
     removeTweet: function removeTweet(id) {
       var _this2 = this;
 
-      axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
+      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/deleteTweet/" + id).then(function (res) {
         _this2.timeLines = _this2.timeLines.filter(function (item) {
           return item.id !== id;
         });
@@ -18136,9 +18151,11 @@ __webpack_require__.r(__webpack_exports__);
       //選択したファイルの情報を取得しプロパティにいれる
       this.selected_file = event.target.files[0];
     },
-    postTweet: function postTweet() {
+    // ツイート新規投稿
+    createTweet: function createTweet() {
       var _this3 = this;
 
+      // フォームデータ成形
       var formData = new FormData(); //appendでデータを追加(第一引数は任意のキー)
       //他に送信したいデータがある場合にはその分appendする
 
@@ -18149,31 +18166,46 @@ __webpack_require__.r(__webpack_exports__);
         headers: {
           'content-type': 'multipart/form-data'
         }
-      };
-      this.isActivePost = true;
-      axios.post('/api/postTweet', formData, config).then(function (res) {
-        console.log(res.data.text);
+      }; // 連続クリック制御
 
-        _this3.timeLines.unshift(res.data);
+      this.isActivePost = true;
+      axios.post('/api/tweets', formData, config).then(function (res) {
+        _this3.tweets.unshift(res.data);
 
         _this3.$emit("tweetActive", true);
 
         _this3.isActivePost = false;
       })["catch"](function (error) {
         alert("テキストを入れてください");
+        _this3.isActivePost = false;
       });
     },
-    sortTimeLine: function sortTimeLine() {
+    // ツイート削除
+    deleteTweet: function deleteTweet(id) {
       var _this4 = this;
 
-      axios.get("/api/sortTimeLine", {
-        params: {
-          user_id: this.user,
-          checkList: this.checkList
-        }
-      }).then(function (res) {
-        _this4.timeLines = res.data;
+      axios["delete"]("/api/tweets/" + id).then(function (res) {
+        _this4.tweets = _this4.tweets.filter(function (item) {
+          return item.id !== id;
+        });
+
+        _this4.$emit("tweetActive", false);
       })["catch"](function (error) {});
+    },
+    // 一覧絞り込み（API通信せずにVue側でデータ編集した方が良いため改善）
+    fetchSortedTweets: function fetchSortedTweets() {
+      var _this5 = this;
+
+      axios.put("/api/tweets", {
+        user_id: this.user,
+        conditions: this.conditions
+      }).then(function (res) {
+        _this5.tweets = res.data;
+      })["catch"](function (error) {});
+    },
+    selectFile: function selectFile(event) {
+      //選択したファイルの情報を取得しプロパティにいれる
+      this.selected_file = event.target.files[0];
     },
     active: function active() {
       this.isActive = !this.isActive;
@@ -18203,7 +18235,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.get();
+    this.fetchComments();
   },
   props: {
     user: {
@@ -18226,10 +18258,11 @@ __webpack_require__.r(__webpack_exports__);
     comments: function comments() {}
   },
   methods: {
-    get: function get() {
+    // コメント取得
+    fetchComments: function fetchComments() {
       var _this = this;
 
-      axios.get("/api/fetchComment", {
+      axios.get("/api/comments", {
         params: {
           tweet_id: this.tweet
         }
@@ -18237,11 +18270,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.comments = res.data.reverse();
       });
     },
-    post: function post() {
+    // コメント新規投稿
+    createComment: function createComment() {
       var _this2 = this;
 
       this.isActive = true;
-      axios.post("/api/postComment", {
+      axios.post("/api/comments", {
         text: this.$refs.commentText.value,
         user_id: this.user,
         tweet_id: this.tweet
@@ -18251,13 +18285,15 @@ __webpack_require__.r(__webpack_exports__);
         _this2.isActive = false;
       })["catch"](function (error) {
         alert("テキストを入れてください");
+        _this2.isActive = false;
       });
     },
-    remove: function remove(id) {
+    // コメント削除
+    removeComment: function removeComment(id) {
       var _this3 = this;
 
-      axios["delete"]("/api/deleteComment/" + id).then(function (res) {
-        _this3.get();
+      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/comments/" + id).then(function (res) {
+        _this3.fetchComments();
       })["catch"](function (error) {});
     }
   }
@@ -18506,7 +18542,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, "プロフィールを編集する", 8
   /* PROPS */
   , _hoisted_16)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
-    onChild: $options.follow,
+    onChild: $options.followAction,
     initialBoolean: $props.isFollowing,
     userId: $props.user
   }, null, 8
@@ -18751,7 +18787,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     onChange: _cache[1] || (_cache[1] = function () {
-      return $options.fileSelect && $options.fileSelect.apply($options, arguments);
+      return $options.selectFile && $options.selectFile.apply($options, arguments);
     }),
     type: "file",
     accept: "image/png, image/jpeg"
@@ -18769,18 +18805,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "submit",
     "class": "btn btn-primary",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.postTweet && $options.postTweet.apply($options, arguments);
+      return $options.createTweet && $options.createTweet.apply($options, arguments);
     }),
     disabled: $data.isActivePost
   }, " ツイートする ", 8
   /* PROPS */
   , _hoisted_22)])])])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.timeLines, function (timeLine) {
+  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tweets, function (tweet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
-      key: timeLine.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [timeLine.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      src: '../storage/profile_image/' + timeLine.userProfileImage,
+      key: tweet.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [tweet.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      src: '../storage/profile_image/' + tweet.userProfileImage,
       "class": "rounded-circle",
       width: "50",
       height: "50"
@@ -18794,24 +18830,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, null, 8
     /* PROPS */
     , _hoisted_31)])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/users/' + timeLine.userId
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.userName), 1
+      href: '/users/' + tweet.userId
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.userName), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_33)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.createdAt), 1
+    , _hoisted_33)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.createdAt), 1
     /* TEXT */
-    )])]), timeLine.image !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      src: '../storage/image/' + timeLine.image,
+    )])]), tweet.image !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      src: '../storage/image/' + tweet.image,
       "class": "rounded-circle",
       width: "50",
       height: "50"
     }, null, 8
     /* PROPS */
-    , _hoisted_38)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.text), 1
+    , _hoisted_38)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.text), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), timeLine.userId === $props.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/tweets/' + timeLine.id + '/edit/',
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === $props.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      href: '/tweets/' + tweet.id + '/edit/',
       "class": "dropdown-item"
     }, "編集", 8
     /* PROPS */
@@ -18819,21 +18855,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "button",
       "class": "dropdown-item del-btn",
       onClick: function onClick($event) {
-        return $options.removeTweet(timeLine.id);
+        return $options.deleteTweet(tweet.id);
       }
     }, "削除", 8
     /* PROPS */
     , _hoisted_46)])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" コメントアイコン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/tweets/' + timeLine.id
+      href: '/tweets/' + tweet.id
     }, _hoisted_50, 8
     /* PROPS */
-    , _hoisted_48), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.commentCount), 1
+    , _hoisted_48), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.commentCount), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" いいね "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_favorite_btn, {
       onChild: $options.favorite,
-      tweetId: timeLine.id,
-      favoriteCount: timeLine.favoriteCount,
-      initialBoolean: timeLine.alreadyFavorite
+      tweetId: tweet.id,
+      favoriteCount: tweet.favoriteCount,
+      initialBoolean: tweet.alreadyFavorite
     }, null, 8
     /* PROPS */
     , ["onChild", "tweetId", "favoriteCount", "initialBoolean"])])])]);
@@ -18947,39 +18983,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "checkbox",
     value: "0",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: "follower",
     type: "checkbox",
     value: "1",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: "all",
     type: "checkbox",
     value: "2",
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_4]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_4]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.sortUserTimeLines && $options.sortUserTimeLines.apply($options, arguments);
+      return $options.fetchSortedUsers && $options.fetchSortedUsers.apply($options, arguments);
     })
-  }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.userTimeLines, function (userTimeLine) {
+  }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.users, function (user) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
-      key: userTimeLine.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [userTimeLine.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      src: '../storage/profile_image/' + userTimeLine.userProfileImage,
+      key: user.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [user.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      src: '../storage/profile_image/' + user.userProfileImage,
       "class": "rounded-circle",
       width: "50",
       height: "50"
@@ -18993,15 +19029,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, null, 8
     /* PROPS */
     , _hoisted_14)])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/users/' + userTimeLine.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(userTimeLine.userName), 1
+      href: '/users/' + user.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.userName), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_16)]), userTimeLine.isFollowed ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, _hoisted_20)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
+    , _hoisted_16)]), user.isFollowed ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, _hoisted_20)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_follow_btn, {
       onChild: $options.follow,
-      initialBoolean: userTimeLine.followingJudgement,
-      userId: userTimeLine.id
+      initialBoolean: user.followingJudgement,
+      userId: user.id
     }, null, 8
     /* PROPS */
     , ["onChild", "initialBoolean", "userId"])])])])]);
@@ -19248,47 +19284,47 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "checkbox",
     value: "0",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "follower",
     type: "checkbox",
     value: "1",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "all",
     type: "checkbox",
     value: "2",
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "oneself",
     type: "checkbox",
     value: "3",
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $data.checkList = $event;
+      return $data.conditions = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.checkList]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.name), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.conditions]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.name), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "submit-btn",
     type: "button",
     onClick: _cache[4] || (_cache[4] = function () {
-      return $options.sortTimeLine && $options.sortTimeLine.apply($options, arguments);
+      return $options.fetchSortedTweets && $options.fetchSortedTweets.apply($options, arguments);
     })
   }, "絞り込み")])])]), $data.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
@@ -19316,7 +19352,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [_hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     onChange: _cache[6] || (_cache[6] = function () {
-      return $options.fileSelect && $options.fileSelect.apply($options, arguments);
+      return $options.selectFile && $options.selectFile.apply($options, arguments);
     }),
     type: "file",
     accept: "image/png, image/jpeg"
@@ -19334,18 +19370,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "submit",
     "class": "btn btn-primary",
     onClick: _cache[8] || (_cache[8] = function () {
-      return $options.postTweet && $options.postTweet.apply($options, arguments);
+      return $options.createTweet && $options.createTweet.apply($options, arguments);
     }),
     disabled: $data.isActivePost
   }, " ツイートする ", 8
   /* PROPS */
   , _hoisted_31)])])])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.timeLines, function (timeLine) {
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tweets, function (tweet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
-      key: timeLine.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [timeLine.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      src: '../storage/profile_image/' + timeLine.userProfileImage,
+      key: tweet.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [tweet.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      src: '../storage/profile_image/' + tweet.userProfileImage,
       "class": "rounded-circle",
       width: "50",
       height: "50"
@@ -19359,22 +19395,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, null, 8
     /* PROPS */
     , _hoisted_40)])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/users/' + timeLine.userId
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.userName), 1
+      href: '/users/' + tweet.userId
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.userName), 1
     /* TEXT */
     )], 8
     /* PROPS */
-    , _hoisted_42)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.createdAt), 1
+    , _hoisted_42)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.createdAt), 1
     /* TEXT */
-    )])]), timeLine.image !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", {
+    )])]), tweet.image !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", {
       key: 0,
-      src: '../storage/image/' + timeLine.image
+      src: '../storage/image/' + tweet.image
     }, null, 8
     /* PROPS */
-    , _hoisted_46)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.text), 1
+    , _hoisted_46)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.text), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), timeLine.userId === $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/tweets/' + timeLine.id + '/edit/',
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      href: '/tweets/' + tweet.id + '/edit/',
       "class": "dropdown-item"
     }, "編集", 8
     /* PROPS */
@@ -19382,21 +19418,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "button",
       "class": "dropdown-item del-btn",
       onClick: function onClick($event) {
-        return $options.removeTweet(timeLine.id);
+        return $options.deleteTweet(tweet.id);
       }
     }, "削除", 8
     /* PROPS */
     , _hoisted_54)])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" コメントアイコン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_55, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: '/tweets/' + timeLine.id
+      href: '/tweets/' + tweet.id
     }, _hoisted_58, 8
     /* PROPS */
-    , _hoisted_56), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(timeLine.commentCount), 1
+    , _hoisted_56), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.commentCount), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" いいね "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_favorite_btn, {
       onChild: $options.favorite,
-      tweetId: timeLine.id,
-      favoriteCount: timeLine.favoriteCount,
-      initialBoolean: timeLine.alreadyFavorite
+      tweetId: tweet.id,
+      favoriteCount: tweet.favoriteCount,
+      initialBoolean: tweet.alreadyFavorite
     }, null, 8
     /* PROPS */
     , ["onChild", "tweetId", "favoriteCount", "initialBoolean"])])])]);
@@ -19481,7 +19517,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     disabled: $data.isActive,
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.post && $options.post.apply($options, arguments);
+      return $options.createComment && $options.createComment.apply($options, arguments);
     })
   }, "送信", 8
   /* PROPS */
@@ -19509,7 +19545,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "delete-btn",
       type: "button",
       onClick: function onClick($event) {
-        return $options.remove(comment.id);
+        return $options.removeComment(comment.id);
       }
     }, "削除", 8
     /* PROPS */
