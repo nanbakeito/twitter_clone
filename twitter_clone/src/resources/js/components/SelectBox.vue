@@ -5,26 +5,26 @@
             id="follow"
             type="checkbox"
             value= 0
-            v-model="checkList"
+            v-model="conditions"
         >
         <label for="follow">フォロー</label>
         <input
             id="follower"
             type="checkbox"
             value= 1
-            v-model="checkList"
+            v-model="conditions"
         >
         <label for="follower">フォロワー</label>
         <input
             id="all"
             type="checkbox"
             value= 2
-            v-model="checkList"
+            v-model="conditions"
         >
         <label for="all">全員</label>
     </section>
     <span class="input-group-btn">
-        <button class="submit-btn" type="button" @click="sortUsers" >絞り込み</button> 
+        <button class="submit-btn" type="button" @click="fetchSortedUsers" >絞り込み</button> 
     </span>
     <div class="container">
         <div class="row justify-content-center">
@@ -68,7 +68,7 @@ export default {
     },
     data(){
         return {
-            checkList: [],
+            conditions: [],
             users: [],
         }
     },
@@ -84,16 +84,15 @@ export default {
                     user_id: this.user,
                 }
             }).then((res) => {
-                this.users = res.data,
-                console.log(this.users)
+                this.users = res.data
             }).catch((error) => {
             });
         },
         // ユーザー一覧絞り込み
-        sortUsers() {
+        fetchSortedUsers() {
             axios.put("/api/users", {
                 userId: this.user,
-                checkList: this.checkList
+                conditions: this.conditions
             }).then((res) => {
                 this.users = res.data
             }).catch((error) => {

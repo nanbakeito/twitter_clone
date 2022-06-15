@@ -7,7 +7,7 @@
                         <div class="col-md-12">
                             <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="commentText">
                             <span class="input-group-btn">
-                                <button class="submit-btn" type="button" :disabled="isActive" @click="createComments" >送信</button> 
+                                <button class="submit-btn" type="button" :disabled="isActive" @click="createComment" >送信</button> 
                             </span>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                     {{ comment.text }}
                 </div>
                 <div v-if="user === tweetUser || user === comment.userId" class="py-3">
-                    <button class="delete-btn" type="button" @click="removeComments(comment.id)" >削除</button>
+                    <button class="delete-btn" type="button" @click="removeComment(comment.id)" >削除</button>
                 </div>
             </li>
         </dl>
@@ -74,7 +74,7 @@ export default {
             });
         },
         // コメント新規投稿
-        createComments() {
+        createComment() {
             this.isActive = true;
             axios.post("/api/comments", {
                 text: this.$refs.commentText.value,
@@ -88,7 +88,7 @@ export default {
             });
         },
         // コメント削除
-        removeComments(id) {
+        removeComment(id) {
             axios.delete("/api/comments/" + id).then((res) => {
                 this.fetchComments();
             }).catch((error) => {
