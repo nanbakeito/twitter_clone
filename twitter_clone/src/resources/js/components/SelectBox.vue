@@ -29,7 +29,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <dl v-for="user in users" :key="user.id" >
+                <dl v-for="user in getUsersEachPage()" :key="user.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
                             <div v-if="user.userProfileImage !== null">
@@ -53,13 +53,25 @@
             </div>
         </div>
     </div>
+    <paginate
+        v-model="currentPage"
+        :page-count="getPaginateCount()"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :click-handler="paginateClickCallback"
+        :container-class="'pagination justify-content-center'"
+    ></paginate>
 </div>
 </template>
 
 <script>
+import Paginate from 'vuejs-paginate-next';
 export default {
+    components: {
+        paginate: Paginate,
+    },
     created (){
-        this.fetchUsers();
+        this.fetchUsers()
     },
     props: {
         user: {
@@ -70,6 +82,7 @@ export default {
         return {
             conditions: [],
             users: [],
+            currentPage: 1,
         }
     },
     watch: {
@@ -108,6 +121,20 @@ export default {
             }).then((res) => {
             }).catch((error) => {
             });
+        },
+        // 以下pagination関係　
+        // ページ総数取得
+        getPaginateCount() {
+            return Math.ceil(this.users.length / 5);
+        },
+        // ページごとのusers取得
+        getUsersEachPage() {
+            const start = (this.currentPage - 1) * 5;
+            const end = this.currentPage * 5;
+            return this.users.slice(start, end);
+        },
+        paginateClickCallback(pageNum) {
+            this.currentPage = Number(pageNum);
         },
     },
 };  

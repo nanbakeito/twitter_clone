@@ -17897,9 +17897,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-paginate-next */ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    paginate: vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   created: function created() {
-    this.fetchtTweets();
+    this.fetchTweets();
   },
   props: {
     loginUser: {
@@ -17923,7 +17928,8 @@ __webpack_require__.r(__webpack_exports__);
       conditions: [3],
       isActive: true,
       isActivePost: false,
-      selected_file: null
+      selected_file: null,
+      currentPage: 1
     };
   },
   watch: {
@@ -17934,10 +17940,9 @@ __webpack_require__.r(__webpack_exports__);
     fetchTweets: function fetchTweets() {
       var _this = this;
 
-      axios.get("/api/tweets", {
-        params: {
-          user_id: this.user
-        }
+      axios.put("/api/tweets", {
+        user_id: this.user,
+        conditions: this.conditions
       }).then(function (res) {
         _this.tweets = res.data;
       })["catch"](function (error) {});
@@ -17981,6 +17986,7 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$emit("tweetActive", true);
 
         _this3.isActivePost = false;
+        _this3.isActive = true;
       })["catch"](function (error) {
         alert("テキストを入れてください");
         _this3.isActivePost = false;
@@ -18011,6 +18017,20 @@ __webpack_require__.r(__webpack_exports__);
           tweet_id: tweetId
         }
       }).then(function (res) {})["catch"](function (error) {});
+    },
+    // 以下pagination関係　
+    // ページ総数取得
+    getPaginateCount: function getPaginateCount() {
+      return Math.ceil(this.tweets.length / 5);
+    },
+    // ページごとのtweets取得
+    getTweetsEachPage: function getTweetsEachPage() {
+      var start = (this.currentPage - 1) * 5;
+      var end = this.currentPage * 5;
+      return this.tweets.slice(start, end);
+    },
+    paginateClickCallback: function paginateClickCallback(pageNum) {
+      this.currentPage = Number(pageNum);
     }
   }
 });
@@ -18028,7 +18048,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-paginate-next */ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    paginate: vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   created: function created() {
     this.fetchUsers();
   },
@@ -18040,7 +18065,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       conditions: [],
-      users: []
+      users: [],
+      currentPage: 1
     };
   },
   watch: {
@@ -18077,6 +18103,20 @@ __webpack_require__.r(__webpack_exports__);
           userId: userId
         }
       }).then(function (res) {})["catch"](function (error) {});
+    },
+    // 以下pagination関係　
+    // ページ総数取得
+    getPaginateCount: function getPaginateCount() {
+      return Math.ceil(this.users.length / 5);
+    },
+    // ページごとのusers取得
+    getUsersEachPage: function getUsersEachPage() {
+      var start = (this.currentPage - 1) * 5;
+      var end = this.currentPage * 5;
+      return this.users.slice(start, end);
+    },
+    paginateClickCallback: function paginateClickCallback(pageNum) {
+      this.currentPage = Number(pageNum);
     }
   }
 });
@@ -18094,7 +18134,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-paginate-next */ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    paginate: vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   created: function created() {
     this.fetchTweet();
   },
@@ -18117,7 +18162,8 @@ __webpack_require__.r(__webpack_exports__);
       conditions: [],
       isActive: true,
       isActivePost: false,
-      selected_file: null
+      selected_file: null,
+      currentPage: 1
     };
   },
   watch: {
@@ -18175,6 +18221,7 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$emit("tweetActive", true);
 
         _this3.isActivePost = false;
+        _this3.isActive = true;
       })["catch"](function (error) {
         alert("テキストを入れてください");
         _this3.isActivePost = false;
@@ -18216,6 +18263,20 @@ __webpack_require__.r(__webpack_exports__);
           tweet_id: tweetId
         }
       }).then(function (res) {})["catch"](function (error) {});
+    },
+    // 以下pagination関係　
+    // ページ総数取得
+    getPaginateCount: function getPaginateCount() {
+      return Math.ceil(this.tweets.length / 5);
+    },
+    // ページごとのtweets取得
+    getTweetsEachPage: function getTweetsEachPage() {
+      var start = (this.currentPage - 1) * 5;
+      var end = this.currentPage * 5;
+      return this.tweets.slice(start, end);
+    },
+    paginateClickCallback: function paginateClickCallback(pageNum) {
+      this.currentPage = Number(pageNum);
     }
   }
 });
@@ -18233,7 +18294,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-paginate-next */ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    paginate: vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   created: function created() {
     this.fetchComments();
   },
@@ -18251,7 +18317,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       comments: [],
-      isActive: false
+      isActive: false,
+      currentPage: 1
     };
   },
   watch: {
@@ -18280,7 +18347,7 @@ __webpack_require__.r(__webpack_exports__);
         user_id: this.user,
         tweet_id: this.tweet
       }).then(function (res) {
-        _this2.get();
+        _this2.fetchComments();
 
         _this2.isActive = false;
       })["catch"](function (error) {
@@ -18292,9 +18359,23 @@ __webpack_require__.r(__webpack_exports__);
     removeComment: function removeComment(id) {
       var _this3 = this;
 
-      if (confirm('削除してよろしいですか?')) axios["delete"]("/api/comments/" + id).then(function (res) {
+      axios["delete"]("/api/comments/" + id).then(function (res) {
         _this3.fetchComments();
       })["catch"](function (error) {});
+    },
+    // 以下pagination関係　
+    // ページ総数取得
+    getPaginateCount: function getPaginateCount() {
+      return Math.ceil(this.comments.length / 5);
+    },
+    // ページごとのtweets取得
+    getCommentsEachPage: function getCommentsEachPage() {
+      var start = (this.currentPage - 1) * 5;
+      var end = this.currentPage * 5;
+      return this.comments.slice(start, end);
+    },
+    paginateClickCallback: function paginateClickCallback(pageNum) {
+      this.currentPage = Number(pageNum);
     }
   }
 });
@@ -18766,6 +18847,8 @@ var _hoisted_51 = {
   "class": "mb-0 text-secondary"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_paginate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("paginate");
+
   var _component_favorite_btn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("favorite-btn");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [$props.user === $props.loginUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [$data.isActive ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -18812,7 +18895,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_22)])])])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tweets, function (tweet) {
+  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_paginate, {
+    "v-model": $data.currentPage,
+    "page-count": $options.getPaginateCount(),
+    "prev-text": '<',
+    "next-text": '>',
+    "click-handler": $options.paginateClickCallback,
+    "container-class": 'pagination justify-content-center'
+  }, null, 8
+  /* PROPS */
+  , ["v-model", "page-count", "click-handler"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.getTweetsEachPage(), function (tweet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: tweet.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [tweet.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -18875,7 +18967,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["onChild", "tweetId", "favoriteCount", "initialBoolean"])])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])])]);
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_paginate, {
+    "v-model": $data.currentPage,
+    "page-count": $options.getPaginateCount(),
+    "prev-text": '<',
+    "next-text": '>',
+    "click-handler": $options.paginateClickCallback,
+    "container-class": 'pagination justify-content-center'
+  }, null, 8
+  /* PROPS */
+  , ["v-model", "page-count", "click-handler"])]);
 }
 
 /***/ }),
@@ -18978,6 +19079,8 @@ var _hoisted_21 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_follow_btn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("follow-btn");
 
+  var _component_paginate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("paginate");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: "follow",
     type: "checkbox",
@@ -19011,7 +19114,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = function () {
       return $options.fetchSortedUsers && $options.fetchSortedUsers.apply($options, arguments);
     })
-  }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.users, function (user) {
+  }, "絞り込み")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.getUsersEachPage(), function (user) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: user.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [user.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -19043,7 +19146,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["onChild", "initialBoolean", "userId"])])])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])])]);
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_paginate, {
+    "v-model": $data.currentPage,
+    "page-count": $options.getPaginateCount(),
+    "prev-text": '<',
+    "next-text": '>',
+    "click-handler": $options.paginateClickCallback,
+    "container-class": 'pagination justify-content-center'
+  }, null, 8
+  /* PROPS */
+  , ["v-model", "page-count", "click-handler"])]);
 }
 
 /***/ }),
@@ -19278,6 +19390,8 @@ var _hoisted_59 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_favorite_btn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("favorite-btn");
 
+  var _component_paginate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("paginate");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 絞り込み "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "check",
     id: "follow",
@@ -19377,7 +19491,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_31)])])])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.tweets, function (tweet) {
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" タイムライン "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.getTweetsEachPage(), function (tweet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: tweet.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [tweet.userProfileImage !== null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -19409,7 +19523,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* PROPS */
     , _hoisted_46)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.text), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), tweet.userId === $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 投稿者がログインユーザーなら編集、削除表示  "), _ctx.e.userId === $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       href: '/tweets/' + tweet.id + '/edit/',
       "class": "dropdown-item"
     }, "編集", 8
@@ -19426,7 +19540,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       href: '/tweets/' + tweet.id
     }, _hoisted_58, 8
     /* PROPS */
-    , _hoisted_56), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(tweet.commentCount), 1
+    , _hoisted_56), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.e.commentCount), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" いいね "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_favorite_btn, {
       onChild: $options.favorite,
@@ -19438,7 +19552,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["onChild", "tweetId", "favoriteCount", "initialBoolean"])])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])])]);
+  ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_paginate, {
+    "v-model": $data.currentPage,
+    "page-count": $options.getPaginateCount(),
+    "prev-text": '<',
+    "next-text": '>',
+    "click-handler": $options.paginateClickCallback,
+    "container-class": 'pagination justify-content-center'
+  }, null, 8
+  /* PROPS */
+  , ["v-model", "page-count", "click-handler"])]);
 }
 
 /***/ }),
@@ -19510,6 +19633,8 @@ var _hoisted_18 = {
 };
 var _hoisted_19 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_paginate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("paginate");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", _hoisted_6, null, 512
   /* NEED_PATCH */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -19521,7 +19646,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, "送信", 8
   /* PROPS */
-  , _hoisted_8)])])])])])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.comments, function (comment) {
+  , _hoisted_8)])])])])])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.getCommentsEachPage(), function (comment) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("dl", {
       key: comment.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
@@ -19552,7 +19677,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , _hoisted_19)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]);
+  )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_paginate, {
+    "v-model": $data.currentPage,
+    "page-count": $options.getPaginateCount(),
+    "prev-text": '<',
+    "next-text": '>',
+    "click-handler": $options.paginateClickCallback,
+    "container-class": 'pagination justify-content-center'
+  }, null, 8
+  /* PROPS */
+  , ["v-model", "page-count", "click-handler"])]);
 }
 
 /***/ }),
@@ -60753,6 +60887,402 @@ const getGlobalThis = () => {
 
 
 
+/***/ }),
+
+/***/ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Paginate)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+const _sfc_main = {
+  data() {
+    return {
+      innerValue: 1
+    };
+  },
+  props: {
+    modelValue: {
+      type: Number
+    },
+    pageCount: {
+      type: Number,
+      required: true
+    },
+    initialPage: {
+      type: Number,
+      default: 1
+    },
+    forcePage: {
+      type: Number
+    },
+    clickHandler: {
+      type: Function,
+      default: () => {
+      }
+    },
+    pageRange: {
+      type: Number,
+      default: 3
+    },
+    marginPages: {
+      type: Number,
+      default: 1
+    },
+    prevText: {
+      type: String,
+      default: "Prev"
+    },
+    nextText: {
+      type: String,
+      default: "Next"
+    },
+    breakViewText: {
+      type: String,
+      default: "\u2026"
+    },
+    containerClass: {
+      type: String,
+      default: "pagination"
+    },
+    pageClass: {
+      type: String,
+      default: "page-item"
+    },
+    pageLinkClass: {
+      type: String,
+      default: "page-link"
+    },
+    prevClass: {
+      type: String,
+      default: "page-item"
+    },
+    prevLinkClass: {
+      type: String,
+      default: "page-link"
+    },
+    nextClass: {
+      type: String,
+      default: "page-item"
+    },
+    nextLinkClass: {
+      type: String,
+      default: "page-link"
+    },
+    breakViewClass: {
+      type: String
+    },
+    breakViewLinkClass: {
+      type: String
+    },
+    activeClass: {
+      type: String,
+      default: "active"
+    },
+    disabledClass: {
+      type: String,
+      default: "disabled"
+    },
+    noLiSurround: {
+      type: Boolean,
+      default: false
+    },
+    firstLastButton: {
+      type: Boolean,
+      default: false
+    },
+    firstButtonText: {
+      type: String,
+      default: "First"
+    },
+    lastButtonText: {
+      type: String,
+      default: "Last"
+    },
+    hidePrevNext: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    selected: {
+      get: function() {
+        return this.modelValue || this.innerValue;
+      },
+      set: function(newValue) {
+        this.innerValue = newValue;
+      }
+    },
+    pages: function() {
+      let items = {};
+      if (this.pageCount <= this.pageRange) {
+        for (let index = 0; index < this.pageCount; index++) {
+          let page = {
+            index,
+            content: index + 1,
+            selected: index === this.selected - 1
+          };
+          items[index] = page;
+        }
+      } else {
+        const halfPageRange = Math.floor(this.pageRange / 2);
+        let setPageItem = (index) => {
+          let page = {
+            index,
+            content: index + 1,
+            selected: index === this.selected - 1
+          };
+          items[index] = page;
+        };
+        let setBreakView = (index) => {
+          let breakView = {
+            disabled: true,
+            breakView: true
+          };
+          items[index] = breakView;
+        };
+        for (let i = 0; i < this.marginPages; i++) {
+          setPageItem(i);
+        }
+        let selectedRangeLow = 0;
+        if (this.selected - halfPageRange > 0) {
+          selectedRangeLow = this.selected - 1 - halfPageRange;
+        }
+        let selectedRangeHigh = selectedRangeLow + this.pageRange - 1;
+        if (selectedRangeHigh >= this.pageCount) {
+          selectedRangeHigh = this.pageCount - 1;
+          selectedRangeLow = selectedRangeHigh - this.pageRange + 1;
+        }
+        for (let i = selectedRangeLow; i <= selectedRangeHigh && i <= this.pageCount - 1; i++) {
+          setPageItem(i);
+        }
+        if (selectedRangeLow > this.marginPages) {
+          setBreakView(selectedRangeLow - 1);
+        }
+        if (selectedRangeHigh + 1 < this.pageCount - this.marginPages) {
+          setBreakView(selectedRangeHigh + 1);
+        }
+        for (let i = this.pageCount - 1; i >= this.pageCount - this.marginPages; i--) {
+          setPageItem(i);
+        }
+      }
+      return items;
+    }
+  },
+  methods: {
+    handlePageSelected(selected) {
+      if (this.selected === selected)
+        return;
+      this.innerValue = selected;
+      this.$emit("update:modelValue", selected);
+      this.clickHandler(selected);
+    },
+    prevPage() {
+      if (this.selected <= 1)
+        return;
+      this.handlePageSelected(this.selected - 1);
+    },
+    nextPage() {
+      if (this.selected >= this.pageCount)
+        return;
+      this.handlePageSelected(this.selected + 1);
+    },
+    firstPageSelected() {
+      return this.selected === 1;
+    },
+    lastPageSelected() {
+      return this.selected === this.pageCount || this.pageCount === 0;
+    },
+    selectFirstPage() {
+      if (this.selected <= 1)
+        return;
+      this.handlePageSelected(1);
+    },
+    selectLastPage() {
+      if (this.selected >= this.pageCount)
+        return;
+      this.handlePageSelected(this.pageCount);
+    }
+  },
+  beforeMount() {
+    this.innerValue = this.initialPage;
+  },
+  beforeUpdate() {
+    if (this.forcePage === void 0)
+      return;
+    if (this.forcePage !== this.selected) {
+      this.selected = this.forcePage;
+    }
+  }
+};
+const _hoisted_1 = ["tabindex", "innerHTML"];
+const _hoisted_2 = ["tabindex", "innerHTML"];
+const _hoisted_3 = ["onClick", "onKeyup"];
+const _hoisted_4 = ["tabindex", "innerHTML"];
+const _hoisted_5 = ["tabindex", "innerHTML"];
+const _hoisted_6 = ["innerHTML"];
+const _hoisted_7 = ["innerHTML"];
+const _hoisted_8 = ["onClick", "onKeyup"];
+const _hoisted_9 = ["innerHTML"];
+const _hoisted_10 = ["innerHTML"];
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return !$props.noLiSurround ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", {
+    key: 0,
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.containerClass)
+  }, [
+    $props.firstLastButton ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+      key: 0,
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageClass, $options.firstPageSelected() ? $props.disabledClass : ""])
+    }, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+        onClick: _cache[0] || (_cache[0] = ($event) => $options.selectFirstPage()),
+        onKeyup: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.selectFirstPage(), ["enter"])),
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.pageLinkClass),
+        tabindex: $options.firstPageSelected() ? -1 : 0,
+        innerHTML: $props.firstButtonText
+      }, null, 42, _hoisted_1)
+    ], 2)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true),
+    !($options.firstPageSelected() && $props.hidePrevNext) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+      key: 1,
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.prevClass, $options.firstPageSelected() ? $props.disabledClass : ""])
+    }, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+        onClick: _cache[2] || (_cache[2] = ($event) => $options.prevPage()),
+        onKeyup: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.prevPage(), ["enter"])),
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.prevLinkClass),
+        tabindex: $options.firstPageSelected() ? -1 : 0,
+        innerHTML: $props.prevText
+      }, null, 42, _hoisted_2)
+    ], 2)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true),
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.pages, (page) => {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+        key: page.index,
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageClass, page.selected ? $props.activeClass : "", page.disabled ? $props.disabledClass : "", page.breakView ? $props.breakViewClass : ""])
+      }, [
+        page.breakView ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          key: 0,
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageLinkClass, $props.breakViewLinkClass]),
+          tabindex: "0"
+        }, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "breakViewContent", {}, () => [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.breakViewText), 1)
+          ])
+        ], 2)) : page.disabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          key: 1,
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.pageLinkClass),
+          tabindex: "0"
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(page.content), 3)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          key: 2,
+          onClick: ($event) => $options.handlePageSelected(page.index + 1),
+          onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.handlePageSelected(page.index + 1), ["enter"]),
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.pageLinkClass),
+          tabindex: "0"
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(page.content), 43, _hoisted_3))
+      ], 2);
+    }), 128)),
+    !($options.lastPageSelected() && $props.hidePrevNext) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+      key: 2,
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.nextClass, $options.lastPageSelected() ? $props.disabledClass : ""])
+    }, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+        onClick: _cache[4] || (_cache[4] = ($event) => $options.nextPage()),
+        onKeyup: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.nextPage(), ["enter"])),
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.nextLinkClass),
+        tabindex: $options.lastPageSelected() ? -1 : 0,
+        innerHTML: $props.nextText
+      }, null, 42, _hoisted_4)
+    ], 2)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true),
+    $props.firstLastButton ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+      key: 3,
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageClass, $options.lastPageSelected() ? $props.disabledClass : ""])
+    }, [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+        onClick: _cache[6] || (_cache[6] = ($event) => $options.selectLastPage()),
+        onKeyup: _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.selectLastPage(), ["enter"])),
+        class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.pageLinkClass),
+        tabindex: $options.lastPageSelected() ? -1 : 0,
+        innerHTML: $props.lastButtonText
+      }, null, 42, _hoisted_5)
+    ], 2)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true)
+  ], 2)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    key: 1,
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.containerClass)
+  }, [
+    $props.firstLastButton ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+      key: 0,
+      onClick: _cache[8] || (_cache[8] = ($event) => $options.selectFirstPage()),
+      onKeyup: _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.selectFirstPage(), ["enter"])),
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageLinkClass, $options.firstPageSelected() ? $props.disabledClass : ""]),
+      tabindex: "0",
+      innerHTML: $props.firstButtonText
+    }, null, 42, _hoisted_6)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true),
+    !($options.firstPageSelected() && $props.hidePrevNext) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+      key: 1,
+      onClick: _cache[10] || (_cache[10] = ($event) => $options.prevPage()),
+      onKeyup: _cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.prevPage(), ["enter"])),
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.prevLinkClass, $options.firstPageSelected() ? $props.disabledClass : ""]),
+      tabindex: "0",
+      innerHTML: $props.prevText
+    }, null, 42, _hoisted_7)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true),
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.pages, (page) => {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [
+        page.breakView ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          key: page.index,
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageLinkClass, $props.breakViewLinkClass, page.disabled ? $props.disabledClass : ""]),
+          tabindex: "0"
+        }, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "breakViewContent", {}, () => [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.breakViewText), 1)
+          ])
+        ], 2)) : page.disabled ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          key: page.index,
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageLinkClass, page.selected ? $props.activeClass : "", $props.disabledClass]),
+          tabindex: "0"
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(page.content), 3)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          key: page.index,
+          onClick: ($event) => $options.handlePageSelected(page.index + 1),
+          onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.handlePageSelected(page.index + 1), ["enter"]),
+          class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageLinkClass, page.selected ? $props.activeClass : ""]),
+          tabindex: "0"
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(page.content), 43, _hoisted_8))
+      ], 64);
+    }), 256)),
+    !($options.lastPageSelected() && $props.hidePrevNext) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+      key: 2,
+      onClick: _cache[12] || (_cache[12] = ($event) => $options.nextPage()),
+      onKeyup: _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.nextPage(), ["enter"])),
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.nextLinkClass, $options.lastPageSelected() ? $props.disabledClass : ""]),
+      tabindex: "0",
+      innerHTML: $props.nextText
+    }, null, 42, _hoisted_9)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true),
+    $props.firstLastButton ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+      key: 3,
+      onClick: _cache[14] || (_cache[14] = ($event) => $options.selectLastPage()),
+      onKeyup: _cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(($event) => $options.selectLastPage(), ["enter"])),
+      class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$props.pageLinkClass, $options.lastPageSelected() ? $props.disabledClass : ""]),
+      tabindex: "0",
+      innerHTML: $props.lastButtonText
+    }, null, 42, _hoisted_10)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("", true)
+  ], 2));
+}
+var Paginate = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+
+
 /***/ })
 
 /******/ 	});
@@ -60877,7 +61407,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_ProfileTweet_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/ProfileTweet.vue */ "./resources/js/Components/ProfileTweet.vue");
 /* harmony import */ var _Components_FavoriteBtn_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/FavoriteBtn.vue */ "./resources/js/Components/FavoriteBtn.vue");
 /* harmony import */ var _Components_comment_Comment_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Components/comment/Comment.vue */ "./resources/js/Components/comment/Comment.vue");
+/* harmony import */ var vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vuejs-paginate-next */ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js");
 // Jsファイルをインポート
+
 
 
 
@@ -60893,7 +61425,7 @@ __webpack_require__.r(__webpack_exports__);
 
  // グローバルコンポーネントを定義 (ルートインスタンスはApp)
 
-(0,vue__WEBPACK_IMPORTED_MODULE_5__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_6__["default"]).component("SelectBox", _Components_SelectBox_vue__WEBPACK_IMPORTED_MODULE_7__["default"]).component("ProfileBox", _Components_ProfileBox_vue__WEBPACK_IMPORTED_MODULE_8__["default"]).component("FollowBtn", _Components_FollowBtn_vue__WEBPACK_IMPORTED_MODULE_9__["default"]).component("Tweet", _Components_Tweet_vue__WEBPACK_IMPORTED_MODULE_10__["default"]).component("ProfileTweet", _Components_ProfileTweet_vue__WEBPACK_IMPORTED_MODULE_11__["default"]).component("FavoriteBtn", _Components_FavoriteBtn_vue__WEBPACK_IMPORTED_MODULE_12__["default"]).component("Comment", _Components_comment_Comment_vue__WEBPACK_IMPORTED_MODULE_13__["default"]).mount("#app");
+(0,vue__WEBPACK_IMPORTED_MODULE_5__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_6__["default"]).component("SelectBox", _Components_SelectBox_vue__WEBPACK_IMPORTED_MODULE_7__["default"]).component("ProfileBox", _Components_ProfileBox_vue__WEBPACK_IMPORTED_MODULE_8__["default"]).component("FollowBtn", _Components_FollowBtn_vue__WEBPACK_IMPORTED_MODULE_9__["default"]).component("Tweet", _Components_Tweet_vue__WEBPACK_IMPORTED_MODULE_10__["default"]).component("ProfileTweet", _Components_ProfileTweet_vue__WEBPACK_IMPORTED_MODULE_11__["default"]).component("FavoriteBtn", _Components_FavoriteBtn_vue__WEBPACK_IMPORTED_MODULE_12__["default"]).component("Comment", _Components_comment_Comment_vue__WEBPACK_IMPORTED_MODULE_13__["default"]).use(vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_14__["default"]).mount("#app");
 })();
 
 /******/ })()

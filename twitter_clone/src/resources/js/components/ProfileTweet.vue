@@ -46,11 +46,19 @@
             </div>
         </div>
     </div>
+    <paginate
+        :v-model="currentPage"
+        :page-count="getPaginateCount()"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :click-handler="paginateClickCallback"
+        :container-class="'pagination justify-content-center'"
+    ></paginate>
     <!-- タイムライン -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 mb-3">
-                <dl v-for=" tweet in  tweets" :key=" tweet.id" >
+                <dl v-for=" tweet in  getTweetsEachPage()" :key=" tweet.id" >
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
                             <div v-if=" tweet.userProfileImage !== null">
@@ -81,14 +89,14 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a :href="'/tweets/' +  tweet.id + '/edit/'" class="dropdown-item">編集</a>
-                                        <button type="button" class="dropdown-item del-btn" @click="deleteTweet( tweet.id)">削除</button>
+                                        <button type="button" class="dropdown-item del-btn" @click="deleteTweet(tweet.id)">削除</button>
                                     </div>
                                 </div>
                             </div>
                             <!-- コメントアイコン -->
                             <div class="mr-3 d-flex align-items-center">
-                                <a :href="'/tweets/' +  tweet.id "><i class="far fa-comment fa-fw"></i></a>
-                                <p class="mb-0 text-secondary">{{  tweet.commentCount }}</p>
+                                <a :href="'/tweets/' + tweet.id "><i class="far fa-comment fa-fw"></i></a>
+                                <p class="mb-0 text-secondary">{{ tweet.commentCount }}</p>
                             </div>
                             <!-- いいね -->
                             <favorite-btn @child="favorite" :tweetId=" tweet.id" :favoriteCount=" tweet.favoriteCount" :initialBoolean=" tweet.alreadyFavorite"></favorite-btn>
@@ -98,13 +106,25 @@
             </div>
         </div>
     </div>
+    <paginate
+        v-model="currentPage"
+        :page-count="getPaginateCount()"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :click-handler="paginateClickCallback"
+        :container-class="'pagination justify-content-center'"
+    ></paginate>
 </div>
 </template>
 
 <script>
+import Paginate from 'vuejs-paginate-next';
 export default {
+    components: {
+        paginate: Paginate,
+    },
     created() {
-        this.fetchtTweets();
+        this.fetchTweets();
     },
     props: {
         loginUser: {
@@ -128,7 +148,8 @@ export default {
             conditions: [3],
             isActive: true,
             isActivePost: false,
-            selected_file: null
+            selected_file: null,
+            currentPage: 1,
         };
     },
     watch: {
@@ -138,12 +159,11 @@ export default {
     methods: {
         // タイムライン取得 
         fetchTweets() {
-            axios.get("/api/tweets", {
-                params: {
-                    user_id: this.user,
-                }
+            axios.put("/api/tweets", {
+                user_id: this.user,
+                conditions: this.conditions
             }).then((res) => {
-                this.tweets = res.data;
+                this.tweets = res.data
             }).catch((error) => {
             });
         },
@@ -184,6 +204,7 @@ export default {
                 this.tweets.unshift(res.data)
                 this.$emit("tweetActive", true);
                 this.isActivePost = false;
+                this.isActive = true;
             }).catch((error) => {
                 alert("テキストを入れてください");
                 this.isActivePost = false;
@@ -216,7 +237,20 @@ export default {
             }).catch((error) => {
             });
         },
-
+        // 以下pagination関係　
+        // ページ総数取得
+        getPaginateCount() {
+            return Math.ceil(this.tweets.length / 5);
+        },
+        // ページごとのtweets取得
+        getTweetsEachPage() {
+            const start = (this.currentPage - 1) * 5;
+            const end = this.currentPage * 5;
+            return this.tweets.slice(start, end);
+        },
+        paginateClickCallback(pageNum) {
+            this.currentPage = Number(pageNum);
+        },
     },
 };  
 </script>
