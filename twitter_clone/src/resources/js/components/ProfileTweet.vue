@@ -107,7 +107,7 @@
         </div>
     </div>
     <paginate
-        :v-model="currentPage"
+        v-model="currentPage"
         :page-count="getPaginateCount()"
         :prev-text="'<'"
         :next-text="'>'"
@@ -244,8 +244,8 @@ export default {
         },
         // ページごとのtweets取得
         getTweetsEachPage() {
-            let start = (this.currentPage - 1) * 5;
-            let end = this.currentPage * 5;
+            const start = (this.currentPage - 1) * 5;
+            const end = this.currentPage * 5;
             return this.tweets.slice(start, end);
         },
         paginateClickCallback(pageNum) {
