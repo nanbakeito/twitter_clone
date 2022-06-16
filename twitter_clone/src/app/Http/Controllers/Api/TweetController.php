@@ -82,6 +82,8 @@ class TweetController extends Controller
      */
     public function deleteTweet(Request $request, Tweet $tweet)
     {
+        // ポリシーによる認証
+        $this->authorize('delete', $tweet);
         $tweetId = $request->id;
         $tweet->tweetDelete($tweetId);
         

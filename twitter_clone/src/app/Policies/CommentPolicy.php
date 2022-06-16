@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Tweet;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TweetPolicy
+class CommentPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class TweetPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Tweet $tweet)
+    public function view(User $user, Comment $comment)
     {
         //
     }
@@ -48,28 +48,24 @@ class TweetPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Tweet $tweet)
+    public function update(User $user, Comment $comment)
     {
-        if($user->id == $tweet->user->id){
-            return true;
-        }  else {
-            return false;
-        }
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Tweet $tweet)
+    public function delete(User $user, Comment $comment)
     {
-        if($user->id == $tweet->user->id){
+        if($user->id == $comment->user->id){
             return true;
         }  else {
             return false;
@@ -80,10 +76,10 @@ class TweetPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Tweet $tweet)
+    public function restore(User $user, Comment $comment)
     {
         //
     }
@@ -92,10 +88,10 @@ class TweetPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Tweet  $tweet
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Tweet $tweet)
+    public function forceDelete(User $user, Comment $comment)
     {
         //
     }

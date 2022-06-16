@@ -105,7 +105,6 @@ class TweetsController extends Controller
      */
     public function edit(Tweet $tweet)
     {
-        dd($tweet);
         // ポリシーによる認証
         $this->authorize('update', $tweet);
 
