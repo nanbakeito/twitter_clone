@@ -104,7 +104,7 @@
 <script>
 export default {
     created() {
-        this.fetchtTweets();
+        this.fetchTweets();
     },
     props: {
         loginUser: {
@@ -138,10 +138,9 @@ export default {
     methods: {
         // タイムライン取得 
         fetchTweets() {
-            axios.get("/api/tweets", {
-                params: {
-                    user_id: this.user,
-                }
+            axios.put("/api/tweets", {
+                user_id: this.user,
+                conditions: this.conditions
             }).then((res) => {
                 this.tweets = res.data;
             }).catch((error) => {

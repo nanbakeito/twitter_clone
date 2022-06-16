@@ -17899,7 +17899,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    this.fetchtTweets();
+    this.fetchTweets();
   },
   props: {
     loginUser: {
@@ -17934,10 +17934,9 @@ __webpack_require__.r(__webpack_exports__);
     fetchTweets: function fetchTweets() {
       var _this = this;
 
-      axios.get("/api/tweets", {
-        params: {
-          user_id: this.user
-        }
+      axios.put("/api/tweets", {
+        user_id: this.user,
+        conditions: this.conditions
       }).then(function (res) {
         _this.tweets = res.data;
       })["catch"](function (error) {});

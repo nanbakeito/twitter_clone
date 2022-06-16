@@ -9,12 +9,12 @@ use App\Models\Comment;
 
 class TweetsController extends Controller
 {
-    // /**
-    //  * ミドルウェアによるバリデーション
-    //  */
-    // public function __construct()  {
-    //     $this->middleware('validationTweet')->only(['store','update']);
-    // }
+    /**
+     * ミドルウェアによるバリデーション
+     */
+    public function __construct()  {
+        $this->middleware('validationTweet')->only(['store','update']);
+    }
 
     /**
      * tweet一覧機能
@@ -105,6 +105,10 @@ class TweetsController extends Controller
      */
     public function edit(Tweet $tweet)
     {
+        dd($tweet);
+        // ポリシーによる認証
+        $this->authorize('update', $tweet);
+
         $user = auth()->user();
         $tweet = $tweet->fetchEditTweet($user->id, $tweet->id);
 
