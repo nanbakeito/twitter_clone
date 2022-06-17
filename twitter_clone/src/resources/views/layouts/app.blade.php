@@ -15,6 +15,8 @@
         <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
         <!-- bootstrap.js -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        {{-- favicon --}}
+        <link rel="shortcut icon" href="{{ asset('storage/favicon/icons8-インターネット-50.png') }}">
     </head>
     <body>
         <div id="app">
