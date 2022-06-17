@@ -16,7 +16,6 @@
         <!-- bootstrap.js -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         {{-- favicon --}}
-        {{-- <a target="_blank" href="https://icons8.com/icon/53372/インターネット">インターネット</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a> --}}
         <link rel="shortcut icon" href="{{ asset('storage/favicon/icons8-インターネット-50.png') }}">
     </head>
     <body>
