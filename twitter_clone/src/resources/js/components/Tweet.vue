@@ -115,7 +115,7 @@
                         </div>
                         <div class="card-footer py-1 d-flex justify-content-end bg-white">
                             <!-- 投稿者がログインユーザーなら編集、削除表示  -->
-                            <div v-if="e.userId === user">
+                            <div v-if="tweet.userId === user">
                                 <div class="dropdown mr-3 d-flex align-items-center">
                                     <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v fa-fw"></i>
@@ -129,7 +129,7 @@
                             <!-- コメントアイコン -->
                             <div class="mr-3 d-flex align-items-center">
                                 <a :href="'/tweets/' + tweet.id "><i class="far fa-comment fa-fw"></i></a>
-                                <p class="mb-0 text-secondary">{{ e.commentCount }}</p>
+                                <p class="mb-0 text-secondary">{{ tweet.commentCount }}</p>
                             </div>
                             <!-- いいね -->
                             <favorite-btn @child="favorite" :tweetId="tweet.id" :favoriteCount="tweet.favoriteCount" :initialBoolean="tweet.alreadyFavorite"></favorite-btn>
@@ -203,7 +203,7 @@ export default {
             if(confirm('削除してよろしいですか?'))
             axios.delete("/api/deleteTweet/" + id
             ).then((res) => {
-                this.timeLines = this.timeLines.filter(item => item.id !== id)
+                this.tweets = this.tweets.filter(item => item.id !== id)
                 this.$emit("tweetActive", false);
             }).catch((error) => {
             });

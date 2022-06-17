@@ -5,7 +5,7 @@
                 <div class="col-md-12"> 
                     <div class="form-group row mb-0">
                         <div class="col-md-12">
-                            <input type="text" class="form-control" placeholder="コメント    140文字以内" ref="commentText">
+                            <textarea class="form-control  is-invalid" name="text" placeholder="コメント    140文字以内" required autocomplete="text" rows="2" ref="commentText"></textarea>
                             <span class="input-group-btn">
                                 <button class="submit-btn" type="button" :disabled="isActive" @click="createComment" >送信</button> 
                             </span>
@@ -127,5 +127,7 @@ export default {
 </script>
 
 <style scoped>
-
+.py-3 {
+    white-space: pre-wrap;
+}
 </style>
