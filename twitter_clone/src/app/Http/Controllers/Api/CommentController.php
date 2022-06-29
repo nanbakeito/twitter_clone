@@ -41,6 +41,8 @@ class CommentController extends Controller
      */
     public function deleteComment(Request $request, Comment $comment)
     {
+        // ポリシーによる認証
+        $this->authorize('delete', $comment);
         $commentId = $request->id;
         $comment->commentDelete($commentId);
         

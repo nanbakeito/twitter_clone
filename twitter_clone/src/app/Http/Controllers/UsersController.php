@@ -14,6 +14,7 @@ class UsersController extends Controller
      */
     public function __construct() {
         $this->middleware('validationUser')->only(['store','update']);
+
     }
 
     /**
@@ -66,6 +67,9 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
+        // ポリシーによる認証
+        $this->authorize('update', $user);
+        
         return view('users.edit', ['user' => $user]);
     }
 
